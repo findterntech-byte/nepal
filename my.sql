@@ -2,6 +2,8 @@ BEGIN;
 
 
 
+
+
 CREATE TABLE IF NOT EXISTS public.slider_card (
     id integer NOT NULL,
     title character varying(255) NOT NULL,
