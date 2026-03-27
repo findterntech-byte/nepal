@@ -1,0 +1,1 @@
+UPDATE users SET country = 'Nepal', state = 'Madhesh Province', city = 'Janakpur' WHERE id = 'your_user_id';
