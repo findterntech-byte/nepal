@@ -703,19 +703,73 @@ export function registerRoutes(app: Express) {
       };
 
       const makeMatches = (rows: any[]) => {
+        // Common brand name aliases
+        const brandAliases: Record<string, string[]> = {
+          'moto': ['motorola', 'moto'],
+          'motorola': ['motorola', 'moto'],
+          'samsung': ['samsung'],
+          'apple': ['apple', 'iphone', 'ipad'],
+          'iphone': ['apple', 'iphone'],
+          'redmi': ['redmi', 'xiaomi'],
+          'realme': ['realme'],
+          'oppo': ['oppo'],
+          'vivo': ['vivo'],
+          'oneplus': ['oneplus'],
+          'huawei': ['huawei'],
+          'nokia': ['nokia'],
+          'lenovo': ['lenovo'],
+          'asus': ['asus'],
+          'mi': ['xiaomi', 'mi'],
+          'xiaomi': ['xiaomi', 'mi', 'redmi'],
+          'poco': ['poco', 'xiaomi'],
+          'infinix': ['infinix'],
+          'tecno': ['tecno'],
+        };
+        
+        // Normalize brand name
+        const normalizeBrand = (brand: string): string => {
+          const lowerBrand = brand.toLowerCase();
+          for (const [alias, brands] of Object.entries(brandAliases)) {
+            if (brands.includes(lowerBrand)) {
+              return alias;
+            }
+          }
+          return lowerBrand;
+        };
+        
         return rows
           .map((r: any) => {
-            const title = r.title || r.name || r.showroomName || r.institutionName || r.username || r.slug || '';
+            // Get all possible name/title fields
+            const title = r.title || r.name || r.showroomName || r.institutionName || r.username || r.fullName || r.productName || r.serviceName || r.companyName || r.slug || '';
+            const titleLower = title.toLowerCase();
+            
+            // Also include brand and model in searchable text for phones/electronics
+            const brand = (r.brand || '').toLowerCase();
+            const model = (r.model || '').toLowerCase();
+            const normalizedBrand = normalizeBrand(brand);
+            
+            // Build extended searchable text
+            const extendedSearchText = `${titleLower} ${brand} ${model} ${normalizedBrand} ${r.description || ''} ${r.summary || ''}`.toLowerCase();
+            
+            // Check if query matches the name/title (priority match)
+            const nameMatch = tokens.every(t => extendedSearchText.includes(t));
+            
             // Build a snippet that includes useful contact information (phone/whatsapp) when available
-            let snippet = (r.description || r.summary || r.address || r.title || r.name || '') as string;
+            let snippet = (r.description || r.summary || r.address || r.title || r.name || r.category || '') as string;
             const phone = (r.contactPhone || r.phone || r.whatsappNumber || r.alternatePhone || r.mobile || r.contact_number);
             if (phone) {
               snippet = `${snippet} Call: ${phone}`.trim();
             }
+            
             const raw = r;
             const serialized = ("" + safeStringify({ id: r.id, title, snippet, raw })).toLowerCase();
             const matchedWords = tokens.filter(t => serialized.includes(t));
-            return { id: r.id, title, snippet, raw, matchedWords };
+            
+            // Calculate relevance score: name matches are worth more
+            const nameMatchCount = tokens.filter(t => extendedSearchText.includes(t)).length;
+            const relevanceScore = nameMatchCount * 10 + matchedWords.length;
+            
+            return { id: r.id, title, snippet, raw, matchedWords, relevanceScore, nameMatch };
           })
           .filter((item: any) => {
             try {
@@ -727,6 +781,13 @@ export function registerRoutes(app: Express) {
             } catch (e) {
               return false;
             }
+          })
+          // Sort by relevance (name matches first, then overall matches)
+          .sort((a, b) => {
+            if (a.nameMatch !== b.nameMatch) {
+              return a.nameMatch ? -1 : 1;
+            }
+            return b.relevanceScore - a.relevanceScore;
           })
           .slice(0, limitPerSource);
       };
@@ -2550,6 +2611,139 @@ export function registerRoutes(app: Express) {
       });
     } catch (error: any) {
       res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Forgot Password - Send reset link
+  app.post("/api/auth/forgot-password", async (req, res) => {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const normalizedEmail = String(email).trim().toLowerCase();
+
+      // Find user by email
+      const user = await db.query.users.findFirst({
+        where: (users, { eq }) => eq(users.email, normalizedEmail),
+      });
+
+      // Always return success to prevent email enumeration attacks
+      if (!user) {
+        return res.json({ 
+          message: "If an account with that email exists, we have sent a password reset link." 
+        });
+      }
+
+      // Generate reset token
+      const resetToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+
+      // Update user with reset token
+      await db
+        .update(users)
+        .set({ 
+          resetToken,
+          resetTokenExpiry,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, user.id));
+
+      // Construct reset URL
+      const baseUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+      const resetUrl = `${baseUrl}/reset-password?token=${resetToken}`;
+
+      // Check if nodemailer is configured
+      if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+        // Send email
+        const transporter = nodemailer.createTransport({
+          host: process.env.SMTP_HOST,
+          port: parseInt(process.env.SMTP_PORT || '587'),
+          secure: process.env.SMTP_SECURE === 'true',
+          auth: {
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASS,
+          },
+        });
+
+        const mailOptions = {
+          from: process.env.SMTP_FROM || '"Jeevika Services" <noreply@jeevika.com>',
+          to: user.email,
+          subject: 'Password Reset - Jeevika Services',
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #0B8457;">Password Reset Request</h2>
+              <p>Hello ${user.firstName || user.username},</p>
+              <p>You requested a password reset for your Jeevika Services account.</p>
+              <p>Click the button below to reset your password:</p>
+              <div style="text-align: center; margin: 30px 0;">
+                <a href="${resetUrl}" style="background-color: #0B8457; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+              </div>
+              <p>Or copy and paste this link into your browser:</p>
+              <p style="word-break: break-all; color: #666;">${resetUrl}</p>
+              <p><strong>This link expires in 1 hour.</strong></p>
+              <p>If you didn't request this, please ignore this email.</p>
+              <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+              <p style="color: #999; font-size: 12px;">Jeevika Services Pvt. Ltd.</p>
+            </div>
+          `,
+          text: `Password Reset Request\n\nHello ${user.firstName || user.username},\n\nYou requested a password reset for your Jeevika Services account.\n\nClick the link below to reset your password:\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you didn't request this, please ignore this email.\n\nJeevika Services Pvt. Ltd.`
+        };
+
+        await transporter.sendMail(mailOptions);
+      }
+
+      res.json({ 
+        message: "If an account with that email exists, we have sent a password reset link." 
+      });
+    } catch (error: any) {
+      console.error("Forgot password error:", error);
+      res.status(500).json({ message: "Failed to process request" });
+    }
+  });
+
+  // Reset Password with token
+  app.post("/api/auth/reset-password", async (req, res) => {
+    try {
+      const { token, password } = req.body;
+
+      if (!token || !password) {
+        return res.status(400).json({ message: "Token and new password are required" });
+      }
+
+      if (password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+
+      // Find user with matching reset token that hasn't expired
+      const user = await db.query.users.findFirst({
+        where: (users, { and, eq }) => and(
+          eq(users.resetToken, token),
+          eq(users.resetTokenExpiry, users.resetTokenExpiry)
+        ),
+      });
+
+      if (!user || !user.resetTokenExpiry || new Date() > user.resetTokenExpiry) {
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+
+      // Update password and clear reset token
+      await db
+        .update(users)
+        .set({ 
+          password,
+          resetToken: null,
+          resetTokenExpiry: null,
+          updatedAt: new Date()
+        })
+        .where(eq(users.id, user.id));
+
+      res.json({ message: "Password reset successful. You can now login with your new password." });
+    } catch (error: any) {
+      console.error("Reset password error:", error);
+      res.status(500).json({ message: "Failed to reset password" });
     }
   });
 
@@ -4538,6 +4732,10 @@ export function registerRoutes(app: Express) {
       // Convert date string to Date object if provided
       const insuranceValidUntilDate = insuranceValidUntil ? new Date(insuranceValidUntil) : null;
 
+      // Determine effective user info
+      const effectiveUserId = sessionUser?.id || userId;
+      const effectiveRole = sessionUser?.role || role || 'user';
+
       const [newVehicle] = await db
         .insert(carsBikes)
         .values({
@@ -4547,29 +4745,29 @@ export function registerRoutes(app: Express) {
           vehicleType,
           brand,
           model,
-          year: parseInt(year.toString()),
-          price: parseFloat(price.toString()),
-          kilometersDriven: kilometersDriven ? parseInt(kilometersDriven.toString()) : null,
+          year,
+          price,
+          kilometersDriven: kilometersDriven || null,
           fuelType: fuelType || null,
           transmission: transmission || null,
-          ownerNumber: ownerNumber ? parseInt(ownerNumber.toString()) : null,
+          ownerNumber: ownerNumber || null,
           registrationNumber: registrationNumber || null,
           registrationState: registrationState || null,
           insuranceValidUntil: insuranceValidUntilDate,
           color: color || null,
           images: images || [],
-          documents: documents || [],
-          features: features || [],
+          documents: documents || null,
+          features: features || null,
           condition: condition || null,
           isNegotiable: isNegotiable || false,
-          country: country || "India",
+          country: country || null,
           stateProvince: stateProvince || null,
           city: city || null,
           areaName: areaName || null,
           fullAddress: fullAddress || null,
           isActive: isActive !== undefined ? isActive : true,
           isFeatured: isFeatured || false,
-          sellerId: effectiveSellerId,
+          sellerId: effectiveUserId,
           userId: effectiveUserId,
           role: effectiveRole,
         })

@@ -773,6 +773,16 @@ export default function Home() {
     },
   });
 
+  // Second Hand Cars & Bikes
+  const { data: secondHandCarsBikes = [], isLoading: secondHandCarsLoading } = useQuery({
+    queryKey: ["second-hand-cars-bikes"],
+    queryFn: async () => {
+      const res = await fetch('/api/second-hand-cars-bikes?limit=20');
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
   // Second Hand Phones
   const { data: secondHandPhones = [], isLoading: secondHandLoading } = useQuery({
     queryKey: ["second-hand-phones"],
@@ -2032,6 +2042,61 @@ export default function Home() {
                           <div className="px-4 pb-4">
                             <Link to={buildCategoryItemHref('Second Hand Phones & Accessories', product.id)} className="w-full block">
                               <button className="w-full bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-600 hover:to-lime-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+                                <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                                View Details
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                  <CarouselNext className="right-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                </Carousel>
+              </div>
+            )}
+
+            {/* Second Hand Cars & Bikes */}
+            {secondHandCarsBikes && secondHandCarsBikes.length > 0 && (
+              <div className="group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-1.5 h-8 bg-gradient-to-b from-slate-500 to-slate-600 rounded-full"></div>
+                  <h3 className="text-3xl font-bold text-gray-900">Second Hand Cars & Bikes</h3>
+                  <span className="ml-auto text-sm font-semibold text-slate-600 bg-slate-50 px-4 py-1.5 rounded-full">
+                    {secondHandCarsBikes.length} listings
+                  </span>
+                </div>
+                <Carousel className="w-full" opts={{ loop: true }} plugins={[Autoplay({ stopOnInteraction: false, delay: 6000 })]}>
+                  <CarouselContent className="gap-4">
+                    {secondHandCarsBikes.map((vehicle: any) => (
+                      <CarouselItem key={vehicle.id} className="md:basis-1/2 lg:basis-1/4">
+                        <div className="group/card overflow-hidden rounded-xl border border-gray-200/50 bg-white shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                          <Link to={`#`} className="flex-1 flex flex-col">
+                            <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+                              {vehicle.images && vehicle.images[0] ? (
+                                <img src={vehicle.images[0]} alt={vehicle.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" />
+                              ) : (
+                                <div className="flex items-center justify-center h-full">
+                                  <Car className="w-12 h-12 text-gray-300" />
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/20 transition-all duration-300"></div>
+                            </div>
+                            <div className="p-4 bg-white flex-1 flex flex-col">
+                              <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{vehicle.brand} {vehicle.model}</h4>
+                              <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{vehicle.year} • {vehicle.vehicleType}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-lg font-bold text-slate-600">₹{vehicle.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                  {vehicle.condition}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                          <div className="px-4 pb-4">
+                            <Link to={buildCategoryItemHref('Second Hand Cars & Bikes', vehicle.id)} className="w-full block">
+                              <button className="w-full bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
                                 <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                                 View Details
                               </button>

@@ -35,6 +35,8 @@ import SkilledLabourPage from "@/pages/skilled-labour";
 import SkilledLabourDetailPage from "@/pages/skilled-labour-detail";
 import TermsAndConditions from "@/pages/terms-and-conditions";
 import PrivacyPolicy from "@/pages/privacy-policy";
+import ForgotPassword from "@/pages/forgot-password";
+import ResetPassword from "@/pages/reset-password";
 
 import FloatingContact from "@/components/floating-contact";
 
@@ -88,6 +90,8 @@ function Router() {
       <Route path="/language-classes" component={LanguageClasses} />
       <Route path="/terms-and-conditions" component={TermsAndConditions} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/forgot-password" component={ForgotPassword} />
+      <Route path="/reset-password" component={ResetPassword} />
 
       <Route path="/:categorySlug/:id" component={CategoryItemDetail} /> {/* Generic dynamic route for all categories */}
       

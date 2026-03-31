@@ -1,3 +1,4 @@
+
 import { Heart, User, Plus, Menu, X, Home, Building2, MapPin, Briefcase, Users as UsersIcon, GraduationCap, Settings, ChevronDown, Search, Facebook, Instagram, Linkedin, Twitter, MessageCircle, Youtube, LayoutDashboard, LogIn } from "lucide-react";
 // TikTok icon is not in lucide-react, so use a generic icon or SVG if needed
 import { Link, useLocation } from "wouter";
@@ -553,7 +554,8 @@ export default function Header() {
                                             if (group === 'subcategories') {
                                               const parentSlug = it.parent?.slug || it.parentSlug || '';
                                               const categoryPart = parentSlug ? `&category=${encodeURIComponent(parentSlug)}` : '';
-                                              setLocation(buildSearchUrl(searchQuery) + `${categoryPart}&subcategory=${encodeURIComponent(it.slug)}`);
+                                              setLocation(`/subcategory/${it.slug}`);
+                                              setShowCategoriesPanel(false);
                                               return;
                                             }
                                             // fallback to backend item link resolver

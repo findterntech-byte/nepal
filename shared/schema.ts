@@ -27,6 +27,8 @@ export const users = pgTable("users", {
   area: text("area"),
   address: text("address"),
   postalCode: text("postal_code"),
+  resetToken: text("reset_token"),
+  resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
