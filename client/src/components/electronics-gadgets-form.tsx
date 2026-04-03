@@ -507,7 +507,7 @@ export default function ElectronicsGadgetsForm() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="price">Price (₹) *</Label>
-                    <Input id="price" type="number" {...register("price", { required: true, valueAsNumber: true })} />
+                    <Input id="price" type="text" {...register("price", { required: true})} />
                   </div>
 
                   <div className="space-y-2">

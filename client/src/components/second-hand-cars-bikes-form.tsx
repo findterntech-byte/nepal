@@ -599,7 +599,7 @@ export function SecondHandCarsBikesForm() {
                     <Label htmlFor="price">Price *</Label>
                     <Input
                       id="price"
-                      type="number"
+                      type="text"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       placeholder="₹"
