@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "Nepal Classifieds",
+    "slug": "nepal-classifieds",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E84040"
+    },
+    "scheme": "nepalclassifieds",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.nepalclassifieds.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Used to upload photos for your listings",
+        "NSPhotoLibraryUsageDescription": "Used to select photos for your listings"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E84040"
+      },
+      "package": "com.nepalclassifieds.app",
+      "versionCode": 1,
+      "permissions": ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Nepal Classifieds to access your photos"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

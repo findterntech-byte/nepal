@@ -2937,6 +2937,153 @@ export function registerRoutes(app: Express) {
     }
   });
 
+  // Create a new listing (user endpoint)
+  app.post("/api/listings", async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      const { tableName, ...data } = req.body;
+      
+      const userId = sessionUser?.id || data.userId;
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      const tables: Record<string, any> = {
+        'properties': properties,
+        'rental-listings': rentalListings,
+        'cars-bikes': carsBikes,
+        'second-hand-cars-bikes': secondHandCarsBikes,
+        'electronics-gadgets': electronicsGadgets,
+        'phones-tablets-accessories': phonesTabletsAccessories,
+        'second-hand-phones-tablets-accessories': secondHandPhonesTabletsAccessories,
+        'furniture-interior-decor': furnitureInteriorDecor,
+        'fashion-beauty-products': fashionBeautyProducts,
+        'household-services': householdServices,
+        'car-bike-rentals': carBikeRentals,
+        'heavy-equipment': heavyEquipment,
+        'construction-materials': constructionMaterials,
+        'tuition-classes': tuitionPrivateClasses,
+      };
+
+      const table = tables[tableName];
+      if (!table) {
+        return res.status(400).json({ message: "Invalid table name" });
+      }
+
+      // Add userId and defaults
+      const insertData = {
+        ...data,
+        userId,
+        isActive: true,
+        isFeatured: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const [newListing] = await db.insert(table).values(insertData).returning();
+      res.status(201).json(newListing);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Get user's listings
+  app.get("/api/user/listings", async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      const userId = sessionUser?.id || req.query.userId;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      const listings: any[] = [];
+      
+      // Fetch from each table
+      const [props, rentals, hostels, cars, secondCars, bikes, electronics, phones, secondPhones, furniture, fashion, services] = await Promise.all([
+        db.select().from(properties).where(eq(properties.userId, userId)).orderBy(desc(properties.createdAt)),
+        db.select().from(rentalListings).where(eq(rentalListings.userId, userId)).orderBy(desc(rentalListings.createdAt)),
+        db.select().from(hostelPgListings).where(eq(hostelPgListings.userId, userId)).orderBy(desc(hostelPgListings.createdAt)),
+        db.select().from(carsBikes).where(eq(carsBikes.userId, userId)).orderBy(desc(carsBikes.createdAt)),
+        db.select().from(secondHandCarsBikes).where(eq(secondHandCarsBikes.userId, userId)).orderBy(desc(secondHandCarsBikes.createdAt)),
+        db.select().from(electronicsGadgets).where(eq(electronicsGadgets.userId, userId)).orderBy(desc(electronicsGadgets.createdAt)),
+        db.select().from(phonesTabletsAccessories).where(eq(phonesTabletsAccessories.userId, userId)).orderBy(desc(phonesTabletsAccessories.createdAt)),
+        db.select().from(secondHandPhonesTabletsAccessories).where(eq(secondHandPhonesTabletsAccessories.userId, userId)).orderBy(desc(secondHandPhonesTabletsAccessories.createdAt)),
+        db.select().from(furnitureInteriorDecor).where(eq(furnitureInteriorDecor.userId, userId)).orderBy(desc(furnitureInteriorDecor.createdAt)),
+        db.select().from(fashionBeautyProducts).where(eq(fashionBeautyProducts.userId, userId)).orderBy(desc(fashionBeautyProducts.createdAt)),
+        db.select().from(householdServices).where(eq(householdServices.userId, userId)).orderBy(desc(householdServices.createdAt)),
+      ]);
+
+      // Add tableName to each listing for routing
+      const addTableName = (items: any[], tableName: string) => 
+        items.map(item => ({ ...item, tableName, status: item.isActive ? 'active' : 'inactive' }));
+
+      listings.push(
+        ...addTableName(props, 'properties'),
+        ...addTableName(rentals, 'rental-listings'),
+        ...addTableName(hostels, 'hostel-listings'),
+        ...addTableName(cars, 'cars-bikes'),
+        ...addTableName(secondCars, 'second-hand-cars-bikes'),
+        ...addTableName(electronics, 'electronics-gadgets'),
+        ...addTableName(phones, 'phones-tablets-accessories'),
+        ...addTableName(secondPhones, 'second-hand-phones-tablets-accessories'),
+        ...addTableName(furniture, 'furniture-interior-decor'),
+        ...addTableName(fashion, 'fashion-beauty-products'),
+        ...addTableName(services, 'household-services'),
+      );
+
+      // Sort by creation date
+      listings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+      res.json(listings);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Delete a user's listing
+  app.delete("/api/user/listings/:id", async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      const userId = sessionUser?.id || req.query.userId;
+      const listingId = parseInt(req.params.id);
+      const { tableName } = req.query;
+
+      if (!userId) {
+        return res.status(401).json({ message: "User not authenticated" });
+      }
+
+      const tables: Record<string, any> = {
+        'properties': properties,
+        'rental-listings': rentalListings,
+        'hostel-listings': hostelPgListings,
+        'cars-bikes': carsBikes,
+        'second-hand-cars-bikes': secondHandCarsBikes,
+        'electronics-gadgets': electronicsGadgets,
+        'phones-tablets-accessories': phonesTabletsAccessories,
+        'second-hand-phones-tablets-accessories': secondHandPhonesTabletsAccessories,
+        'furniture-interior-decor': furnitureInteriorDecor,
+        'fashion-beauty-products': fashionBeautyProducts,
+        'household-services': householdServices,
+      };
+
+      const table = tables[tableName as string];
+      if (!table) {
+        return res.status(400).json({ message: "Invalid table name" });
+      }
+
+      // Get the id column name based on table
+      const idColumn = 'id';
+
+      // Delete the listing
+      await db.delete(table).where(and(eq((table as any)[idColumn], listingId), eq((table as any).userId, userId)));
+
+      res.json({ message: "Listing deleted successfully" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Admin: Create user
   app.post("/api/admin/users", async (req, res) => {
     try {

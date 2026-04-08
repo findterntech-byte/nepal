@@ -8532,6 +8532,42 @@ function ArticlesSection() {
     try {
       const payload: any = { ...form };
 
+      const isDataMediaUrl = (s: string) => /^data:(image|video)\//i.test(String(s || '').trim());
+      const dataUrlToFile = (dataUrl: string, filename: string) => {
+        const [meta, content] = String(dataUrl || '').split(',');
+        const match = /data:([^;]+);base64/i.exec(meta || '');
+        const mime = match?.[1] || 'application/octet-stream';
+        const binary = atob(content || '');
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+        return new File([bytes], filename, { type: mime });
+      };
+      const uploadSingleFile = async (file: File): Promise<string> => {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+        if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+        const data = await res.json();
+        if (!data?.url || typeof data.url !== 'string') throw new Error('Upload failed: missing url');
+        return data.url;
+      };
+
+      if (isDataMediaUrl(payload.thumbnailUrl)) {
+        payload.thumbnailUrl = await uploadSingleFile(dataUrlToFile(payload.thumbnailUrl, `cover-${Date.now()}.png`));
+      }
+      if (Array.isArray(payload.images)) {
+        const uploadedUrls: string[] = [];
+        for (const img of payload.images) {
+          if (isDataMediaUrl(img)) {
+            const url = await uploadSingleFile(dataUrlToFile(img, `img-${Date.now()}.png`));
+            uploadedUrls.push(url);
+          } else if (typeof img === 'string' && img.startsWith('/uploads/')) {
+            uploadedUrls.push(img);
+          }
+        }
+        payload.images = uploadedUrls;
+      }
+
       // Attach current userId/role from localStorage if available (server expects userId sometimes)
       try {
         const stored = localStorage.getItem('user');
@@ -8936,6 +8972,26 @@ function SliderCardSection() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const thumbsRef = useRef<HTMLDivElement | null>(null);
 
+  const isDataMediaUrl = (s: string) => /^data:(image|video)\//i.test(String(s || '').trim());
+  const dataUrlToFile = (dataUrl: string, filename: string) => {
+    const [meta, content] = String(dataUrl || '').split(',');
+    const match = /data:([^;]+);base64/i.exec(meta || '');
+    const mime = match?.[1] || 'application/octet-stream';
+    const binary = atob(content || '');
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new File([bytes], filename, { type: mime });
+  };
+  const uploadSingleFile = async (file: File): Promise<string> => {
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+    const data = await res.json();
+    if (!data?.url || typeof data.url !== 'string') throw new Error('Upload failed: missing url');
+    return data.url;
+  };
+
   // Prevent body scrolling when the dialog is open so only modal scrolls
   useEffect(() => {
     const prev = typeof document !== 'undefined' ? document.body.style.overflow : '';
@@ -9062,13 +9118,17 @@ function SliderCardSection() {
     }
 
     // Validation: image is required (from newly uploaded images or existing)
-    const finalImageUrl = images.length > 0 ? images[0] : form.imageUrl;
+    let finalImageUrl = images.length > 0 ? images[0] : form.imageUrl;
     if (!finalImageUrl) {
       setSubmitError('Image is required');
       return;
     }
 
     try {
+      if (isDataMediaUrl(finalImageUrl)) {
+        finalImageUrl = await uploadSingleFile(dataUrlToFile(finalImageUrl, `slider-${Date.now()}.png`));
+      }
+
       const payload = { title: form.title, imageUrl: finalImageUrl, status: form.status };
       let res;
       if (editingCard) {

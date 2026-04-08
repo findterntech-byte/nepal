@@ -295,6 +295,45 @@ export function SecondHandCarsBikesForm() {
     },
   });
 
+  const isDataMediaUrl = (s: string) => /^data:(image|video)\//i.test(String(s || '').trim());
+
+  const dataUrlToFile = (dataUrl: string, filename: string) => {
+    const [meta, content] = String(dataUrl || '').split(',');
+    const match = /data:([^;]+);base64/i.exec(meta || '');
+    const mime = match?.[1] || 'application/octet-stream';
+    const binary = atob(content || '');
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new File([bytes], filename, { type: mime });
+  };
+
+  const uploadSingleFile = async (file: File): Promise<string> => {
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await fetch('/api/upload', { method: 'POST', body: fd });
+    if (!res.ok) throw new Error(`Upload failed (${res.status})`);
+    const data = await res.json();
+    const url = data?.url;
+    if (typeof url !== 'string' || url.length === 0) throw new Error('Upload failed: missing url');
+    return url;
+  };
+
+  const ensureUploadedUrls = async (items: string[], prefix: string): Promise<string[]> => {
+    const out: string[] = [];
+    for (let i = 0; i < items.length; i++) {
+      const v = items[i];
+      if (typeof v !== 'string' || v.length === 0) continue;
+      if (!isDataMediaUrl(v)) {
+        out.push(v);
+        continue;
+      }
+      const file = dataUrlToFile(v, `${prefix}-${Date.now()}-${i}.bin`);
+      const url = await uploadSingleFile(file);
+      out.push(url);
+    }
+    return out;
+  };
+
   const toggleActiveMutation = useMutation({
     mutationFn: async (id: string) => {
       const response = await fetch(`/api/admin/second-hand-cars-bikes/${id}/toggle-active`, {

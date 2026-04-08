@@ -779,7 +779,33 @@ export default function Home() {
     queryFn: async () => {
       const res = await fetch('/api/second-hand-cars-bikes?limit=20');
       if (!res.ok) return [];
-      return res.json();
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      // Normalize images field - handle both string and array formats
+      return data.map((item: any) => ({
+        ...item,
+        images: typeof item.images === 'string' 
+          ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
+          : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
+      }));
+    },
+  });
+
+  // Car & Bike Rentals
+  const { data: carBikeRentals = [], isLoading: carBikeRentalsLoading } = useQuery({
+    queryKey: ["car-bike-rentals"],
+    queryFn: async () => {
+      const res = await fetch('/api/car-bike-rentals?limit=20');
+      if (!res.ok) return [];
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      // Normalize images field
+      return data.map((item: any) => ({
+        ...item,
+        images: typeof item.images === 'string' 
+          ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
+          : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
+      }));
     },
   });
 
@@ -789,7 +815,15 @@ export default function Home() {
     queryFn: async () => {
       const res = await fetch('/api/second-hand-phones?limit=20');
       if (!res.ok) return [];
-      return res.json();
+      const data = await res.json();
+      if (!Array.isArray(data)) return [];
+      // Normalize images field
+      return data.map((item: any) => ({
+        ...item,
+        images: typeof item.images === 'string' 
+          ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
+          : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
+      }));
     },
   });
 
@@ -2075,7 +2109,9 @@ export default function Home() {
                           <Link to={`#`} className="flex-1 flex flex-col">
                             <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
                               {vehicle.images && vehicle.images[0] ? (
-                                <img src={vehicle.images[0]} alt={vehicle.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" />
+                                <img src={vehicle.images[0]} alt={vehicle.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                              ) : vehicle.imageUrl ? (
+                                <img src={vehicle.imageUrl} alt={vehicle.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
                               ) : (
                                 <div className="flex items-center justify-center h-full">
                                   <Car className="w-12 h-12 text-gray-300" />
@@ -2097,6 +2133,63 @@ export default function Home() {
                           <div className="px-4 pb-4">
                             <Link to={buildCategoryItemHref('Second Hand Cars & Bikes', vehicle.id)} className="w-full block">
                               <button className="w-full bg-gradient-to-r from-slate-500 to-slate-600 hover:from-slate-600 hover:to-slate-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+                                <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                                View Details
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                  <CarouselNext className="right-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                </Carousel>
+              </div>
+            )}
+
+            {/* Car & Bike Rentals */}
+            {carBikeRentals && carBikeRentals.length > 0 && (
+              <div className="group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full"></div>
+                  <h3 className="text-3xl font-bold text-gray-900">Car & Bike Rentals</h3>
+                  <span className="ml-auto text-sm font-semibold text-blue-600 bg-blue-50 px-4 py-1.5 rounded-full">
+                    {carBikeRentals.length} listings
+                  </span>
+                </div>
+                <Carousel className="w-full" opts={{ loop: true }} plugins={[Autoplay({ stopOnInteraction: false, delay: 6000 })]}>
+                  <CarouselContent className="gap-4">
+                    {carBikeRentals.map((rental: any) => (
+                      <CarouselItem key={rental.id} className="md:basis-1/2 lg:basis-1/4">
+                        <div className="group/card overflow-hidden rounded-xl border border-gray-200/50 bg-white shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                          <Link to={`#`} className="flex-1 flex flex-col">
+                            <div className="relative h-48 bg-gradient-to-br from-blue-100 to-blue-200 overflow-hidden">
+                              {rental.images && rental.images[0] ? (
+                                <img src={rental.images[0]} alt={rental.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                              ) : rental.imageUrl ? (
+                                <img src={rental.imageUrl} alt={rental.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                              ) : (
+                                <div className="flex items-center justify-center h-full">
+                                  <Car className="w-12 h-12 text-blue-300" />
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/20 transition-all duration-300"></div>
+                            </div>
+                            <div className="p-4 bg-white flex-1 flex flex-col">
+                              <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{rental.title}</h4>
+                              <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{rental.vehicleType} • {rental.brand} {rental.model}</p>
+                              <div className="flex items-center justify-between">
+                                <span className="text-lg font-bold text-blue-600">₹{rental.pricePerDay?.toLocaleString('en-IN') || rental.price?.toLocaleString('en-IN') || 'N/A'}/day</span>
+                                  <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                    {String(rental.driverAvailable || '').includes('driver') ? 'With Driver' : 'Self Drive'}
+                                  </div>
+                              </div>
+                            </div>
+                          </Link>
+                          <div className="px-4 pb-4">
+                            <Link to={buildCategoryItemHref('Car & Bike Rentals', rental.id)} className="w-full block">
+                              <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
                                 <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                                 View Details
                               </button>
