@@ -115,7 +115,7 @@ export default function PrivacyScreen() {
           <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Company: Jeevika Services Pvt. Ltd.{'\n'}Founder & CEO: Rajaul Khan{'\n'}General Manager: Salman Khan{'\n'}Address: Nepal</Text>
           
           <Text style={[styles.contactLabel, { color: isDark ? Colors.textDark : Colors.text, marginTop: 12 }]}>Contact Privacy Support:</Text>
-          <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Email: support@jeevika.live</Text>
+          <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Email: support@jeevika.services</Text>
           
           <View style={styles.divider} />
           

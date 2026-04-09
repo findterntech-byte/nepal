@@ -162,7 +162,7 @@ export default function Contact() {
                     <Mail className="w-4 h-4" />
                     <div>
                       <a href="mailto:jeevika7076@gmail.com" className="hover:text-primary">jeevika7076@gmail.com</a><br />
-                      <a href="mailto:support@jeevika.live" className="hover:text-primary">support@jeevika.live</a>
+                      <a href="mailto:support@jeevika.services" className="hover:text-primary">support@jeevika.services</a>
                     </div>
                   </div>
                   

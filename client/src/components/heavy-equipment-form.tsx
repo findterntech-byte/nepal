@@ -28,6 +28,9 @@ interface HeavyEquipment {
   year?: number;
   price: number;
   priceType?: string;
+  emiAvailable: boolean;
+  emiStartingFrom: string;
+  emiMonths: string;
   condition?: string;
   hoursUsed?: number;
   serialNumber?: string;
@@ -114,6 +117,9 @@ export function HeavyEquipmentForm() {
     year: new Date().getFullYear(),
     price: "",
     priceType: "total",
+    emiAvailable: false,
+    emiStartingFrom: "",
+    emiMonths: "",
     condition: "used",
     hoursUsed: "",
     serialNumber: "",
@@ -290,6 +296,9 @@ export function HeavyEquipmentForm() {
       year: new Date().getFullYear(),
       price: "",
       priceType: "total",
+      emiAvailable: false,
+      emiStartingFrom: "",
+      emiMonths: "",
       condition: "used",
       hoursUsed: "",
       serialNumber: "",
@@ -326,6 +335,9 @@ export function HeavyEquipmentForm() {
       year: item.year || new Date().getFullYear(),
       price: item.price.toString(),
       priceType: item.priceType || "total",
+      emiAvailable: (item as any).emiAvailable || false,
+      emiStartingFrom: (item as any).emiStartingFrom?.toString() || "",
+      emiMonths: (item as any).emiMonths?.toString() || "",
       condition: item.condition || "used",
       hoursUsed: item.hoursUsed?.toString() || "",
       serialNumber: item.serialNumber || "",
@@ -627,6 +639,47 @@ export function HeavyEquipmentForm() {
 
                     <div className="flex items-center space-x-2">
                       <Switch
+                        checked={formData.emiAvailable}
+                        onCheckedChange={(checked) => setFormData({ ...formData, emiAvailable: checked })}
+                      />
+                      <Label>EMI Available</Label>
+                    </div>
+
+                    {formData.emiAvailable && (
+                      <>
+                        <div>
+                          <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                          <Input
+                            id="emiStartingFrom"
+                            type="text"
+                            value={formData.emiStartingFrom}
+                            onChange={(e) => setFormData({ ...formData, emiStartingFrom: e.target.value })}
+                            placeholder="e.g., 50000"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="emiMonths">EMI Duration (Months)</Label>
+                          <Select value={formData.emiMonths} onValueChange={(value) => setFormData({ ...formData, emiMonths: value })}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select months" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="3">3 Months</SelectItem>
+                              <SelectItem value="6">6 Months</SelectItem>
+                              <SelectItem value="12">12 Months</SelectItem>
+                              <SelectItem value="18">18 Months</SelectItem>
+                              <SelectItem value="24">24 Months</SelectItem>
+                              <SelectItem value="36">36 Months</SelectItem>
+                              <SelectItem value="48">48 Months</SelectItem>
+                              <SelectItem value="60">60 Months</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </>
+                    )}
+
+                    <div className="flex items-center space-x-2">
+                      <Switch
                         checked={formData.isActive}
                         onCheckedChange={(checked) => setFormData({ ...formData, isActive: checked })}
                       />
@@ -708,7 +761,14 @@ export function HeavyEquipmentForm() {
                     <TableCell className="font-medium">{item.title}</TableCell>
                     <TableCell>{item.equipmentType}</TableCell>
                     <TableCell>{item.category}</TableCell>
-                    <TableCell>₹{parseFloat(item.price.toString()).toLocaleString()}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1">
+                        <div>₹{parseFloat(item.price.toString()).toLocaleString()}</div>
+                        {(item as any).emiAvailable && (
+                          <Badge className="bg-blue-600 text-xs w-fit">EMI ₹{(item as any).emiStartingFrom}/{(item as any).emiMonths}mo</Badge>
+                        )}
+                      </div>
+                    </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
                         <Badge variant={item.isActive ? "default" : "secondary"}>

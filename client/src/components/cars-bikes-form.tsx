@@ -25,6 +25,9 @@ interface CarBike {
   model: string;
   year: number;
   price: number;
+  emiAvailable?: boolean;
+  emiStartingFrom?: number;
+  emiMonths?: number;
   kilometersDriven?: number;
   fuelType?: string;
   transmission?: string;
@@ -52,11 +55,14 @@ interface CarBike {
   role?: string;
 }
 
-interface FormData extends Omit<CarBike, 'id' | 'createdAt' | 'updatedAt' | 'viewCount' | 'price' | 'year' | 'kilometersDriven' | 'ownerNumber'> {
+interface FormData extends Omit<CarBike, 'id' | 'createdAt' | 'updatedAt' | 'viewCount' | 'price' | 'year' | 'kilometersDriven' | 'ownerNumber' | 'emiAvailable' | 'emiStartingFrom' | 'emiMonths'> {
   price: string;
   year: number | string;
   kilometersDriven?: string;
   ownerNumber?: string;
+  emiAvailable: boolean;
+  emiStartingFrom: string;
+  emiMonths: string;
   userId: string;
   role: string;
 }
@@ -109,6 +115,9 @@ export function CarsBikesForm() {
     model: "",
     year: new Date().getFullYear(),
     price: "",
+    emiAvailable: false,
+    emiStartingFrom: "",
+    emiMonths: "",
     kilometersDriven: "",
     fuelType: "petrol",
     transmission: "manual",
@@ -354,6 +363,9 @@ export function CarsBikesForm() {
       model: "",
       year: new Date().getFullYear(),
       price: "",
+      emiAvailable: false,
+      emiStartingFrom: "",
+      emiMonths: "",
       kilometersDriven: "",
       fuelType: "petrol",
       transmission: "manual",
@@ -391,6 +403,9 @@ export function CarsBikesForm() {
       model: item.model,
       year: item.year,
       price: item.price.toString(),
+      emiAvailable: item.emiAvailable || false,
+      emiStartingFrom: item.emiStartingFrom?.toString() || "",
+      emiMonths: item.emiMonths?.toString() || "",
       kilometersDriven: item.kilometersDriven?.toString() || "",
       fuelType: item.fuelType || "petrol",
       transmission: item.transmission || "manual",
@@ -573,6 +588,51 @@ export function CarsBikesForm() {
                       required
                     />
                   </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="emiAvailable"
+                      checked={formData.emiAvailable}
+                      onCheckedChange={(checked) => setFormData({ ...formData, emiAvailable: checked })}
+                    />
+                    <Label htmlFor="emiAvailable">EMI Available</Label>
+                  </div>
+
+                  {formData.emiAvailable && (
+                    <>
+                      <div>
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Input
+                          id="emiStartingFrom"
+                          type="text"
+                          value={formData.emiStartingFrom}
+                          onChange={(e) => setFormData({ ...formData, emiStartingFrom: e.target.value })}
+                          placeholder="e.g., 15000"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="emiMonths">EMI Duration (Months)</Label>
+                        <Select 
+                          value={formData.emiMonths} 
+                          onValueChange={(value) => setFormData({ ...formData, emiMonths: value })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select months" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="3">3 Months</SelectItem>
+                            <SelectItem value="6">6 Months</SelectItem>
+                            <SelectItem value="12">12 Months</SelectItem>
+                            <SelectItem value="18">18 Months</SelectItem>
+                            <SelectItem value="24">24 Months</SelectItem>
+                            <SelectItem value="36">36 Months</SelectItem>
+                            <SelectItem value="48">48 Months</SelectItem>
+                            <SelectItem value="60">60 Months</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </>
+                  )}
 
                   <div>
                     <Label htmlFor="kilometersDriven">Kilometers Driven</Label>
@@ -792,15 +852,22 @@ export function CarsBikesForm() {
             </TableHeader>
             <TableBody>
               {listings.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell className="font-medium">{item.title}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{item.listingType}</Badge>
-                  </TableCell>
-                  <TableCell>{item.brand} {item.model}</TableCell>
-                  <TableCell>{item.year}</TableCell>
-                  <TableCell>₹{item.price.toLocaleString()}</TableCell>
-                  <TableCell>
+                  <TableRow key={item.id}>
+                    <TableCell className="font-medium">{item.title}</TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{item.listingType}</Badge>
+                    </TableCell>
+                    <TableCell>{item.brand} {item.model}</TableCell>
+                    <TableCell>{item.year}</TableCell>
+                    <TableCell>
+                      <div className="flex flex-col gap-1">
+                        <div>₹{item.price.toLocaleString()}</div>
+                        {item.emiAvailable && (
+                          <Badge className="bg-blue-600 text-xs w-fit">EMI ₹{item.emiStartingFrom}/{item.emiMonths}mo</Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
                     <div className="flex gap-2">
                       <Badge variant={item.isActive ? "default" : "secondary"}>
                         {item.isActive ? "Active" : "Inactive"}

@@ -202,10 +202,10 @@ export default function Footer() {
                   <div>
                     Email:{" "}
                     <a
-                      href="mailto:support@jeevika.live"
+                      href="mailto:support@jeevika.services"
                       className="underline underline-offset-4 hover:text-primary-foreground"
                     >
-                      support@jeevika.live
+                      support@jeevika.services
                     </a>
                   </div>
                   <div className="pt-2 text-xs text-primary-foreground/70">

@@ -69,7 +69,7 @@ export default function ContactScreen() {
               <Ionicons name="mail-outline" size={20} color={Colors.textMuted} />
               <View>
                 <Text style={[styles.infoText, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>jeevika7076@gmail.com</Text>
-                <Text style={[styles.infoText, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>support@jeevika.live</Text>
+                <Text style={[styles.infoText, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>support@jeevika.services</Text>
               </View>
             </View>
 

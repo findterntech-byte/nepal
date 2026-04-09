@@ -4838,6 +4838,9 @@ export function registerRoutes(app: Express) {
         model,
         year,
         price,
+        emiAvailable,
+        emiStartingFrom,
+        emiMonths,
         kilometersDriven,
         fuelType,
         transmission,
@@ -4894,6 +4897,9 @@ export function registerRoutes(app: Express) {
           model,
           year,
           price,
+          emiAvailable: emiAvailable || false,
+          emiStartingFrom: emiStartingFrom ? parseFloat(emiStartingFrom.toString()) : null,
+          emiMonths: emiMonths ? parseInt(emiMonths.toString()) : null,
           kilometersDriven: kilometersDriven || null,
           fuelType: fuelType || null,
           transmission: transmission || null,
@@ -4940,6 +4946,9 @@ export function registerRoutes(app: Express) {
         model,
         year,
         price,
+        emiAvailable,
+        emiStartingFrom,
+        emiMonths,
         kilometersDriven,
         fuelType,
         transmission,
@@ -4989,6 +4998,9 @@ export function registerRoutes(app: Express) {
       if (model !== undefined) updateData.model = model;
       if (year !== undefined) updateData.year = parseInt(year.toString());
       if (price !== undefined) updateData.price = parseFloat(price.toString());
+      if (emiAvailable !== undefined) updateData.emiAvailable = emiAvailable;
+      if (emiStartingFrom !== undefined) updateData.emiStartingFrom = emiStartingFrom ? parseFloat(emiStartingFrom.toString()) : null;
+      if (emiMonths !== undefined) updateData.emiMonths = emiMonths ? parseInt(emiMonths.toString()) : null;
       if (kilometersDriven !== undefined) updateData.kilometersDriven = kilometersDriven ? parseInt(kilometersDriven.toString()) : null;
       if (fuelType !== undefined) updateData.fuelType = fuelType || null;
       if (transmission !== undefined) updateData.transmission = transmission || null;

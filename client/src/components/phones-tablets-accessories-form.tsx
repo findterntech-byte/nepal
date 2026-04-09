@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -42,6 +42,7 @@ type ProductFormData = {
   rentalPricePerMonth?: number;
   emiAvailable?: boolean;
   emiStartingFrom?: number;
+  emiMonths?: string;
   warrantyPeriod?: string;
   warrantyType?: string;
   manufacturerWarranty?: boolean;
@@ -117,6 +118,12 @@ export default function PhonesTabletsAccessoriesForm() {
   const [uploadingImages, setUploadingImages] = useState(false);
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<ProductFormData>();
+  const emiAvailableWatch = watch("emiAvailable");
+  const [emiLocal, setEmiLocal] = useState(false);
+
+  useEffect(() => {
+    setEmiLocal(emiAvailableWatch || false);
+  }, [emiAvailableWatch]);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["phones-tablets-accessories"],
@@ -275,8 +282,13 @@ export default function PhonesTabletsAccessoriesForm() {
     setEditingProduct(product);
     setImages(product.images || []);
     setImageError(null);
+    setEmiLocal(product.emiAvailable || false);
     Object.keys(product).forEach((key) => {
-      setValue(key as any, product[key]);
+      if (key === 'emiMonths' && product[key]) {
+        setValue(key as any, product[key].toString());
+      } else {
+        setValue(key as any, product[key]);
+      }
     });
     setIsDialogOpen(true);
   };
@@ -329,6 +341,9 @@ export default function PhonesTabletsAccessoriesForm() {
                       <div className="flex-1">
                         <h3 className="font-semibold text-lg">{product.title}</h3>
                         <div className="flex gap-2 mt-2 flex-wrap">
+                          {product.emiAvailable && (
+                            <Badge className="bg-blue-600">EMI ₹{Number(product.emiStartingFrom).toLocaleString()}/{product.emiMonths}mo</Badge>
+                          )}
                           <Badge variant="outline">{product.category}</Badge>
                           <Badge variant="outline">{product.brand} {product.model}</Badge>
                           <Badge variant={product.listingType === 'sell' ? 'default' : 'secondary'}>
@@ -504,9 +519,34 @@ export default function PhonesTabletsAccessoriesForm() {
                   </div>
 
                   <div className="flex items-center space-x-2">
-                    <Switch id="emiAvailable" onCheckedChange={(checked) => setValue("emiAvailable", checked)} />
+                    <Switch id="emiAvailable" onCheckedChange={(checked) => { setValue("emiAvailable", checked); setEmiLocal(checked); }} />
                     <Label htmlFor="emiAvailable">EMI Available</Label>
                   </div>
+
+                  {emiLocal && (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Input id="emiStartingFrom" type="text" {...register("emiStartingFrom")} placeholder="e.g., 1500" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="emiMonths">EMI Duration (Months)</Label>
+                        <Select onValueChange={(value) => setValue("emiMonths", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select months" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="3">3 Months</SelectItem>
+                            <SelectItem value="6">6 Months</SelectItem>
+                            <SelectItem value="12">12 Months</SelectItem>
+                            <SelectItem value="18">18 Months</SelectItem>
+                            <SelectItem value="24">24 Months</SelectItem>
+                            <SelectItem value="36">36 Months</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </>
+                  )}
                 </div>
               </CardContent>
             </Card>

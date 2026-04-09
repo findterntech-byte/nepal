@@ -133,7 +133,7 @@ export default function TermsScreen() {
           <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Company: Jeevika Services Pvt. Ltd.{'\n'}Founder & CEO: Rajaul Khan{'\n'}General Manager: Salman Khan{'\n'}Address: Nepal</Text>
           
           <Text style={[styles.contactLabel, { color: isDark ? Colors.textDark : Colors.text, marginTop: 12 }]}>Get in Touch:</Text>
-          <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Email: support@jeevika.live{'\n'}Website: www.jeevika.live</Text>
+          <Text style={[styles.contactValue, { color: isDark ? Colors.textSecondaryDark : Colors.textSecondary }]}>Email: support@jeevika.services{'\n'}Website: www.jeevika.live</Text>
           
           <View style={styles.divider} />
           

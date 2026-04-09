@@ -212,8 +212,8 @@ export default function About() {
                 </div>
                 <div className="pt-2 border-t">
                   <p className="text-xs text-muted-foreground mb-2"><strong>Customer Care:</strong></p>
-                  <a href="mailto:support@jeevika.live" className="text-sm text-primary hover:underline">
-                    support@jeevika.live
+                  <a href="mailto:support@jeevika.services" className="text-sm text-primary hover:underline">
+                    support@jeevika.services
                   </a>
                 </div>
               </CardContent>

@@ -100,7 +100,7 @@ export default function TermsAndConditions() {
     founder: "Rajaul Khan",
     generalManager: "Salman Khan",
     address: "Nepal",
-    email: "support@jeevika.live",
+    email: "support@jeevika.services",
     website: "www.jeevika.live"
   };
 
