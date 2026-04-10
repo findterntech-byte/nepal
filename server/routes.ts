@@ -10969,6 +10969,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     }
   });
 
+  // Furniture & Interior Decor Detail (public)
+  app.get("/api/furniture-decor/:id", async (req, res) => {
+    try {
+      const item = await db.query.furnitureInteriorDecor.findFirst({
+        where: eq(furnitureInteriorDecor.id, req.params.id),
+      });
+      if (!item) return res.status(404).json({ message: "Item not found" });
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Jewelry & Accessories
   app.get("/api/jewelry-accessories", async (req, res) => {
     try {
@@ -11245,6 +11258,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     }
   });
 
+  // Saree & Clothing Shopping Detail (public)
+  app.get("/api/saree-clothing/:id", async (req, res) => {
+    try {
+      const item = await db.query.sareeClothingShopping.findFirst({
+        where: eq(sareeClothingShopping.id, req.params.id),
+      });
+      if (!item) return res.status(404).json({ message: "Item not found" });
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // E-Books & Online Courses
   app.get("/api/ebooks-courses", async (req, res) => {
     try {
@@ -11479,6 +11505,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     }
   });
 
+  // Car & Bike Rentals Detail (public)
+  app.get("/api/car-bike-rental-public/:id", async (req, res) => {
+    try {
+      const item = await db.query.carBikeRentals.findFirst({
+        where: eq(carBikeRentals.id, req.params.id),
+      });
+      if (!item) return res.status(404).json({ message: "Item not found" });
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Heavy Equipment (public endpoint)
   app.get("/api/heavy-equipment-public", async (req, res) => {
     try {
@@ -11624,6 +11663,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
         orderBy: desc(secondHandCarsBikes.createdAt),
       });
       res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Second Hand Cars & Bikes Detail (public)
+  app.get("/api/second-hand-cars-bikes-public/:id", async (req, res) => {
+    try {
+      const item = await db.query.secondHandCarsBikes.findFirst({
+        where: eq(secondHandCarsBikes.id, req.params.id),
+      });
+      if (!item) return res.status(404).json({ message: "Item not found" });
+      res.json(item);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
