@@ -484,7 +484,7 @@ export default function Home() {
           'jewelry-accessories': 'jewelry-accessories',
           'saree-clothing-shopping': 'saree-clothing',
           // Furniture
-          'furniture-interior-decor': 'furniture-interior-decor',
+          'furniture-interior-decor': 'furniture-decor',
           // Real Estate
           'residential-properties': 'properties',
           'commercial-properties': 'commercial-properties-public',
@@ -495,8 +495,8 @@ export default function Home() {
           'hostel-pg': 'hostel-listings',
           // Vehicles
           'cars-bikes': 'cars-bikes',
-          'second-hand-cars-bikes': 'second-hand-cars-bikes',
-          'car-bike-rentals': 'car-bike-rentals',
+          'second-hand-cars-bikes': 'second-hand-cars-bikes-public',
+          'car-bike-rentals': 'car-bike-rental-public',
           // Other
           'construction-materials': 'construction-materials',
           'household-services': 'household-services',
@@ -523,8 +523,8 @@ export default function Home() {
           'rental-listings',
           'hostel-listings',
           'cars-bikes',
-          'second-hand-cars-bikes',
-          'car-bike-rentals',
+          'second-hand-cars-bikes-public',
+          'car-bike-rental-public',
           'construction-materials',
           'heavy-equipment-public',
           'showrooms-public',
@@ -534,7 +534,7 @@ export default function Home() {
           'phones-tablets-accessories',
           'fashion-beauty',
           'jewelry-accessories',
-          'furniture-interior-decor',
+          'furniture-decor',
           'household-services',
           'health-wellness',
           'pharmacy',
@@ -545,6 +545,7 @@ export default function Home() {
           'dance-gym-yoga',
           'language-classes',
           'academies',
+          'schools-colleges-coaching',
           'ebooks-courses',
           'educational-consultancy',
           'second-hand-phones',
@@ -563,13 +564,14 @@ export default function Home() {
             
             const subSlug = toSlug(subcategory.slug || subcategory.name || '');
             const tableName = subcategoryToTable[subSlug] || subSlug;
+            const apiEndpoint = tableName === 'furniture-interior-decor' ? 'furniture-decor' : tableName;
             let products: any[] = [];
 
             if (!tableName || !allowedApiTables.has(tableName)) continue;
             
             try {
               // Try to fetch from the mapped table endpoint
-              const res = await fetch(`/api/${encodeURIComponent(tableName)}?limit=10`);
+              const res = await fetch(`/api/${encodeURIComponent(apiEndpoint)}?limit=10`);
               if (res.ok) {
                 const data = await safeJson(res);
                 // Handle various response formats
@@ -777,7 +779,7 @@ export default function Home() {
   const { data: secondHandCarsBikes = [], isLoading: secondHandCarsLoading } = useQuery({
     queryKey: ["second-hand-cars-bikes"],
     queryFn: async () => {
-      const res = await fetch('/api/second-hand-cars-bikes?limit=100');
+      const res = await fetch('/api/second-hand-cars-bikes-public?limit=100');
       if (!res.ok) return [];
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -795,7 +797,7 @@ export default function Home() {
   const { data: carBikeRentals = [], isLoading: carBikeRentalsLoading } = useQuery({
     queryKey: ["car-bike-rentals"],
     queryFn: async () => {
-      const res = await fetch('/api/car-bike-rentals?limit=100');
+      const res = await fetch('/api/car-bike-rental-public?limit=100');
       if (!res.ok) return [];
       const data = await res.json();
       if (!Array.isArray(data)) return [];
