@@ -53,7 +53,7 @@ export type ListingConfig = {
     apiBase: "/api/admin/cars-bikes",
     titleField: "title",
     subtitleField: "model",
-    defaultFields: ["listingType", "vehicleType", "brand", "model", "year", "price", "kilometersDriven", "fuelType", "transmission", "color", "city", "fullAddress", "isActive", "isFeatured", "viewCount"],
+    defaultFields: ["listingType", "vehicleType", "brand", "model", "year", "price", "emiAvailable", "emiStartingFrom", "emiMonths", "kilometersDriven", "fuelType", "transmission", "color", "ownerNumber", "registrationNumber", "insuranceValidUntil", "condition", "isNegotiable", "city", "fullAddress", "contactPerson", "contactPhone", "isActive", "isFeatured", "viewCount"],
   },
   // Second Hand Cars & Bikes
   "second-hand-cars-bikes": {
@@ -68,6 +68,9 @@ export type ListingConfig = {
       "variant",
       "year",
       "price",
+      "emiAvailable",
+      "emiStartingFrom",
+      "emiMonths",
       "kilometersDriven",
       "fuelType",
       "transmission",

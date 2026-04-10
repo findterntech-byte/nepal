@@ -95,7 +95,9 @@ export default function SubcategoryPage() {
     enabled: !!endpoint,
     queryFn: async () => {
       if (!endpoint) return [];
-      const endpointString = endpoint as string;
+      const endpointString = (endpoint as string).includes('?') 
+        ? `${endpoint}&limit=100` 
+        : `${endpoint}?limit=100`;
       const response = await fetch(endpointString);
       if (!response.ok) throw new Error("Failed to fetch listings");
       return response.json();

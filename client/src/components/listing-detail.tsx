@@ -144,19 +144,14 @@ export default function ListingDetail({ listing, titleField = "title", subtitleF
     return normalized;
   }, [showAllFields, allKeysFromListing, fields, fieldFilter]);
 
-  const formatValue = (v: any, field?: string): React.ReactNode => {
+  const formatValue = (v: any): React.ReactNode => {
     if (v == null) return "—";
     if (Array.isArray(v)) return v.length ? v.join(", ") : "—";
     if (typeof v === "boolean") return v ? "Yes" : "No";
     if (typeof v === "object") return <pre className="text-xs bg-gray-100 p-2 rounded">{JSON.stringify(v, null, 2)}</pre>;
-    // Special handling for EMI months - don't treat as date
-    if (field === "emiMonths" && typeof v === "number") return `${v} months`;
-    if (field === "emiStartingFrom" && typeof v === "number") return `₹${v.toLocaleString()}`;
-    // Dates - only treat as date if it looks like a valid date string (not a number like months)
-    if (typeof v === "string" && !isNaN(new Date(v).getTime()) && v.includes("-")) {
-      const d = new Date(v);
-      if (!isNaN(d.getTime())) return d.toLocaleString();
-    }
+    // Dates
+    const d = new Date(v);
+    if (!isNaN(d.getTime())) return d.toLocaleString();
     // Numbers representing money
     if (typeof v === "number") return v.toString();
     return String(v);
@@ -306,7 +301,7 @@ export default function ListingDetail({ listing, titleField = "title", subtitleF
                 {visibleFields.map((f) => (
                   <React.Fragment key={f}>
                     <div className="text-sm text-muted-foreground">{prettyKey(f)}</div>
-                    <div className="font-medium">{formatValue(valueForField(f), f)}</div>
+                    <div className="font-medium">{formatValue(valueForField(f))}</div>
                   </React.Fragment>
                 ))}
               </div>

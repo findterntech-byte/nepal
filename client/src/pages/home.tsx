@@ -609,7 +609,7 @@ export default function Home() {
   const { data: fashionProducts = [], isLoading: fashionLoading } = useQuery({
     queryKey: ["fashion-beauty-products"],
     queryFn: async () => {
-      const res = await fetch('/api/fashion-beauty?limit=20');
+      const res = await fetch('/api/fashion-beauty?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -618,7 +618,7 @@ export default function Home() {
   const { data: carsBikes = [], isLoading: carsLoading } = useQuery({
     queryKey: ["cars-bikes"],
     queryFn: async () => {
-      const res = await fetch('/api/cars-bikes?limit=20');
+      const res = await fetch('/api/cars-bikes?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -627,7 +627,7 @@ export default function Home() {
   const { data: constructionMaterials = [], isLoading: constructionLoading } = useQuery({
     queryKey: ["construction-materials"],
     queryFn: async () => {
-      const res = await fetch('/api/construction-materials?limit=20');
+      const res = await fetch('/api/construction-materials?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -637,7 +637,7 @@ export default function Home() {
   const { data: electronicsGadgets = [], isLoading: electronicsLoading } = useQuery({
     queryKey: ["electronics-gadgets"],
     queryFn: async () => {
-      const res = await fetch('/api/electronics-gadgets?limit=20');
+      const res = await fetch('/api/electronics-gadgets?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -647,7 +647,7 @@ export default function Home() {
   const { data: phonesTablets = [], isLoading: phonesLoading } = useQuery({
     queryKey: ["phones-tablets"],
     queryFn: async () => {
-      const res = await fetch('/api/phones-tablets-accessories?limit=20');
+      const res = await fetch('/api/phones-tablets-accessories?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -657,7 +657,7 @@ export default function Home() {
   const { data: rentalData = [], isLoading: rentalLoading } = useQuery({
     queryKey: ["rental-listings"],
     queryFn: async () => {
-      const res = await fetch('/api/rental-listings?limit=20');
+      const res = await fetch('/api/rental-listings?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -667,7 +667,7 @@ export default function Home() {
   const { data: furnitureData = [], isLoading: furnitureLoading } = useQuery({
     queryKey: ["furniture-decor"],
     queryFn: async () => {
-      const res = await fetch('/api/furniture-decor?limit=20');
+      const res = await fetch('/api/furniture-decor?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -677,7 +677,7 @@ export default function Home() {
   const { data: jewelryData = [], isLoading: jewelryLoading } = useQuery({
     queryKey: ["jewelry-accessories"],
     queryFn: async () => {
-      const res = await fetch('/api/jewelry-accessories?limit=20');
+      const res = await fetch('/api/jewelry-accessories?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -687,7 +687,7 @@ export default function Home() {
   const { data: skillTraining = [], isLoading: skillLoading } = useQuery({
     queryKey: ["skill-training"],
     queryFn: async () => {
-      const res = await fetch('/api/skill-training?limit=20');
+      const res = await fetch('/api/skill-training?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -697,7 +697,7 @@ export default function Home() {
   const { data: tuitionClasses = [], isLoading: tuitionLoading } = useQuery({
     queryKey: ["tuition-classes"],
     queryFn: async () => {
-      const res = await fetch('/api/tuition-classes?limit=20');
+      const res = await fetch('/api/tuition-classes?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -707,7 +707,7 @@ export default function Home() {
   const { data: danceGymYoga = [], isLoading: danceLoading } = useQuery({
     queryKey: ["dance-gym-yoga"],
     queryFn: async () => {
-      const res = await fetch('/api/dance-gym-yoga?limit=20');
+      const res = await fetch('/api/dance-gym-yoga?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -717,7 +717,7 @@ export default function Home() {
   const { data: languageClasses = [], isLoading: languageLoading } = useQuery({
     queryKey: ["language-classes"],
     queryFn: async () => {
-      const res = await fetch('/api/language-classes?limit=20');
+      const res = await fetch('/api/language-classes?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -727,7 +727,7 @@ export default function Home() {
   const { data: healthWellness = [], isLoading: healthLoading } = useQuery({
     queryKey: ["health-wellness"],
     queryFn: async () => {
-      const res = await fetch('/api/health-wellness?limit=20');
+      const res = await fetch('/api/health-wellness?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -737,7 +737,7 @@ export default function Home() {
   const { data: pharmacyMedical = [], isLoading: pharmacyLoading } = useQuery({
     queryKey: ["pharmacy-medical"],
     queryFn: async () => {
-      const res = await fetch('/api/pharmacy-medical?limit=20');
+      const res = await fetch('/api/pharmacy-medical?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -747,7 +747,7 @@ export default function Home() {
   const { data: householdServices = [], isLoading: householdLoading } = useQuery({
     queryKey: ["household-services"],
     queryFn: async () => {
-      const res = await fetch('/api/household-services?limit=20');
+      const res = await fetch('/api/household-services?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -757,7 +757,7 @@ export default function Home() {
   const { data: eventDecoration = [], isLoading: eventLoading } = useQuery({
     queryKey: ["event-decoration"],
     queryFn: async () => {
-      const res = await fetch('/api/event-decoration?limit=20');
+      const res = await fetch('/api/event-decoration?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -767,7 +767,7 @@ export default function Home() {
   const { data: computerRepair = [], isLoading: computerLoading } = useQuery({
     queryKey: ["computer-repair"],
     queryFn: async () => {
-      const res = await fetch('/api/computer-repair?limit=20');
+      const res = await fetch('/api/computer-repair?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -777,7 +777,7 @@ export default function Home() {
   const { data: secondHandCarsBikes = [], isLoading: secondHandCarsLoading } = useQuery({
     queryKey: ["second-hand-cars-bikes"],
     queryFn: async () => {
-      const res = await fetch('/api/second-hand-cars-bikes?limit=20');
+      const res = await fetch('/api/second-hand-cars-bikes?limit=100');
       if (!res.ok) return [];
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -795,7 +795,7 @@ export default function Home() {
   const { data: carBikeRentals = [], isLoading: carBikeRentalsLoading } = useQuery({
     queryKey: ["car-bike-rentals"],
     queryFn: async () => {
-      const res = await fetch('/api/car-bike-rentals?limit=20');
+      const res = await fetch('/api/car-bike-rentals?limit=100');
       if (!res.ok) return [];
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -813,7 +813,7 @@ export default function Home() {
   const { data: secondHandPhones = [], isLoading: secondHandLoading } = useQuery({
     queryKey: ["second-hand-phones"],
     queryFn: async () => {
-      const res = await fetch('/api/second-hand-phones?limit=20');
+      const res = await fetch('/api/second-hand-phones?limit=100');
       if (!res.ok) return [];
       const data = await res.json();
       if (!Array.isArray(data)) return [];
@@ -831,7 +831,7 @@ export default function Home() {
   const { data: sareeClothing = [], isLoading: sareeLoading } = useQuery({
     queryKey: ["saree-clothing"],
     queryFn: async () => {
-      const res = await fetch('/api/saree-clothing?limit=20');
+      const res = await fetch('/api/saree-clothing?limit=100');
       if (!res.ok) return [];
       return res.json();
     },
@@ -841,7 +841,7 @@ export default function Home() {
   const { data: ebooksCourses = [], isLoading: ebooksLoading } = useQuery({
     queryKey: ["ebooks-courses"],
     queryFn: async () => {
-      const res = await fetch('/api/ebooks-courses?limit=20');
+      const res = await fetch('/api/ebooks-courses?limit=100');
       if (!res.ok) return [];
       return res.json();
     },

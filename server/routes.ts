@@ -10727,7 +10727,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Fashion & Beauty Products
   app.get("/api/fashion-beauty", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.fashionBeautyProducts.findMany({
         limit,
         orderBy: desc(fashionBeautyProducts.createdAt),
@@ -10757,7 +10757,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Electronics & Gadgets
   app.get("/api/electronics-gadgets", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.electronicsGadgets.findMany({
         limit,
         orderBy: desc(electronicsGadgets.createdAt),
@@ -10787,7 +10787,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Phones, Tablets & Accessories
   app.get("/api/phones-tablets-accessories", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.phonesTabletsAccessories.findMany({
         limit,
         orderBy: desc(phonesTabletsAccessories.createdAt),
@@ -10817,7 +10817,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Cars & Bikes
   app.get("/api/cars-bikes", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.carsBikes.findMany({
         limit,
         orderBy: desc(carsBikes.createdAt),
@@ -10847,7 +10847,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Skill Training & Certification
   app.get("/api/skill-training", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.skillTrainingCertification.findMany({
         limit,
         orderBy: desc(skillTrainingCertification.createdAt),
@@ -10877,7 +10877,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Construction Materials
   app.get("/api/construction-materials", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.constructionMaterials.findMany({
         limit,
         orderBy: desc(constructionMaterials.createdAt),
@@ -10904,7 +10904,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Rental Listings
   app.get("/api/rental-listings", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.rentalListings.findMany({
         limit,
         orderBy: desc(rentalListings.createdAt),
@@ -10931,7 +10931,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Hostel & PG Listings
   app.get("/api/hostel-listings", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.hostelPgListings.findMany({
         limit,
         orderBy: desc(hostelPgListings.createdAt),
@@ -10958,7 +10958,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Furniture & Interior Decor
   app.get("/api/furniture-decor", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.furnitureInteriorDecor.findMany({
         limit,
         orderBy: desc(furnitureInteriorDecor.createdAt),
@@ -10972,7 +10972,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Jewelry & Accessories
   app.get("/api/jewelry-accessories", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.jewelryAccessories.findMany({
         limit,
         orderBy: desc(jewelryAccessories.createdAt),
@@ -10986,7 +10986,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Health & Wellness Services
   app.get("/api/health-wellness", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.healthWellnessServices.findMany({
         limit,
         orderBy: desc(healthWellnessServices.createdAt),
@@ -11016,7 +11016,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Tuition & Private Classes
   app.get("/api/tuition-classes", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.tuitionPrivateClasses.findMany({
         limit,
         orderBy: desc(tuitionPrivateClasses.createdAt),
@@ -11046,7 +11046,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Dance, Karate, Gym & Yoga
   app.get("/api/dance-gym-yoga", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.danceKarateGymYoga.findMany({
         limit,
         orderBy: desc(danceKarateGymYoga.createdAt),
@@ -11076,7 +11076,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Language Classes
   app.get("/api/language-classes", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.languageClasses.findMany({
         limit,
         orderBy: desc(languageClasses.createdAt),
@@ -11106,7 +11106,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Academies, Music, Arts & Sports
   app.get("/api/academy-music-arts", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.academiesMusicArtsSports.findMany({
         limit,
         orderBy: desc(academiesMusicArtsSports.createdAt),
@@ -11136,7 +11136,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Schools, Colleges & Coaching
   app.get("/api/schools-colleges-coaching", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.schoolsCollegesCoaching.findMany({
         limit,
         orderBy: desc(schoolsCollegesCoaching.createdAt),
@@ -11150,7 +11150,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Education Consultancy & Study Abroad
   app.get("/api/education-consultancy", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.educationalConsultancyStudyAbroad.findMany({
         limit,
         orderBy: desc(educationalConsultancyStudyAbroad.createdAt),
@@ -11164,7 +11164,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Pharmacy & Medical Stores
   app.get("/api/pharmacy-medical", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.pharmacyMedicalStores.findMany({
         limit,
         orderBy: desc(pharmacyMedicalStores.createdAt),
@@ -11178,7 +11178,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Second Hand Phones, Tablets & Accessories
   app.get("/api/second-hand-phones", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.secondHandPhonesTabletsAccessories.findMany({
         limit,
         orderBy: desc(secondHandPhonesTabletsAccessories.createdAt),
@@ -11192,7 +11192,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Computer, Mobile & Laptop Repair Services
   app.get("/api/computer-repair", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.computerMobileLaptopRepairServices.findMany({
         limit,
         orderBy: desc(computerMobileLaptopRepairServices.createdAt),
@@ -11206,7 +11206,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Event & Decoration Services
   app.get("/api/event-decoration", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.eventDecorationServices.findMany({
         limit,
         orderBy: desc(eventDecorationServices.createdAt),
@@ -11220,7 +11220,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Household Services
   app.get("/api/household-services", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.householdServices.findMany({
         limit,
         orderBy: desc(householdServices.createdAt),
@@ -11234,7 +11234,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Saree & Clothing Shopping
   app.get("/api/saree-clothing", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.sareeClothingShopping.findMany({
         limit,
         orderBy: desc(sareeClothingShopping.createdAt),
@@ -11248,7 +11248,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // E-Books & Online Courses
   app.get("/api/ebooks-courses", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.ebooksOnlineCourses.findMany({
         limit,
         orderBy: desc(ebooksOnlineCourses.createdAt),
@@ -11287,7 +11287,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Cricket & Sports Training
   app.get("/api/cricket-sports", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.cricketSportsTraining.findMany({
         limit,
         orderBy: desc(cricketSportsTraining.createdAt),
@@ -11426,7 +11426,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Cyber Cafe & Internet Services
   app.get("/api/cyber-cafe", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.cyberCafeInternetServices.findMany({
         limit,
         orderBy: desc(cyberCafeInternetServices.createdAt),
@@ -11440,7 +11440,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Telecommunication Services
   app.get("/api/telecommunication", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.telecommunicationServices.findMany({
         limit,
         orderBy: desc(telecommunicationServices.createdAt),
@@ -11454,7 +11454,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Service Centre & Warranty
   app.get("/api/service-centre", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.serviceCentreWarranty.findMany({
         limit,
         orderBy: desc(serviceCentreWarranty.createdAt),
@@ -11468,7 +11468,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Car & Bike Rentals (public endpoint)
   app.get("/api/car-bike-rental-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.carBikeRentals.findMany({
         limit,
         orderBy: desc(carBikeRentals.createdAt),
@@ -11482,7 +11482,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Heavy Equipment (public endpoint)
   app.get("/api/heavy-equipment-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.heavyEquipment.findMany({
         limit,
         orderBy: desc(heavyEquipment.createdAt),
@@ -11496,7 +11496,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Property Deals (public endpoint)
   app.get("/api/property-deals-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.propertyDeals.findMany({
         limit,
         orderBy: desc(propertyDeals.createdAt),
@@ -11523,7 +11523,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Commercial Properties (public endpoint)
   app.get("/api/commercial-properties-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.commercialProperties.findMany({
         limit,
         orderBy: desc(commercialProperties.createdAt),
@@ -11550,7 +11550,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Industrial Land (public endpoint)
   app.get("/api/industrial-land-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.industrialLand.findMany({
         limit,
         orderBy: desc(industrialLand.createdAt),
@@ -11577,7 +11577,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Office Spaces (public endpoint)
   app.get("/api/office-spaces-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.officeSpaces.findMany({
         limit,
         orderBy: desc(officeSpaces.createdAt),
@@ -11604,7 +11604,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Showrooms (public endpoint)
   app.get("/api/showrooms-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.showrooms.findMany({
         limit,
         orderBy: desc(showrooms.createdAt),
@@ -11618,7 +11618,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Second Hand Cars & Bikes (public endpoint)
   app.get("/api/second-hand-cars-bikes-public", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.secondHandCarsBikes.findMany({
         limit,
         orderBy: desc(secondHandCarsBikes.createdAt),
@@ -11632,7 +11632,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Vehicle License Classes (public endpoint)
   app.get("/api/vehicle-license-classes", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.vehicleLicenseClasses.findMany({
         limit,
         orderBy: desc(vehicleLicenseClasses.createdAt),
@@ -11646,7 +11646,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   // Transportation & Moving Services (public endpoint)
   app.get("/api/transportation-services", async (req, res) => {
     try {
-      const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.transportationMovingServices.findMany({
         limit,
         orderBy: desc(transportationMovingServices.createdAt),
