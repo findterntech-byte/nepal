@@ -1684,22 +1684,8 @@ function JewelryAccessoriesSection() {
 
   const fetchItems = async () => {
     try {
-      const storedUser = localStorage.getItem("user");
-      const queryParams = new URLSearchParams();
-
-      if (storedUser) {
-        const userData = JSON.parse(storedUser);
-        if (userData.role === 'admin') {
-          queryParams.append('role', 'admin');
-        } else {
-          queryParams.append('userId', userData.id);
-          queryParams.append('role', userData.role || 'user');
-        }
-      }
-
-      const response = await fetch(`/api/admin/jewelry-accessories?${queryParams.toString()}`);
+      const response = await fetch('/api/admin/jewelry-accessories');
       const data = await response.json();
-      console.log('Fetched jewelry accessories:', data); // Debug log
       setItems(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching jewelry & accessories:', error);

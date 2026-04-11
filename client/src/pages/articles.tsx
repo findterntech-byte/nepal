@@ -421,10 +421,12 @@ export default function Articles() {
                             <Download className="w-4 h-4" />
                             {article.downloads || '0'}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Eye className="w-4 h-4" />
-                            {article.viewCount ?? 0}
-                          </span>
+                          {article.viewCount > 0 && (
+                            <span className="flex items-center gap-1">
+                              <Eye className="w-4 h-4" />
+                              {article.viewCount}
+                            </span>
+                          )}
                           <span className="flex items-center gap-1">
                             <ThumbsUp className="w-4 h-4" />
                             {article.likes ?? 0}
@@ -569,7 +571,9 @@ export default function Articles() {
               <div className="flex items-center gap-4 text-sm text-muted-foreground">
                 <span>By {viewingArticle.authorName || '—'}</span>
                 <span className="flex items-center gap-1"><Calendar className="w-4 h-4" />{viewingArticle.createdAt ? new Date(viewingArticle.createdAt).toLocaleDateString() : ''}</span>
-                <span className="flex items-center gap-1"><Eye className="w-4 h-4" />{viewingArticle.viewCount ?? 0}</span>
+                {viewingArticle.viewCount > 0 && (
+                  <span className="flex items-center gap-1"><Eye className="w-4 h-4" />{viewingArticle.viewCount}</span>
+                )}
               </div>
               <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: viewingArticle.content || viewingArticle.excerpt || '' }} />
               <div className="flex justify-end">

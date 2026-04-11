@@ -67,7 +67,7 @@ import {
   cyberCafeInternetServices, // Added
 } from "../shared/schema";
 import { uploadMedia, handleMediaUpload } from './upload';
-import { eq, sql, desc, or, and, asc } from "drizzle-orm";
+import { eq, sql, desc, or, and, asc, isNotNull } from "drizzle-orm";
 import nodemailer from "nodemailer";
 
 const parseBoolean = (value: any, defaultValue = false) => {
@@ -5614,19 +5614,25 @@ export function registerRoutes(app: Express) {
       const queryRole = typeof req.query.role === 'string' ? req.query.role : undefined;
 
       let vehicles;
-      if (sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'super_admin')) {
-        const adminId = sessionUser.id as string;
-        if (queryUserId && queryUserId !== adminId) {
-          return res.status(403).json({ message: "Forbidden: cannot access other users' listings" });
+      const isAdmin = sessionUser && (sessionUser.role === 'admin' || sessionUser.role === 'super_admin');
+      const isSeller = sessionUser && sessionUser.accountType === 'seller';
+
+      if (isAdmin) {
+        // Admin sees all data
+        if (queryUserId) {
+          // If queryUserId is specified, filter by that user
+          vehicles = await db.query.secondHandCarsBikes.findMany({
+            where: or(eq(secondHandCarsBikes.userId, queryUserId), eq(secondHandCarsBikes.sellerId, queryUserId)),
+            orderBy: desc(secondHandCarsBikes.createdAt),
+          });
+        } else {
+          // Admin sees all
+          vehicles = await db.query.secondHandCarsBikes.findMany({
+            orderBy: desc(secondHandCarsBikes.createdAt),
+          });
         }
-        vehicles = await db.query.secondHandCarsBikes.findMany({
-          where: and(
-            or(eq(secondHandCarsBikes.userId, adminId), eq(secondHandCarsBikes.sellerId, adminId)),
-            eq(secondHandCarsBikes.role, sessionUser.role as string),
-          ),
-          orderBy: desc(secondHandCarsBikes.createdAt),
-        });
-      } else if (sessionUser && sessionUser.id) {
+      } else if (isSeller || sessionUser?.id) {
+        // Seller sees only their own data
         const sid = sessionUser.id as string;
         vehicles = await db.query.secondHandCarsBikes.findMany({
           where: or(eq(secondHandCarsBikes.userId, sid), eq(secondHandCarsBikes.sellerId, sid)),
@@ -5636,16 +5642,10 @@ export function registerRoutes(app: Express) {
         vehicles = await db.query.secondHandCarsBikes.findMany({
           where: queryRole
             ? and(
-                or(
-                  eq(secondHandCarsBikes.userId, queryUserId),
-                  eq(secondHandCarsBikes.sellerId, queryUserId)
-                ),
+                or(eq(secondHandCarsBikes.userId, queryUserId), eq(secondHandCarsBikes.sellerId, queryUserId)),
                 eq(secondHandCarsBikes.role, queryRole)
               )
-            : or(
-                eq(secondHandCarsBikes.userId, queryUserId),
-                eq(secondHandCarsBikes.sellerId, queryUserId)
-              ),
+            : or(eq(secondHandCarsBikes.userId, queryUserId), eq(secondHandCarsBikes.sellerId, queryUserId)),
           orderBy: desc(secondHandCarsBikes.createdAt),
         });
       } else {
@@ -5678,11 +5678,29 @@ export function registerRoutes(app: Express) {
   // CREATE new vehicle
   app.post("/api/admin/second-hand-cars-bikes", async (req, res) => {
     try {
+      const sessionUser = (req as any).session?.user || null;
+      if (!sessionUser?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const body = { ...req.body };
+      
+      // Sanitize numeric fields - convert empty strings to null
+      const numericFields = ['price', 'emiStartingFrom', 'kilometersDriven', 'ownerNumber', 'registrationYear', 'seatingCapacity', 'engineCapacity', 'mileageKmpl', 'year'];
+      numericFields.forEach(field => {
+        if (body[field] === '' || body[field] === undefined) {
+          body[field] = null;
+        }
+      });
+
       const [newVehicle] = await db
         .insert(secondHandCarsBikes)
         .values({
-          ...req.body,
-          country: req.body.country || "India",
+          ...body,
+          country: body.country || "India",
+          userId: sessionUser.id,
+          sellerId: sessionUser.id,
+          sellerType: sessionUser.accountType || sessionUser.role || "seller",
         })
         .returning();
 
@@ -5697,7 +5715,17 @@ export function registerRoutes(app: Express) {
   app.put("/api/admin/second-hand-cars-bikes/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const updateData = { ...req.body, updatedAt: new Date() };
+      const body = { ...req.body };
+      
+      // Sanitize numeric fields - convert empty strings to null
+      const numericFields = ['price', 'emiStartingFrom', 'kilometersDriven', 'ownerNumber', 'registrationYear', 'seatingCapacity', 'engineCapacity', 'mileageKmpl', 'year'];
+      numericFields.forEach(field => {
+        if (body[field] === '' || body[field] === undefined) {
+          body[field] = null;
+        }
+      });
+
+      const updateData = { ...body, updatedAt: new Date() };
 
       const [updatedVehicle] = await db
         .update(secondHandCarsBikes)
@@ -6503,7 +6531,24 @@ export function registerRoutes(app: Express) {
   // GET all electronics & gadgets
   app.get("/api/admin/electronics-gadgets", async (req, res) => {
     try {
-      const sessionUser = (req as any).session?.user || null;
+      // Support both session and header-based auth
+      let sessionUser = (req as any).session?.user || null;
+      
+      // Fallback to headers if no session
+      if (!sessionUser?.id) {
+        const headerUserId = req.headers['x-user-id'] as string;
+        const headerRole = req.headers['x-user-role'] as string;
+        const headerAccountType = req.headers['x-account-type'] as string;
+        
+        if (headerUserId) {
+          sessionUser = {
+            id: headerUserId,
+            role: headerRole || 'user',
+            accountType: headerAccountType || 'user',
+          };
+        }
+      }
+
       if (!sessionUser?.id) {
         return res.status(401).json({ message: "Unauthorized" });
       }
@@ -6515,8 +6560,15 @@ export function registerRoutes(app: Express) {
         return res.status(403).json({ message: "Forbidden" });
       }
 
+      // For sellers: only show items with valid sellerId (not null)
+      // For admins: show all items that have a valid sellerId or are admin-owned
       const gadgets = await db.query.electronicsGadgets.findMany({
-        where: isAdmin ? undefined : eq(electronicsGadgets.userId, sessionUser.id as string),
+        where: isAdmin 
+          ? or(isNotNull(electronicsGadgets.sellerId), eq(electronicsGadgets.userId, sessionUser.id as string))
+          : and(
+              eq(electronicsGadgets.userId, sessionUser.id as string),
+              isNotNull(electronicsGadgets.sellerId)
+            ),
         orderBy: desc(electronicsGadgets.createdAt),
       });
       res.json(gadgets);
@@ -6556,14 +6608,30 @@ export function registerRoutes(app: Express) {
         return res.status(403).json({ message: "Forbidden" });
       }
 
+      // Sanitize request body - remove empty strings for seller fields
+      const body = { ...req.body };
+      if (body.sellerId === '') body.sellerId = null;
+      if (body.sellerType === '') body.sellerType = null;
+
+      // Map accountType/role to allowed seller_type values
+      const getSellerType = (accountType?: string, role?: string) => {
+        if (accountType === 'seller') return 'individual';
+        if (accountType === 'dealer') return 'dealer';
+        if (accountType === 'retailer') return 'retailer';
+        if (role === 'admin' || role === 'super_admin') return 'retailer';
+        return 'individual';
+      };
+
       const [newGadget] = await db
         .insert(electronicsGadgets)
         .values({
-          ...req.body,
+          ...body,
           // Enforce ownership for seller accounts
-          userId: isSeller ? (sessionUser.id as string) : req.body?.userId,
-          role: isSeller ? 'seller' : (req.body?.role || sessionUser.role || 'user'),
-          country: req.body.country || "India",
+          userId: isSeller ? (sessionUser.id as string) : body?.userId,
+          sellerId: sessionUser.id as string,
+          sellerType: getSellerType(sessionUser.accountType, sessionUser.role),
+          role: isSeller ? 'seller' : (body?.role || sessionUser.role || 'user'),
+          country: body.country || "India",
         })
         .returning();
 
@@ -10729,6 +10797,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.fashionBeautyProducts.findMany({
+        where: eq(fashionBeautyProducts.isActive, true),
         limit,
         orderBy: desc(fashionBeautyProducts.createdAt),
       });
@@ -10759,6 +10828,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.electronicsGadgets.findMany({
+        where: eq(electronicsGadgets.isActive, true),
         limit,
         orderBy: desc(electronicsGadgets.createdAt),
       });
@@ -10789,6 +10859,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.phonesTabletsAccessories.findMany({
+        where: eq(phonesTabletsAccessories.isActive, true),
         limit,
         orderBy: desc(phonesTabletsAccessories.createdAt),
       });
@@ -10819,6 +10890,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.carsBikes.findMany({
+        where: eq(carsBikes.isActive, true),
         limit,
         orderBy: desc(carsBikes.createdAt),
       });
@@ -10849,6 +10921,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.skillTrainingCertification.findMany({
+        where: eq(skillTrainingCertification.isActive, true),
         limit,
         orderBy: desc(skillTrainingCertification.createdAt),
       });
@@ -10879,6 +10952,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.constructionMaterials.findMany({
+        where: eq(constructionMaterials.isActive, true),
         limit,
         orderBy: desc(constructionMaterials.createdAt),
       });
@@ -10906,6 +10980,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.rentalListings.findMany({
+        where: eq(rentalListings.isActive, true),
         limit,
         orderBy: desc(rentalListings.createdAt),
       });
@@ -10933,6 +11008,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.hostelPgListings.findMany({
+        where: eq(hostelPgListings.isActive, true),
         limit,
         orderBy: desc(hostelPgListings.createdAt),
       });
@@ -10960,6 +11036,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.furnitureInteriorDecor.findMany({
+        where: eq(furnitureInteriorDecor.isActive, true),
         limit,
         orderBy: desc(furnitureInteriorDecor.createdAt),
       });
@@ -10987,6 +11064,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.jewelryAccessories.findMany({
+        where: eq(jewelryAccessories.isActive, true),
         limit,
         orderBy: desc(jewelryAccessories.createdAt),
       });
@@ -11001,6 +11079,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.healthWellnessServices.findMany({
+        where: eq(healthWellnessServices.isActive, true),
         limit,
         orderBy: desc(healthWellnessServices.createdAt),
       });
@@ -11031,6 +11110,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.tuitionPrivateClasses.findMany({
+        where: eq(tuitionPrivateClasses.isActive, true),
         limit,
         orderBy: desc(tuitionPrivateClasses.createdAt),
       });
@@ -11061,6 +11141,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.danceKarateGymYoga.findMany({
+        where: eq(danceKarateGymYoga.isActive, true),
         limit,
         orderBy: desc(danceKarateGymYoga.createdAt),
       });
@@ -11091,6 +11172,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.languageClasses.findMany({
+        where: eq(languageClasses.isActive, true),
         limit,
         orderBy: desc(languageClasses.createdAt),
       });
@@ -11121,6 +11203,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.academiesMusicArtsSports.findMany({
+        where: eq(academiesMusicArtsSports.isActive, true),
         limit,
         orderBy: desc(academiesMusicArtsSports.createdAt),
       });
@@ -11151,6 +11234,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.schoolsCollegesCoaching.findMany({
+        where: eq(schoolsCollegesCoaching.isActive, true),
         limit,
         orderBy: desc(schoolsCollegesCoaching.createdAt),
       });
@@ -11165,6 +11249,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.educationalConsultancyStudyAbroad.findMany({
+        where: eq(educationalConsultancyStudyAbroad.isActive, true),
         limit,
         orderBy: desc(educationalConsultancyStudyAbroad.createdAt),
       });
@@ -11179,6 +11264,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.pharmacyMedicalStores.findMany({
+        where: eq(pharmacyMedicalStores.isActive, true),
         limit,
         orderBy: desc(pharmacyMedicalStores.createdAt),
       });
@@ -11193,6 +11279,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.secondHandPhonesTabletsAccessories.findMany({
+        where: eq(secondHandPhonesTabletsAccessories.isActive, true),
         limit,
         orderBy: desc(secondHandPhonesTabletsAccessories.createdAt),
       });
@@ -11207,6 +11294,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.computerMobileLaptopRepairServices.findMany({
+        where: eq(computerMobileLaptopRepairServices.isActive, true),
         limit,
         orderBy: desc(computerMobileLaptopRepairServices.createdAt),
       });
@@ -11221,6 +11309,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.eventDecorationServices.findMany({
+        where: eq(eventDecorationServices.isActive, true),
         limit,
         orderBy: desc(eventDecorationServices.createdAt),
       });
@@ -11235,6 +11324,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.householdServices.findMany({
+        where: eq(householdServices.isActive, true),
         limit,
         orderBy: desc(householdServices.createdAt),
       });
@@ -11249,6 +11339,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.sareeClothingShopping.findMany({
+        where: eq(sareeClothingShopping.isActive, true),
         limit,
         orderBy: desc(sareeClothingShopping.createdAt),
       });
@@ -11276,6 +11367,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.ebooksOnlineCourses.findMany({
+        where: eq(ebooksOnlineCourses.isActive, true),
         limit,
         orderBy: desc(ebooksOnlineCourses.createdAt),
       });
@@ -11315,6 +11407,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.cricketSportsTraining.findMany({
+        where: eq(cricketSportsTraining.isActive, true),
         limit,
         orderBy: desc(cricketSportsTraining.createdAt),
       });
@@ -11454,6 +11547,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.cyberCafeInternetServices.findMany({
+        where: eq(cyberCafeInternetServices.isActive, true),
         limit,
         orderBy: desc(cyberCafeInternetServices.createdAt),
       });
@@ -11468,6 +11562,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.telecommunicationServices.findMany({
+        where: eq(telecommunicationServices.isActive, true),
         limit,
         orderBy: desc(telecommunicationServices.createdAt),
       });
@@ -11482,6 +11577,7 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
       const items = await db.query.serviceCentreWarranty.findMany({
+        where: eq(serviceCentreWarranty.isActive, true),
         limit,
         orderBy: desc(serviceCentreWarranty.createdAt),
       });

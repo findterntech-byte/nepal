@@ -247,7 +247,9 @@ export default function Blog() {
                           </div>
                           <div className="flex items-center gap-3">
                             <span>{post.readTime || "—"}</span>
-                            <span>• {post.viewCount ?? 0} views</span>
+                            {post.viewCount > 0 && (
+                              <span>• {post.viewCount} views</span>
+                            )}
                           </div>
                         </div>
                         <div className="text-right">

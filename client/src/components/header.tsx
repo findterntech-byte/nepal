@@ -238,6 +238,14 @@ export default function Header() {
   });
 
   const activeCategories = categories.filter((cat: any) => cat.isActive);
+
+  // Auto-expand first category on mobile menu open
+  useEffect(() => {
+    if (isMobileMenuOpen && activeCategories.length > 0 && !mobileExpandedCategory) {
+      setMobileExpandedCategory(activeCategories[0].id);
+    }
+  }, [isMobileMenuOpen, activeCategories, mobileExpandedCategory]);
+
   const activeCat = activeCategories.find((c: any) => c.id === activeCategory);
 
   // Build grouped services: each category once, with its active subcategories
@@ -880,18 +888,22 @@ export default function Header() {
 
                           return (
                             <div key={category.id} className="border rounded-lg overflow-hidden">
-                              <div className="flex items-center gap-2">
-                                <Link
-                                  href={`/category/${category.slug}`}
+                              <div 
+                                className="flex items-center gap-2 cursor-pointer"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setMobileExpandedCategory(isExpanded ? "" : category.id);
+                                }}
+                              >
+                                <div
                                   className="flex-1 flex items-center gap-3 py-3 px-3 text-gray-700 hover:bg-gray-50 transition-colors"
-                                  onClick={() => setIsMobileMenuOpen(false)}
                                 >
                                   <Icon className="w-5 h-5" />
                                   <span className="font-medium">{category.name}</span>
-                                </Link>
+                                </div>
                                 {hasSubcategories && (
                                   <button
-                                    onClick={() => setMobileExpandedCategory(isExpanded ? "" : category.id)}
+                                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setMobileExpandedCategory(isExpanded ? "" : category.id); }}
                                     className="p-3 hover:bg-gray-50"
                                     aria-label="Toggle subcategories"
                                   >

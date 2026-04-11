@@ -156,10 +156,21 @@ export default function ElectronicsGadgetsForm() {
   const { data: gadgets = [], isLoading } = useQuery({
     queryKey: ["electronics-gadgets"],
     queryFn: async () => {
-      const response = await fetch("/api/admin/electronics-gadgets");
+      const storedUser = localStorage.getItem('user');
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      
+      const response = await fetch("/api/admin/electronics-gadgets", {
+        headers: user ? {
+          'x-user-id': user.id || '',
+          'x-user-role': user.role || '',
+          'x-account-type': user.accountType || '',
+        } : {},
+      });
       if (!response.ok) throw new Error("Failed to fetch electronics gadgets");
       return response.json();
     },
+    staleTime: 0,
+    refetchOnWindowFocus: true,
   });
 
   const createMutation = useMutation({

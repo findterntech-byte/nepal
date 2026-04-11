@@ -1165,7 +1165,7 @@ export default function Home() {
 
           <div className="space-y-16">
             {/* Fashion & Beauty */}
-            {fashionProducts && fashionProducts.length > 0 && (
+            {fashionProducts && fashionProducts.length >= 4 && (
               <div className="group">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-1.5 h-8 bg-gradient-to-b from-[#0B8457] to-[#059669] rounded-full"></div>
@@ -1226,7 +1226,7 @@ export default function Home() {
             )}
 
             {/* Vehicles */}
-            {carsBikes && carsBikes.length > 0 && (
+            {carsBikes && carsBikes.length >= 4 && (
               <div className="group">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full"></div>
@@ -1281,7 +1281,7 @@ export default function Home() {
             )}
 
             {/* Construction Materials */}
-            {constructionMaterials && constructionMaterials.length > 0 && (
+            {constructionMaterials && constructionMaterials.length >= 4 && (
               <div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">Construction Materials</h3>
                 <Carousel className="w-full" opts={{ loop: true }} plugins={[Autoplay({ stopOnInteraction: false, delay: 7000 })]}>

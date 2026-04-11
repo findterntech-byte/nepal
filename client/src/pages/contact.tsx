@@ -144,8 +144,8 @@ export default function Contact() {
                   <div>
                     <h4 className="font-semibold text-foreground">Jeevika Services Pvt. Ltd.</h4>
                     <p className="text-muted-foreground">
-                    {location.city}, {location.state}<br />
- Nepal
+                    {location.city},Nepal<br />
+ 
                   </p>
                   </div>
                   

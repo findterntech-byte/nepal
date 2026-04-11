@@ -129,10 +129,12 @@ export function CategoryListingCard({ listing, categorySlug }: CategoryListingCa
         </div>
 
         <div className="flex items-center gap-4 mt-4 pt-4 border-t">
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <Eye className="w-4 h-4" />
-            <span>{listing.viewCount || 0}</span>
-          </div>
+          {(listing.viewCount > 0) && (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Eye className="w-4 h-4" />
+              <span>{listing.viewCount}</span>
+            </div>
+          )}
           {listing.rating && (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
