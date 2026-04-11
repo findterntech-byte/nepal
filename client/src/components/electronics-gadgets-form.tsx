@@ -175,9 +175,19 @@ export default function ElectronicsGadgetsForm() {
 
   const createMutation = useMutation({
     mutationFn: async (data: ElectronicsGadgetFormData) => {
+      const storedUser = localStorage.getItem('user');
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      
       const response = await fetch("/api/admin/electronics-gadgets", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          ...(user ? {
+            'x-user-id': user.id || '',
+            'x-user-role': user.role || '',
+            'x-account-type': user.accountType || '',
+          } : {}),
+        },
         body: JSON.stringify(data),
       });
       if (!response.ok) {

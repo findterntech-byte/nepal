@@ -36,7 +36,10 @@ import {
   Search,
   ChevronDown,
   Pencil,
-  Trash
+  Trash,
+  Heart,
+  Building2,
+  Briefcase
 } from 'lucide-react';
 import {
   Sidebar,
@@ -98,9 +101,17 @@ import TelecommunicationServicesForm from "@/components/telecommunication-servic
 import ServiceCentreWarrantyForm from "@/components/service-centre-warranty-form";
 import CyberCafeInternetServicesForm from "@/components/cyber-cafe-internet-services-form";
 import DynamicFilter from '@/components/dynamic-filter';
+import ProfessionalServicesForm from "@/components/professional-services-form";
+import LaborWorkerServicesForm from "@/components/labor-worker-services-form";
+import EngineeringITServicesForm from "@/components/engineering-it-services-form";
+import LegalBankingServicesForm from "@/components/legal-banking-services-form";
+import InsuranceServicesForm from "@/components/insurance-services-form";
+import NGOSocialServicesForm from "@/components/ngo-social-services-form";
+import AgentsAgenciesForm from "@/components/agents-agencies-form";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import EducationalConsultancyStudyAbroadForm from "@/components/educational-consultancy-study-abroad-form";
+import ProProfilesForm from "@/components/pro-profiles-form";
 
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
@@ -2827,7 +2838,14 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
   };
 
   const staticItems = [
-    { title: "Dashboard", icon: Home, key: "dashboard" }
+    { title: "Dashboard", icon: Home, key: "dashboard" },
+    { title: "Professional Services", icon: Briefcase, key: "professional-services" },
+    { title: "Labor & Worker Services", icon: Users, key: "labor-worker-services" },
+    { title: "Engineering & IT Services", icon: Building, key: "engineering-it-services" },
+    { title: "Legal & Banking Services", icon: Shield, key: "legal-banking-services" },
+    { title: "Insurance Services", icon: Shield, key: "insurance-services" },
+    { title: "NGO & Social Services", icon: Heart, key: "ngo-social-services" },
+    { title: "Agents & Agencies", icon: Building2, key: "agents-agencies" },
   ];
 
   return (
@@ -2883,6 +2901,23 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
               <span className="flex-1 text-left">Platform</span>
             </button>
           </li>
+
+          <li className="mt-4 mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-3">Services</span>
+          </li>
+
+          {staticItems.slice(1).map((item) => (
+            <li key={item.key}>
+              <button
+                className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${activeSection === item.key ? "bg-gradient-to-r from-blue-600 to-green-600 text-white" : "hover:bg-gray-50 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-200"}`}
+                onClick={() => setActiveSection(item.key)}
+                aria-current={activeSection === item.key ? 'page' : undefined}
+              >
+                {item.icon && <item.icon className="w-4 h-4" />}
+                <span className="flex-1 text-left">{item.title}</span>
+              </button>
+            </li>
+          ))}
 
           {filteredCategoryPreferences.length === 0 && (
             <li className="px-3 py-2 text-sm text-muted-foreground">No categories found.</li>
@@ -6066,6 +6101,24 @@ export default function SellerDashboard() {
       case "health-&-wellness-services":
       case "health-wellness-services":
         return <HealthWellnessServicesSection />;
+      case "pro-profiles":
+      case "professional-profiles":
+        return <ProProfilesSection />;
+
+      case "professional-services":
+        return <ProfessionalServicesForm />;
+      case "labor-worker-services":
+        return <LaborWorkerServicesForm />;
+      case "engineering-it-services":
+        return <EngineeringITServicesForm />;
+      case "legal-banking-services":
+        return <LegalBankingServicesForm />;
+      case "insurance-services":
+        return <InsuranceServicesForm />;
+      case "ngo-social-services":
+        return <NGOSocialServicesForm />;
+      case "agents-agencies":
+        return <AgentsAgenciesForm />;
 
       case "tuitionprivatclasses":
         return <TuitionPrivateClassesSection />;

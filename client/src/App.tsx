@@ -38,6 +38,14 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import ForgotPassword from "@/pages/forgot-password";
 import ResetPassword from "@/pages/reset-password";
 
+import ProfessionalServicesPage from "@/pages/professional-services";
+import LaborWorkerServicesPage from "@/pages/labor-worker-services";
+import EngineeringITServicesPage from "@/pages/engineering-it-services";
+import LegalBankingServicesPage from "@/pages/legal-banking-services";
+import InsuranceServicesPage from "@/pages/insurance-services";
+import NGOSocialServicesPage from "@/pages/ngo-social-services";
+import AgentsAgenciesPage from "@/pages/agents-agencies";
+
 import FloatingContact from "@/components/floating-contact";
 
 import TuitionPrivateClassesPage from "./pages/tuition-private-classes-page";
@@ -92,6 +100,14 @@ function Router() {
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/reset-password" component={ResetPassword} />
+
+      <Route path="/professional-services" component={ProfessionalServicesPage} />
+      <Route path="/labor-worker-services" component={LaborWorkerServicesPage} />
+      <Route path="/engineering-it-services" component={EngineeringITServicesPage} />
+      <Route path="/legal-banking-services" component={LegalBankingServicesPage} />
+      <Route path="/insurance-services" component={InsuranceServicesPage} />
+      <Route path="/ngo-social-services" component={NGOSocialServicesPage} />
+      <Route path="/agents-agencies" component={AgentsAgenciesPage} />
 
       <Route path="/:categorySlug/:id" component={CategoryItemDetail} /> {/* Generic dynamic route for all categories */}
       

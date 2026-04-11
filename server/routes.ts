@@ -65,6 +65,13 @@ import {
   blogPosts,
   videos,
   cyberCafeInternetServices, // Added
+  professionalServices,
+  laborWorkerServices,
+  engineeringItServices,
+  legalBankingServices,
+  insuranceServices,
+  ngoSocialServices,
+  agentsAgencies,
 } from "../shared/schema";
 import { uploadMedia, handleMediaUpload } from './upload';
 import { eq, sql, desc, or, and, asc, isNotNull } from "drizzle-orm";
@@ -175,6 +182,113 @@ export function registerRoutes(app: Express) {
     try {
       const list = await db.query.proProfileTypes.findMany({ orderBy: [asc(proProfileTypes.sortOrder), asc(proProfileTypes.name)] });
       res.json(list);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Pro-Profile: Admin - Get all profiles with pagination
+  app.get('/api/admin/pro-profiles', async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      if (!sessionUser?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const isAdmin = sessionUser.role === 'admin' || sessionUser.role === 'super_admin';
+      const isSeller = sessionUser.accountType === 'seller';
+      
+      if (!isAdmin && !isSeller) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const limit = Math.min(parseInt(req.query.limit as string) || 50, 200);
+      const offset = parseInt(req.query.offset as string) || 0;
+
+      const profiles = await db.query.proProfiles.findMany({
+        with: {
+          user: true,
+          profileType: true,
+          values: {
+            with: {
+              field: true,
+            },
+          },
+        },
+        orderBy: [desc(proProfiles.createdAt)],
+        limit,
+        offset,
+      });
+
+      // Filter for seller - only their own profiles
+      let filtered = profiles;
+      if (isSeller && !isAdmin) {
+        filtered = profiles.filter((p: any) => p.userId === sessionUser.id);
+      }
+
+      const total = await db.select().from(proProfiles);
+      res.json({ profiles: filtered, total: total.length });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Pro-Profile: Admin - Toggle active status
+  app.patch('/api/admin/pro-profiles/:id/toggle-active', async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      if (!sessionUser?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const isAdmin = sessionUser.role === 'admin' || sessionUser.role === 'super_admin';
+      if (!isAdmin) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const profile = await db.query.proProfiles.findFirst({
+        where: eq(proProfiles.id, req.params.id),
+      });
+
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+
+      const [updated] = await db
+        .update(proProfiles)
+        .set({ isActive: !profile.isActive, updatedAt: new Date() })
+        .where(eq(proProfiles.id, req.params.id))
+        .returning();
+
+      res.json(updated);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Pro-Profile: Admin - Delete profile
+  app.delete('/api/admin/pro-profiles/:id', async (req, res) => {
+    try {
+      const sessionUser = (req as any).session?.user || null;
+      if (!sessionUser?.id) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
+      const isAdmin = sessionUser.role === 'admin' || sessionUser.role === 'super_admin';
+      if (!isAdmin) {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+
+      const profile = await db.query.proProfiles.findFirst({
+        where: eq(proProfiles.id, req.params.id),
+      });
+
+      if (!profile) {
+        return res.status(404).json({ message: "Profile not found" });
+      }
+
+      await db.delete(proProfiles).where(eq(proProfiles.id, req.params.id));
+      res.json({ message: "Profile deleted successfully" });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -11800,6 +11914,513 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
         orderBy: desc(transportationMovingServices.createdAt),
       });
       res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Professional Services (public endpoint)
+  app.get("/api/professional-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(professionalServices.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(professionalServices.isActive, true), eq(professionalServices.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.professionalServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(professionalServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Professional Services Admin
+  app.get("/api/admin/professional-services", async (req, res) => {
+    try {
+      const items = await db.query.professionalServices.findMany({
+        orderBy: desc(professionalServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/professional-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(professionalServices).where(eq(professionalServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/professional-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(professionalServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/professional-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(professionalServices).set(req.body).where(eq(professionalServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/professional-services/:id", async (req, res) => {
+    try {
+      await db.delete(professionalServices).where(eq(professionalServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Labor & Worker Services (public endpoint)
+  app.get("/api/labor-worker-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const workerType = req.query.workerType as string;
+      let whereCondition = eq(laborWorkerServices.isActive, true);
+      if (workerType) {
+        whereCondition = and(eq(laborWorkerServices.isActive, true), eq(laborWorkerServices.workerType, workerType)) as any;
+      }
+      const items = await db.query.laborWorkerServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(laborWorkerServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Labor & Worker Services Admin
+  app.get("/api/admin/labor-worker-services", async (req, res) => {
+    try {
+      const items = await db.query.laborWorkerServices.findMany({
+        orderBy: desc(laborWorkerServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/labor-worker-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(laborWorkerServices).where(eq(laborWorkerServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/labor-worker-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(laborWorkerServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/labor-worker-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(laborWorkerServices).set(req.body).where(eq(laborWorkerServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/labor-worker-services/:id", async (req, res) => {
+    try {
+      await db.delete(laborWorkerServices).where(eq(laborWorkerServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Engineering & IT Services (public endpoint)
+  app.get("/api/engineering-it-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(engineeringItServices.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(engineeringItServices.isActive, true), eq(engineeringItServices.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.engineeringItServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(engineeringItServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Engineering & IT Services Admin
+  app.get("/api/admin/engineering-it-services", async (req, res) => {
+    try {
+      const items = await db.query.engineeringItServices.findMany({
+        orderBy: desc(engineeringItServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/engineering-it-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(engineeringItServices).where(eq(engineeringItServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/engineering-it-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(engineeringItServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/engineering-it-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(engineeringItServices).set(req.body).where(eq(engineeringItServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/engineering-it-services/:id", async (req, res) => {
+    try {
+      await db.delete(engineeringItServices).where(eq(engineeringItServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Legal, Banking, Loan & Land Surveying Services (public endpoint)
+  app.get("/api/legal-banking-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(legalBankingServices.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(legalBankingServices.isActive, true), eq(legalBankingServices.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.legalBankingServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(legalBankingServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Legal, Banking Services Admin
+  app.get("/api/admin/legal-banking-services", async (req, res) => {
+    try {
+      const items = await db.query.legalBankingServices.findMany({
+        orderBy: desc(legalBankingServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/legal-banking-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(legalBankingServices).where(eq(legalBankingServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/legal-banking-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(legalBankingServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/legal-banking-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(legalBankingServices).set(req.body).where(eq(legalBankingServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/legal-banking-services/:id", async (req, res) => {
+    try {
+      await db.delete(legalBankingServices).where(eq(legalBankingServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Insurance Services (public endpoint)
+  app.get("/api/insurance-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const insuranceType = req.query.insuranceType as string;
+      let whereCondition = eq(insuranceServices.isActive, true);
+      if (insuranceType) {
+        whereCondition = and(eq(insuranceServices.isActive, true), eq(insuranceServices.insuranceType, insuranceType)) as any;
+      }
+      const items = await db.query.insuranceServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(insuranceServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Insurance Services Admin
+  app.get("/api/admin/insurance-services", async (req, res) => {
+    try {
+      const items = await db.query.insuranceServices.findMany({
+        orderBy: desc(insuranceServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/insurance-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(insuranceServices).where(eq(insuranceServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/insurance-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(insuranceServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/insurance-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(insuranceServices).set(req.body).where(eq(insuranceServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/insurance-services/:id", async (req, res) => {
+    try {
+      await db.delete(insuranceServices).where(eq(insuranceServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // NGO & Social Services (public endpoint)
+  app.get("/api/ngo-social-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const ngoType = req.query.ngoType as string;
+      let whereCondition = eq(ngoSocialServices.isActive, true);
+      if (ngoType) {
+        whereCondition = and(eq(ngoSocialServices.isActive, true), eq(ngoSocialServices.ngoType, ngoType)) as any;
+      }
+      const items = await db.query.ngoSocialServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(ngoSocialServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // NGO & Social Services Admin
+  app.get("/api/admin/ngo-social-services", async (req, res) => {
+    try {
+      const items = await db.query.ngoSocialServices.findMany({
+        orderBy: desc(ngoSocialServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/ngo-social-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(ngoSocialServices).where(eq(ngoSocialServices.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/ngo-social-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(ngoSocialServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/ngo-social-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(ngoSocialServices).set(req.body).where(eq(ngoSocialServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/ngo-social-services/:id", async (req, res) => {
+    try {
+      await db.delete(ngoSocialServices).where(eq(ngoSocialServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Agents & Agencies (public endpoint)
+  app.get("/api/agents-agencies", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const agencyType = req.query.agencyType as string;
+      let items;
+      if (agencyType) {
+        items = await db.select().from(agentsAgencies).where(
+          and(eq(agentsAgencies.isActive, true), eq(agentsAgencies.agencyType, agencyType))
+        ).orderBy(desc(agentsAgencies.createdAt)).limit(limit);
+      } else {
+        items = await db.select().from(agentsAgencies).where(eq(agentsAgencies.isActive, true)).orderBy(desc(agentsAgencies.createdAt)).limit(limit);
+      }
+      res.json(items);
+    } catch (error: any) {
+      console.error("agents-agencies error:", error);
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/agents-agencies/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(agentsAgencies).where(eq(agentsAgencies.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Agents & Agencies Admin
+  app.get("/api/admin/agents-agencies", async (req, res) => {
+    try {
+      const items = await db.select().from(agentsAgencies).orderBy(desc(agentsAgencies.createdAt));
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/agents-agencies/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(agentsAgencies).where(eq(agentsAgencies.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/agents-agencies", async (req, res) => {
+    try {
+      const [item] = await db.insert(agentsAgencies).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/agents-agencies/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(agentsAgencies).set(req.body).where(eq(agentsAgencies.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/agents-agencies/:id", async (req, res) => {
+    try {
+      await db.delete(agentsAgencies).where(eq(agentsAgencies.id, req.params.id));
+      res.json({ message: "Deleted" });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

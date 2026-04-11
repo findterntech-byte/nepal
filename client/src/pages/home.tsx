@@ -512,6 +512,7 @@ export default function Home() {
           'second-hand-phones-tablets-accessories': 'second-hand-phones',
           'heavy-equipment': 'heavy-equipment',
           'transportation-moving-services': 'transportation-services',
+          'agents-agencies': 'agents-agencies',
         };
 
         const allowedApiTables = new Set<string>([
@@ -553,6 +554,7 @@ export default function Home() {
           'cyber-cafe',
           'telecommunication',
           'saree-clothing',
+          'agents-agencies',
         ]);
         
         // For each category, try to fetch products
@@ -770,6 +772,16 @@ export default function Home() {
     queryKey: ["computer-repair"],
     queryFn: async () => {
       const res = await fetch('/api/computer-repair?limit=100');
+      if (!res.ok) return [];
+      return res.json();
+    },
+  });
+
+  // Agents & Agencies
+  const { data: agentsAgencies = [], isLoading: agentsLoading } = useQuery({
+    queryKey: ["agents-agencies-home"],
+    queryFn: async () => {
+      const res = await fetch('/api/agents-agencies?limit=20');
       if (!res.ok) return [];
       return res.json();
     },
@@ -1858,6 +1870,65 @@ export default function Home() {
                           <div className="px-4 pb-4">
                             <Link to={buildCategoryItemHref('Health & Wellness Services', service.id)} className="w-full block">
                               <button className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
+                                <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                                View Details
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious className="left-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                  <CarouselNext className="right-0 bg-white hover:bg-gray-50 border border-gray-200" />
+                </Carousel>
+              </div>
+            )}
+
+            {/* Agents & Agencies */}
+            {agentsAgencies && agentsAgencies.length > 0 && (
+              <div className="group">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-1.5 h-8 bg-gradient-to-b from-teal-500 to-teal-600 rounded-full"></div>
+                  <h3 className="text-3xl font-bold text-gray-900">Agents & Agencies</h3>
+                  <span className="ml-auto text-sm font-semibold text-teal-600 bg-teal-50 px-4 py-1.5 rounded-full">
+                    {agentsAgencies.length} agencies
+                  </span>
+                </div>
+                <Carousel className="w-full" opts={{ loop: true }} plugins={[Autoplay({ stopOnInteraction: false, delay: 6000 })]}>
+                  <CarouselContent className="gap-4">
+                    {agentsAgencies.map((agency: any) => (
+                      <CarouselItem key={agency.id} className="md:basis-1/2 lg:basis-1/4">
+                        <div className="group/card overflow-hidden rounded-xl border border-gray-200/50 bg-white shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col">
+                          <Link to={`/agents-agencies/${agency.id}`} className="flex-1 flex flex-col">
+                            <div className="relative h-48 bg-gradient-to-br from-teal-100 to-teal-200 overflow-hidden">
+                              {agency.images && agency.images[0] ? (
+                                <img src={agency.images[0]} alt={agency.title} className="w-full h-full group-hover/card:scale-125 transition-transform duration-500" />
+                              ) : (
+                                <div className="flex items-center justify-center h-full">
+                                  <Building2 className="w-12 h-12 text-teal-400" />
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/20 transition-all duration-300"></div>
+                              {agency.verified && (
+                                <div className="absolute top-3 right-3 bg-teal-500 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                                  <Shield className="w-3 h-3" /> Verified
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-4 bg-white flex-1 flex flex-col">
+                              <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{agency.title}</h4>
+                              <p className="text-xs text-gray-500 mb-2 line-clamp-1">{agency.agencyName}</p>
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                <Badge variant="secondary" className="text-xs">{agency.agencyType}</Badge>
+                                {agency.licensed && <Badge className="bg-blue-500 text-xs text-white">Licensed</Badge>}
+                              </div>
+                              {agency.city && <p className="text-xs text-gray-400">📍 {agency.city}</p>}
+                            </div>
+                          </Link>
+                          <div className="px-4 pb-4">
+                            <Link to={buildCategoryItemHref('Agents & Agencies', agency.id)} className="w-full block">
+                              <button className="w-full bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 group/btn">
                                 <Eye className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                                 View Details
                               </button>

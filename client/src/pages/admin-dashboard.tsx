@@ -34,7 +34,8 @@ import {
   X,
   Pencil,
   Trash,
-  Video
+  Video,
+  Globe
 } from 'lucide-react';
 import {
   Sidebar,
@@ -99,6 +100,14 @@ import { SliderForm } from "@/components/slider-form";
 import BlogForm from "@/components/blog-form";
 import { VideosForm } from '@/components/videos-form';
 import EducationalConsultancyStudyAbroadForm from "@/components/educational-consultancy-study-abroad-form";
+import ProfessionalServicesForm from "@/components/professional-services-form";
+import ProProfileForm from "@/components/pro-profile-form";
+import LaborWorkerServicesForm from "@/components/labor-worker-services-form";
+import EngineeringITServicesForm from "@/components/engineering-it-services-form";
+import LegalBankingServicesForm from "@/components/legal-banking-services-form";
+import InsuranceServicesForm from "@/components/insurance-services-form";
+import NGOSocialServicesForm from "@/components/ngo-social-services-form";
+import AgentsAgenciesForm from "@/components/agents-agencies-form";
 
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
@@ -2474,6 +2483,7 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
     { title: "Blogs", icon: FileText, key: "blogs" },
     { title: "Articles", icon: FileText, key: "articles" },
     { title: "Videos", icon: Video, key: "videos" },
+   
     // { title: "Featured Videos", icon: Video, key: "featured-videos" },
   ];
 
@@ -5460,6 +5470,21 @@ export default function AdminDashboard() {
       case "cyber-cafe-internet-services":
       case "cybercafeinternetservices":
         return <CyberCafeInternetServicesForm />;
+      case "professional-profile-expertise-listing":
+      case "professional-services":
+        return <ProfessionalServicesForm />;
+      case "labor-worker-services":
+        return <LaborWorkerServicesForm />;
+      case "engineering-it-services":
+        return <EngineeringITServicesForm />;
+      case "legal-banking-loan-land-surveying-services":
+        return <LegalBankingServicesForm />;
+      case "insurance-services":
+        return <InsuranceServicesForm />;
+      case "ngos-social-services":
+        return <NGOSocialServicesForm />;
+      case "agents-agencies":
+        return <AgentsAgenciesForm />;
       case "sliders":
         return <SlidersSection />;
       case "slider-card":

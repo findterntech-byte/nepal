@@ -112,6 +112,22 @@ export const SUBCATEGORY_API_MAP: Record<string, string> = {
   'Jewelry & Accessories': '/api/jewelry-accessories',
   'HealthWellnessServices': '/api/health-wellness',
   'Health & Wellness Services': '/api/health-wellness',
+  'AgentsAgencies': '/api/admin/agents-agencies',
+  'Agents & Agencies': '/api/admin/agents-agencies',
+  'ProfessionalProfileExpertiseListing': '/api/admin/professional-services',
+  'Professional Profile & Expertise Listing': '/api/admin/professional-services',
+  'LaborWorkerServices': '/api/admin/labor-worker-services',
+  'Labor & Worker Services': '/api/admin/labor-worker-services',
+  'EngineeringITServices': '/api/admin/engineering-it-services',
+  'Engineering & IT Services': '/api/admin/engineering-it-services',
+  'LegalBankingServices': '/api/admin/legal-banking-services',
+  'Legal & Banking Services': '/api/admin/legal-banking-services',
+  'LegalBankingLoanLandSurveyingServices': '/api/admin/legal-banking-services',
+  'Legal, Banking, Loan & Land Surveying Services': '/api/admin/legal-banking-services',
+  'InsuranceServices': '/api/admin/insurance-services',
+  'Insurance Services': '/api/admin/insurance-services',
+  'NGOsSocialServices': '/api/admin/ngo-social-services',
+  'NGOs & Social Services': '/api/admin/ngo-social-services',
 };
 
 export const SUBCATEGORY_NAMES: Record<string, string> = {
