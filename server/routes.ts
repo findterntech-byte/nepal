@@ -80,6 +80,10 @@ import {
   salesMarketing,
   courierCargo,
   newsMedia,
+  restaurants,
+  cafes,
+  homeDeliveryServices,
+  cateringServices,
 } from "../shared/schema";
 import { uploadMedia, handleMediaUpload } from './upload';
 import { eq, sql, desc, or, and, asc, isNotNull } from "drizzle-orm";
@@ -12870,6 +12874,155 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   app.delete("/api/admin/news-media/:id", async (req, res) => {
     try { await db.delete(newsMedia).where(eq(newsMedia.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Restaurants - Public
+  app.get("/api/restaurants", async (req, res) => {
+    try {
+      const { city, cuisine, rating } = req.query;
+      let whereCondition = eq(restaurants.isActive, true);
+      if (city) whereCondition = and(eq(restaurants.isActive, true), eq(restaurants.city, city as string)) as any;
+      if (cuisine) whereCondition = and(eq(restaurants.isActive, true), eq(restaurants.cuisineType, cuisine as string)) as any;
+      const items = await db.query.restaurants.findMany({
+        where: whereCondition,
+        orderBy: [desc(restaurants.isFeatured), desc(restaurants.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Restaurants - Admin
+  app.get("/api/admin/restaurants", async (req, res) => {
+    try { const items = await db.query.restaurants.findMany({ orderBy: desc(restaurants.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/restaurants/:id", async (req, res) => {
+    try { const [item] = await db.select().from(restaurants).where(eq(restaurants.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/restaurants", async (req, res) => {
+    try { const [item] = await db.insert(restaurants).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/restaurants/:id", async (req, res) => {
+    try { const [item] = await db.update(restaurants).set(req.body).where(eq(restaurants.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/restaurants/:id", async (req, res) => {
+    try { await db.delete(restaurants).where(eq(restaurants.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Cafes - Public
+  app.get("/api/cafes", async (req, res) => {
+    try {
+      const { city, cafeType } = req.query;
+      let whereCondition = eq(cafes.isActive, true);
+      if (city) whereCondition = and(eq(cafes.isActive, true), eq(cafes.city, city as string)) as any;
+      const items = await db.query.cafes.findMany({
+        where: whereCondition,
+        orderBy: [desc(cafes.isFeatured), desc(cafes.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Cafes - Admin
+  app.get("/api/admin/cafes", async (req, res) => {
+    try { const items = await db.query.cafes.findMany({ orderBy: desc(cafes.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/cafes/:id", async (req, res) => {
+    try { const [item] = await db.select().from(cafes).where(eq(cafes.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/cafes", async (req, res) => {
+    try { const [item] = await db.insert(cafes).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/cafes/:id", async (req, res) => {
+    try { const [item] = await db.update(cafes).set(req.body).where(eq(cafes.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/cafes/:id", async (req, res) => {
+    try { await db.delete(cafes).where(eq(cafes.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Home Delivery - Public
+  app.get("/api/home-delivery", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(homeDeliveryServices.isActive, true);
+      if (city) whereCondition = and(eq(homeDeliveryServices.isActive, true), eq(homeDeliveryServices.city, city as string)) as any;
+      const items = await db.query.homeDeliveryServices.findMany({
+        where: whereCondition,
+        orderBy: [desc(homeDeliveryServices.isFeatured), desc(homeDeliveryServices.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Home Delivery - Admin
+  app.get("/api/admin/home-delivery", async (req, res) => {
+    try { const items = await db.query.homeDeliveryServices.findMany({ orderBy: desc(homeDeliveryServices.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/home-delivery/:id", async (req, res) => {
+    try { const [item] = await db.select().from(homeDeliveryServices).where(eq(homeDeliveryServices.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/home-delivery", async (req, res) => {
+    try { const [item] = await db.insert(homeDeliveryServices).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/home-delivery/:id", async (req, res) => {
+    try { const [item] = await db.update(homeDeliveryServices).set(req.body).where(eq(homeDeliveryServices.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/home-delivery/:id", async (req, res) => {
+    try { await db.delete(homeDeliveryServices).where(eq(homeDeliveryServices.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Catering - Public
+  app.get("/api/catering", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(cateringServices.isActive, true);
+      if (city) whereCondition = and(eq(cateringServices.isActive, true), eq(cateringServices.city, city as string)) as any;
+      const items = await db.query.cateringServices.findMany({
+        where: whereCondition,
+        orderBy: [desc(cateringServices.isFeatured), desc(cateringServices.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Catering - Admin
+  app.get("/api/admin/catering", async (req, res) => {
+    try { const items = await db.query.cateringServices.findMany({ orderBy: desc(cateringServices.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/catering/:id", async (req, res) => {
+    try { const [item] = await db.select().from(cateringServices).where(eq(cateringServices.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/catering", async (req, res) => {
+    try { const [item] = await db.insert(cateringServices).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/catering/:id", async (req, res) => {
+    try { const [item] = await db.update(cateringServices).set(req.body).where(eq(cateringServices.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/catering/:id", async (req, res) => {
+    try { await db.delete(cateringServices).where(eq(cateringServices.id, req.params.id)); res.json({ message: "Deleted" }); }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
 

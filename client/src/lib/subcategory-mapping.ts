@@ -155,6 +155,15 @@ export const SUBCATEGORY_API_MAP: Record<string, string> = {
   'NewsMedia': '/api/admin/news-media',
   'News & Media': '/api/admin/news-media',
   'News & Media Services': '/api/admin/news-media',
+  'Restaurants': '/api/restaurants',
+  'Restaurant': '/api/restaurants',
+  'Cafes': '/api/cafes',
+  'Cafe': '/api/cafes',
+  'HomeDelivery': '/api/home-delivery',
+  'Home Delivery': '/api/home-delivery',
+  'Catering': '/api/catering',
+  'CateringServices': '/api/catering',
+  'Catering Services': '/api/catering',
 };
 
 export const SUBCATEGORY_NAMES: Record<string, string> = {
@@ -218,6 +227,15 @@ export const SUBCATEGORY_NAMES: Record<string, string> = {
   'Courier%20%26%20Cargo': 'Courier & Cargo',
   'Sales%20%26%20Marketing': 'Sales & Marketing',
   'News%20%26%20Media': 'News & Media',
+  'Restaurants': 'Restaurants',
+  'Restaurant': 'Restaurants',
+  'Cafes': 'Cafes',
+  'Cafe': 'Cafes',
+  'HomeDelivery': 'Home Delivery Services',
+  'Home Delivery': 'Home Delivery Services',
+  'Catering': 'Catering Services',
+  'CateringServices': 'Catering Services',
+  'Catering Services': 'Catering Services',
 };
 
 export default SUBCATEGORY_API_MAP;

@@ -116,6 +116,11 @@ import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-
 import SalesMarketingForm from "@/components/sales-marketing-form";
 import CourierCargoForm from "@/components/courier-cargo-form";
 import NewsMediaForm from "@/components/news-media-form";
+import RestaurantForm from "@/components/restaurant-form";
+import HotelForm from "@/components/hotel-form";
+import CafeForm from "@/components/cafe-form";
+import HomeDeliveryForm from "@/components/home-delivery-form";
+import CateringForm from "@/components/catering-form";
 
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
@@ -5509,6 +5514,16 @@ export default function AdminDashboard() {
         return <CourierCargoForm />;
       case "news-media":
         return <NewsMediaForm />;
+      case "restaurants":
+        return <RestaurantForm />;
+      case "hotel":
+        return <HotelForm />;
+      case "cafe":
+        return <CafeForm />;
+      case "home-delivery":
+        return <HomeDeliveryForm />;
+      case "catering":
+        return <CateringForm />;
       case "sliders":
         return <SlidersSection />;
       case "slider-card":

@@ -42,7 +42,9 @@ import {
   Briefcase,
   Ticket,
   Dog,
-  Sprout
+  Sprout,
+  UtensilsCrossed,
+  Utensils
 } from 'lucide-react';
 import {
   Sidebar,
@@ -119,6 +121,11 @@ import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-
 import SalesMarketingForm from "@/components/sales-marketing-form";
 import CourierCargoForm from "@/components/courier-cargo-form";
 import NewsMediaForm from "@/components/news-media-form";
+import RestaurantForm from "@/components/restaurant-form";
+import HotelForm from "@/components/hotel-form";
+import CafeForm from "@/components/cafe-form";
+import HomeDeliveryForm from "@/components/home-delivery-form";
+import CateringForm from "@/components/catering-form";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import EducationalConsultancyStudyAbroadForm from "@/components/educational-consultancy-study-abroad-form";
@@ -2865,6 +2872,11 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
     { title: "Sales & Marketing", icon: TrendingUp, key: "sales-marketing" },
     { title: "Courier & Cargo", icon: Truck, key: "courier-cargo" },
     { title: "News & Media", icon: Newspaper, key: "news-media" },
+    { title: "Restaurants", icon: UtensilsCrossed, key: "restaurants" },
+    { title: "Hotel", icon: Building, key: "hotel" },
+    { title: "Cafe", icon: Coffee, key: "cafe" },
+    { title: "Home Delivery", icon: Truck, key: "home-delivery" },
+    { title: "Catering", icon: Utensils, key: "catering" },
   ];
 
   return (
@@ -6154,6 +6166,16 @@ export default function SellerDashboard() {
         return <CourierCargoForm />;
       case "news-media":
         return <NewsMediaForm />;
+      case "restaurants":
+        return <RestaurantForm />;
+      case "hotel":
+        return <HotelForm />;
+      case "cafe":
+        return <CafeForm />;
+      case "home-delivery":
+        return <HomeDeliveryForm />;
+      case "catering":
+        return <CateringForm />;
 
       case "tuitionprivatclasses":
         return <TuitionPrivateClassesSection />;
