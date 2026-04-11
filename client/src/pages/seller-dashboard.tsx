@@ -39,7 +39,10 @@ import {
   Trash,
   Heart,
   Building2,
-  Briefcase
+  Briefcase,
+  Ticket,
+  Dog,
+  Sprout
 } from 'lucide-react';
 import {
   Sidebar,
@@ -108,6 +111,14 @@ import LegalBankingServicesForm from "@/components/legal-banking-services-form";
 import InsuranceServicesForm from "@/components/insurance-services-form";
 import NGOSocialServicesForm from "@/components/ngo-social-services-form";
 import AgentsAgenciesForm from "@/components/agents-agencies-form";
+import ToursTravelsForm from "@/components/tours-travels-form";
+import HotelsResortsForm from "@/components/hotels-resorts-form";
+import EventTicketBookingForm from "@/components/event-ticket-booking-form";
+import PetCarePetFoodForm from "@/components/pet-care-pet-food-form";
+import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-form";
+import SalesMarketingForm from "@/components/sales-marketing-form";
+import CourierCargoForm from "@/components/courier-cargo-form";
+import NewsMediaForm from "@/components/news-media-form";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import EducationalConsultancyStudyAbroadForm from "@/components/educational-consultancy-study-abroad-form";
@@ -2846,6 +2857,14 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
     { title: "Insurance Services", icon: Shield, key: "insurance-services" },
     { title: "NGO & Social Services", icon: Heart, key: "ngo-social-services" },
     { title: "Agents & Agencies", icon: Building2, key: "agents-agencies" },
+    { title: "Tours & Travels", icon: MapPin, key: "tours-travels" },
+    { title: "Hotels & Resorts", icon: Building, key: "hotels-resorts" },
+    { title: "Event & Movie Tickets", icon: Ticket, key: "event-ticket-booking" },
+    { title: "Pet Care & Pet Food", icon: Dog, key: "pet-care-pet-food" },
+    { title: "Agriculture & Farming", icon: Sprout, key: "agriculture-seeds-farming" },
+    { title: "Sales & Marketing", icon: TrendingUp, key: "sales-marketing" },
+    { title: "Courier & Cargo", icon: Truck, key: "courier-cargo" },
+    { title: "News & Media", icon: Newspaper, key: "news-media" },
   ];
 
   return (
@@ -6119,6 +6138,22 @@ export default function SellerDashboard() {
         return <NGOSocialServicesForm />;
       case "agents-agencies":
         return <AgentsAgenciesForm />;
+      case "tours-travels":
+        return <ToursTravelsForm />;
+      case "hotels-resorts":
+        return <HotelsResortsForm />;
+      case "event-ticket-booking":
+        return <EventTicketBookingForm />;
+      case "pet-care-pet-food":
+        return <PetCarePetFoodForm />;
+      case "agriculture-seeds-farming":
+        return <AgricultureSeedsFarmingForm />;
+      case "sales-marketing":
+        return <SalesMarketingForm />;
+      case "courier-cargo":
+        return <CourierCargoForm />;
+      case "news-media":
+        return <NewsMediaForm />;
 
       case "tuitionprivatclasses":
         return <TuitionPrivateClassesSection />;

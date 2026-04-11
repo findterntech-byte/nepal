@@ -75,6 +75,9 @@ export default function SubcategoryPage() {
     decodedSubcategorySlug,
     normalizedSubcategorySlug,
     normalizedSubcategoryKey,
+    decodedSubcategorySlug.replace(/&/g, ""),
+    normalizedSubcategorySlug.replace(/&/g, ""),
+    normalizedSubcategorySlug.replace(/ & /g, ""),
   ].filter(Boolean) as string[];
 
   const endpoint = apiMapCandidates.reduce<string | undefined>((acc, key) => {

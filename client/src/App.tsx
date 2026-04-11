@@ -46,6 +46,24 @@ import InsuranceServicesPage from "@/pages/insurance-services";
 import NGOSocialServicesPage from "@/pages/ngo-social-services";
 import AgentsAgenciesPage from "@/pages/agents-agencies";
 
+import ToursTravelsPage from "@/pages/tours-travels";
+import HotelsResortsPage from "@/pages/hotels-resorts";
+import EventTicketBookingPage from "@/pages/event-ticket-booking";
+import PetCarePetFoodPage from "@/pages/pet-care-pet-food";
+import AgricultureSeedsFarmingPage from "@/pages/agriculture-seeds-farming";
+import SalesMarketingPage from "@/pages/sales-marketing";
+import CourierCargoPage from "@/pages/courier-cargo";
+import NewsMediaPage from "@/pages/news-media";
+
+import ToursTravelsForm from "@/components/tours-travels-form";
+import HotelsResortsForm from "@/components/hotels-resorts-form";
+import EventTicketBookingForm from "@/components/event-ticket-booking-form";
+import PetCarePetFoodForm from "@/components/pet-care-pet-food-form";
+import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-form";
+import SalesMarketingForm from "@/components/sales-marketing-form";
+import CourierCargoForm from "@/components/courier-cargo-form";
+import NewsMediaForm from "@/components/news-media-form";
+
 import FloatingContact from "@/components/floating-contact";
 
 import TuitionPrivateClassesPage from "./pages/tuition-private-classes-page";
@@ -108,6 +126,24 @@ function Router() {
       <Route path="/insurance-services" component={InsuranceServicesPage} />
       <Route path="/ngo-social-services" component={NGOSocialServicesPage} />
       <Route path="/agents-agencies" component={AgentsAgenciesPage} />
+
+      <Route path="/tours-travels" component={ToursTravelsPage} />
+      <Route path="/hotels-resorts" component={HotelsResortsPage} />
+      <Route path="/event-ticket-booking" component={EventTicketBookingPage} />
+      <Route path="/pet-care-pet-food" component={PetCarePetFoodPage} />
+      <Route path="/agriculture-seeds-farming" component={AgricultureSeedsFarmingPage} />
+      <Route path="/sales-marketing" component={SalesMarketingPage} />
+      <Route path="/courier-cargo" component={CourierCargoPage} />
+      <Route path="/news-media" component={NewsMediaPage} />
+
+      <Route path="/admin/tours-travels" component={ToursTravelsForm} />
+      <Route path="/admin/hotels-resorts" component={HotelsResortsForm} />
+      <Route path="/admin/event-ticket-booking" component={EventTicketBookingForm} />
+      <Route path="/admin/pet-care-pet-food" component={PetCarePetFoodForm} />
+      <Route path="/admin/agriculture-seeds-farming" component={AgricultureSeedsFarmingForm} />
+      <Route path="/admin/sales-marketing" component={SalesMarketingForm} />
+      <Route path="/admin/courier-cargo" component={CourierCargoForm} />
+      <Route path="/admin/news-media" component={NewsMediaForm} />
 
       <Route path="/:categorySlug/:id" component={CategoryItemDetail} /> {/* Generic dynamic route for all categories */}
       

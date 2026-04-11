@@ -108,6 +108,14 @@ import LegalBankingServicesForm from "@/components/legal-banking-services-form";
 import InsuranceServicesForm from "@/components/insurance-services-form";
 import NGOSocialServicesForm from "@/components/ngo-social-services-form";
 import AgentsAgenciesForm from "@/components/agents-agencies-form";
+import ToursTravelsForm from "@/components/tours-travels-form";
+import HotelsResortsForm from "@/components/hotels-resorts-form";
+import EventTicketBookingForm from "@/components/event-ticket-booking-form";
+import PetCarePetFoodForm from "@/components/pet-care-pet-food-form";
+import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-form";
+import SalesMarketingForm from "@/components/sales-marketing-form";
+import CourierCargoForm from "@/components/courier-cargo-form";
+import NewsMediaForm from "@/components/news-media-form";
 
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
@@ -5485,6 +5493,22 @@ export default function AdminDashboard() {
         return <NGOSocialServicesForm />;
       case "agents-agencies":
         return <AgentsAgenciesForm />;
+      case "tours-travels":
+        return <ToursTravelsForm />;
+      case "hotels-resorts":
+        return <HotelsResortsForm />;
+      case "event-movie-ticket-booking":
+        return <EventTicketBookingForm />;
+      case "pet-care-pet-food":
+        return <PetCarePetFoodForm />;
+      case "agriculture-seeds-farming":
+        return <AgricultureSeedsFarmingForm />;
+      case "sales-marketing-services":
+        return <SalesMarketingForm />;
+      case "courier-cargo-services":
+        return <CourierCargoForm />;
+      case "news-media":
+        return <NewsMediaForm />;
       case "sliders":
         return <SlidersSection />;
       case "slider-card":

@@ -42,16 +42,16 @@ import {
   sareeClothingShopping,
   ebooksOnlineCourses,
   cricketSportsTraining,
-  pharmacyMedicalStores, // Import pharmacyMedicalStores
-  tuitionPrivateClasses, // Added
-  danceKarateGymYoga, // Added
-  languageClasses, // Added
-  academiesMusicArtsSports, // Added
-  skillTrainingCertification, // Added
+  pharmacyMedicalStores,
+  tuitionPrivateClasses,
+  danceKarateGymYoga,
+  languageClasses,
+  academiesMusicArtsSports,
+  skillTrainingCertification,
   schoolsCollegesCoaching,
-  educationalConsultancyStudyAbroad, // Added, uncommented
-  jewelryAccessories, // Added
-  healthWellnessServices, // Added
+  educationalConsultancyStudyAbroad,
+  jewelryAccessories,
+  healthWellnessServices,
   telecommunicationServices,
   serviceCentreWarranty,
   contactMessages,
@@ -64,7 +64,7 @@ import {
   insertArticleCategorySchema,
   blogPosts,
   videos,
-  cyberCafeInternetServices, // Added
+  cyberCafeInternetServices,
   professionalServices,
   laborWorkerServices,
   engineeringItServices,
@@ -72,6 +72,14 @@ import {
   insuranceServices,
   ngoSocialServices,
   agentsAgencies,
+  toursTravels,
+  hotelsResorts,
+  eventTickets,
+  petCare,
+  agriculture,
+  salesMarketing,
+  courierCargo,
+  newsMedia,
 } from "../shared/schema";
 import { uploadMedia, handleMediaUpload } from './upload';
 import { eq, sql, desc, or, and, asc, isNotNull } from "drizzle-orm";
@@ -97,6 +105,7 @@ export function registerRoutes(app: Express) {
   // Middleware: sanitize incoming JSON payloads for DB writes
   // - remove client-supplied system timestamp fields
   // - convert ISO-like date strings to `Date` objects so DB drivers can call `.toISOString()` safely
+  // - convert empty strings to null for numeric fields
   app.use((req, _res, next) => {
     try {
       if (!req.body || typeof req.body !== 'object') return next();
@@ -105,6 +114,11 @@ export function registerRoutes(app: Express) {
       for (const [k, v] of Object.entries(req.body)) {
         if (k === 'createdAt' || k === 'updatedAt') continue;
         if (v == null) {
+          sanitized[k] = null;
+          continue;
+        }
+        // Convert empty string to null for potential numeric fields
+        if (typeof v === 'string' && v === '') {
           sanitized[k] = null;
           continue;
         }
@@ -12424,6 +12438,439 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
+  });
+
+  // Tours & Travels (public endpoint)
+  app.get("/api/tours-travels", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(toursTravels.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(toursTravels.isActive, true), eq(toursTravels.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.toursTravels.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(toursTravels.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/tours-travels", async (req, res) => {
+    try {
+      const items = await db.query.toursTravels.findMany({
+        orderBy: desc(toursTravels.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/tours-travels/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(toursTravels).where(eq(toursTravels.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/tours-travels", async (req, res) => {
+    try {
+      const [item] = await db.insert(toursTravels).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/tours-travels/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(toursTravels).set(req.body).where(eq(toursTravels.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/tours-travels/:id", async (req, res) => {
+    try {
+      await db.delete(toursTravels).where(eq(toursTravels.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Hotels & Resorts (public endpoint)
+  app.get("/api/hotels-resorts", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const propertyType = req.query.propertyType as string;
+      let whereCondition = eq(hotelsResorts.isActive, true);
+      if (propertyType) {
+        whereCondition = and(eq(hotelsResorts.isActive, true), eq(hotelsResorts.propertyType, propertyType)) as any;
+      }
+      const items = await db.query.hotelsResorts.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(hotelsResorts.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/hotels-resorts", async (req, res) => {
+    try {
+      const items = await db.query.hotelsResorts.findMany({
+        orderBy: desc(hotelsResorts.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/hotels-resorts/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(hotelsResorts).where(eq(hotelsResorts.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/hotels-resorts", async (req, res) => {
+    try {
+      const [item] = await db.insert(hotelsResorts).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/hotels-resorts/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(hotelsResorts).set(req.body).where(eq(hotelsResorts.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/hotels-resorts/:id", async (req, res) => {
+    try {
+      await db.delete(hotelsResorts).where(eq(hotelsResorts.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Event/Movie Ticket Booking (public endpoint)
+  app.get("/api/event-tickets", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const eventType = req.query.eventType as string;
+      let whereCondition = eq(eventTickets.isActive, true);
+      if (eventType) {
+        whereCondition = and(eq(eventTickets.isActive, true), eq(eventTickets.eventType, eventType)) as any;
+      }
+      const items = await db.query.eventTickets.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(eventTickets.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/event-tickets", async (req, res) => {
+    try {
+      const items = await db.query.eventTickets.findMany({
+        orderBy: desc(eventTickets.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/event-tickets/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(eventTickets).where(eq(eventTickets.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/event-tickets", async (req, res) => {
+    try {
+      const [item] = await db.insert(eventTickets).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/event-tickets/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(eventTickets).set(req.body).where(eq(eventTickets.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/event-tickets/:id", async (req, res) => {
+    try {
+      await db.delete(eventTickets).where(eq(eventTickets.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Pet Care & Pet Food (public endpoint)
+  app.get("/api/pet-care", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(petCare.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(petCare.isActive, true), eq(petCare.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.petCare.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(petCare.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/pet-care", async (req, res) => {
+    try {
+      const items = await db.query.petCare.findMany({
+        orderBy: desc(petCare.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/pet-care/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(petCare).where(eq(petCare.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/pet-care", async (req, res) => {
+    try {
+      const [item] = await db.insert(petCare).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/pet-care/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(petCare).set(req.body).where(eq(petCare.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/pet-care/:id", async (req, res) => {
+    try {
+      await db.delete(petCare).where(eq(petCare.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Agriculture, Seeds & Farming (public endpoint)
+  app.get("/api/agriculture", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(agriculture.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(agriculture.isActive, true), eq(agriculture.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.agriculture.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(agriculture.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/agriculture", async (req, res) => {
+    try {
+      const items = await db.query.agriculture.findMany({
+        orderBy: desc(agriculture.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/agriculture/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(agriculture).where(eq(agriculture.id, req.params.id));
+      if (!item) {
+        return res.status(404).json({ message: "Not found" });
+      }
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/agriculture", async (req, res) => {
+    try {
+      const [item] = await db.insert(agriculture).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/agriculture/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(agriculture).set(req.body).where(eq(agriculture.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/agriculture/:id", async (req, res) => {
+    try {
+      await db.delete(agriculture).where(eq(agriculture.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Sales & Marketing (public)
+  app.get("/api/sales-marketing", async (req, res) => {
+    try {
+      const items = await db.query.salesMarketing.findMany({ where: eq(salesMarketing.isActive, true), orderBy: desc(salesMarketing.createdAt) });
+      res.json(items);
+    } catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  app.get("/api/admin/sales-marketing", async (req, res) => {
+    try { const items = await db.query.salesMarketing.findMany({ orderBy: desc(salesMarketing.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/sales-marketing/:id", async (req, res) => {
+    try { const [item] = await db.select().from(salesMarketing).where(eq(salesMarketing.id, req.params.id)); if (!item) return res.status(404).json({ message: "Not found" }); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/sales-marketing", async (req, res) => {
+    try { const [item] = await db.insert(salesMarketing).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/sales-marketing/:id", async (req, res) => {
+    try { const [item] = await db.update(salesMarketing).set(req.body).where(eq(salesMarketing.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/sales-marketing/:id", async (req, res) => {
+    try { await db.delete(salesMarketing).where(eq(salesMarketing.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Courier & Cargo (public)
+  app.get("/api/courier-cargo", async (req, res) => {
+    try { const items = await db.query.courierCargo.findMany({ where: eq(courierCargo.isActive, true), orderBy: desc(courierCargo.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  app.get("/api/admin/courier-cargo", async (req, res) => {
+    try { const items = await db.query.courierCargo.findMany({ orderBy: desc(courierCargo.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/courier-cargo/:id", async (req, res) => {
+    try { const [item] = await db.select().from(courierCargo).where(eq(courierCargo.id, req.params.id)); if (!item) return res.status(404).json({ message: "Not found" }); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/courier-cargo", async (req, res) => {
+    try { const [item] = await db.insert(courierCargo).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/courier-cargo/:id", async (req, res) => {
+    try { const [item] = await db.update(courierCargo).set(req.body).where(eq(courierCargo.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/courier-cargo/:id", async (req, res) => {
+    try { await db.delete(courierCargo).where(eq(courierCargo.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // News & Media (public)
+  app.get("/api/news-media", async (req, res) => {
+    try { const items = await db.query.newsMedia.findMany({ where: eq(newsMedia.isActive, true), orderBy: desc(newsMedia.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  app.get("/api/admin/news-media", async (req, res) => {
+    try { const items = await db.query.newsMedia.findMany({ orderBy: desc(newsMedia.createdAt) }); res.json(items); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/news-media/:id", async (req, res) => {
+    try { const [item] = await db.select().from(newsMedia).where(eq(newsMedia.id, req.params.id)); if (!item) return res.status(404).json({ message: "Not found" }); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/news-media", async (req, res) => {
+    try { const [item] = await db.insert(newsMedia).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/news-media/:id", async (req, res) => {
+    try { const [item] = await db.update(newsMedia).set(req.body).where(eq(newsMedia.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/news-media/:id", async (req, res) => {
+    try { await db.delete(newsMedia).where(eq(newsMedia.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
   });
 
   const httpServer = createServer(app);
