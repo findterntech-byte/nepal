@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,6 +87,7 @@ type PetCareFormData = {
 export default function PetCarePetFoodForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -96,10 +98,21 @@ export default function PetCarePetFoodForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<PetCareFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["pet-care"],
+    queryKey: ["pet-care", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/pet-care");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/pet-care${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -235,7 +248,13 @@ export default function PetCarePetFoodForm() {
   };
 
   const onSubmit = (data: PetCareFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    
     if (editingService) {
       updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
@@ -471,15 +490,15 @@ export default function PetCarePetFoodForm() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <Label htmlFor="consultationFee">Consultation Fee (₹)</Label>
+                <Label htmlFor="consultationFee">Consultation Fee (रू )</Label>
                 <Input id="consultationFee" type="number" {...register("consultationFee")} placeholder="Consultation Fee" />
               </div>
               <div>
-                <Label htmlFor="groomingPrice">Grooming Price (₹)</Label>
+                <Label htmlFor="groomingPrice">Grooming Price (रू )</Label>
                 <Input id="groomingPrice" type="number" {...register("groomingPrice")} placeholder="Grooming Price" />
               </div>
               <div>
-                <Label htmlFor="boardingPricePerDay">Boarding/Day (₹)</Label>
+                <Label htmlFor="boardingPricePerDay">Boarding/Day (रू )</Label>
                 <Input id="boardingPricePerDay" type="number" {...register("boardingPricePerDay")} placeholder="Boarding Price per day" />
               </div>
             </div>

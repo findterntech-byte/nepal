@@ -485,7 +485,7 @@ export default function EducationalConsultancyStudyAbroadForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label>Consultation Fee (₹)</Label>
+                    <Label>Consultation Fee (रू )</Label>
                     <Input
                       type="number"
                       value={formData.consultationFee}
@@ -493,7 +493,7 @@ export default function EducationalConsultancyStudyAbroadForm() {
                     />
                   </div>
                   <div>
-                    <Label>Service Charge (₹)</Label>
+                    <Label>Service Charge (रू )</Label>
                     <Input
                       type="number"
                       value={formData.serviceCharge}
@@ -501,7 +501,7 @@ export default function EducationalConsultancyStudyAbroadForm() {
                     />
                   </div>
                   <div>
-                    <Label>Package Price (₹)</Label>
+                    <Label>Package Price (रू )</Label>
                     <Input
                       type="number"
                       value={formData.packagePrice}

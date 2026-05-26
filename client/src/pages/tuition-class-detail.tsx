@@ -96,7 +96,7 @@ export default function TuitionPrivateClasses() {
               <div className="text-sm text-muted-foreground mb-2">Tutor: <span className="font-semibold">{singleListing.tutorName || singleListing.contactPerson}</span></div>
             )}
             {(singleListing.feePerMonth || singleListing.feePerHour || singleListing.feePerSubject || singleListing.feeAmount) && (
-              <div className="text-lg font-bold text-green-700">{`₹${Number(singleListing.feePerMonth || singleListing.feePerHour || singleListing.feePerSubject || singleListing.feeAmount || 0).toLocaleString()}`}{singleListing.feePerMonth ? '/month' : singleListing.feePerHour ? '/hr' : ''}</div>
+              <div className="text-lg font-bold text-green-700">{`रू ${Number(singleListing.feePerMonth || singleListing.feePerHour || singleListing.feePerSubject || singleListing.feeAmount || 0).toLocaleString()}`}{singleListing.feePerMonth ? '/month' : singleListing.feePerHour ? '/hr' : ''}</div>
             )}
           </div>
 
@@ -152,7 +152,7 @@ export default function TuitionPrivateClasses() {
                   <div className="font-medium">{singleListing.batchSize ?? '—'}</div>
 
                   <div className="text-sm text-muted-foreground">Fees</div>
-                  <div className="font-medium">{singleListing.feePerMonth ? `₹${Number(singleListing.feePerMonth).toLocaleString()}/month` : singleListing.feePerHour ? `₹${Number(singleListing.feePerHour).toLocaleString()}/hr` : singleListing.feePerSubject ? `₹${Number(singleListing.feePerSubject).toLocaleString()}/subject` : '—'}</div>
+                  <div className="font-medium">{singleListing.feePerMonth ? `रू ${Number(singleListing.feePerMonth).toLocaleString()}/month` : singleListing.feePerHour ? `रू ${Number(singleListing.feePerHour).toLocaleString()}/hr` : singleListing.feePerSubject ? `रू ${Number(singleListing.feePerSubject).toLocaleString()}/subject` : '—'}</div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">

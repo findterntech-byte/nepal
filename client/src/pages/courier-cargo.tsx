@@ -106,7 +106,7 @@ export default function CourierCargoPage() {
                   <div className="space-y-2 text-sm">
                     <p><strong>Category:</strong> {service.serviceCategory}</p>
                     <p><strong>Location:</strong> {service.city}, {service.state}</p>
-                    {service.perKgRate && <p><strong>Rate:</strong> ₹{service.perKgRate}/kg</p>}
+                    {service.perKgRate && <p><strong>Rate:</strong> रू {service.perKgRate}/kg</p>}
                   </div>
                   <div className="mt-4 flex gap-2 flex-wrap">
                     {service.domesticDelivery && <Badge variant="outline">Domestic</Badge>}

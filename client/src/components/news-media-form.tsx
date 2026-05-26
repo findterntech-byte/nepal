@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,6 +90,7 @@ type NewsMediaFormData = {
 export default function NewsMediaForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -99,10 +101,21 @@ export default function NewsMediaForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<NewsMediaFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["news-media"],
+    queryKey: ["news-media", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/news-media");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/news-media${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -202,7 +215,15 @@ export default function NewsMediaForm() {
   };
 
   const removeImage = (index: number) => setImages((prev) => prev.filter((_, i) => i !== index));
-  const onSubmit = (data: NewsMediaFormData) => { const payload = { ...data, images }; editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload); };
+  const onSubmit = (data: NewsMediaFormData) => {
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload);
+  };
 
   return (
     <div className="container mx-auto py-6">
@@ -276,7 +297,7 @@ export default function NewsMediaForm() {
               <div><Label htmlFor="viewership">Viewership</Label><Input id="viewership" type="number" {...register("viewership")} placeholder="Daily viewers" /></div>
               <div><Label htmlFor="subscribers">Subscribers</Label><Input id="subscribers" type="number" {...register("subscribers")} placeholder="Total subscribers" /></div>
               <div><Label htmlFor="circulation">Circulation</Label><Input id="circulation" type="number" {...register("circulation")} placeholder="Print circulation" /></div>
-              <div><Label htmlFor="subscriptionPrice">Subscription Price (₹)</Label><Input id="subscriptionPrice" type="number" {...register("subscriptionPrice")} placeholder="Monthly subscription" /></div>
+              <div><Label htmlFor="subscriptionPrice">Subscription Price (रू )</Label><Input id="subscriptionPrice" type="number" {...register("subscriptionPrice")} placeholder="Monthly subscription" /></div>
               <div><Label htmlFor="experienceYears">Experience (Years)</Label><Input id="experienceYears" type="number" {...register("experienceYears")} placeholder="Years of Experience" /></div>
               <div><Label htmlFor="awards">Awards</Label><Input id="awards" {...register("awards")} placeholder="Awards won" /></div>
               <div><Label htmlFor="workingHours">Working Hours</Label><Input id="workingHours" {...register("workingHours")} placeholder="24/7 or 9 AM - 6 PM" /></div>

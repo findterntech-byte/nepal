@@ -40,7 +40,27 @@ import {
   ArrowRight,
   Download,
   Eye,
-  Badge as BadgeIcon
+  Badge as BadgeIcon,
+  Utensils,
+  HeartPulse,
+  ShoppingCart,
+  Plane,
+  Activity,
+  Newspaper,
+  Calculator,
+  Coins,
+  Landmark,
+  Coffee,
+  ChefHat,
+  Palette,
+  Code,
+  Megaphone,
+  Stethoscope,
+  Microscope,
+  Bed,
+  Ticket,
+  PawPrint,
+  Leaf
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import Header from "@/components/header";
@@ -99,6 +119,27 @@ const iconMap: Record<string, any> = {
   'brain': Brain,
   'truck': Truck,
   'badge': BadgeIcon,
+  'trending-up': TrendingUp,
+  'utensils': Utensils,
+  'heart-pulse': HeartPulse,
+  'shopping-cart': ShoppingCart,
+  'plane': Plane,
+  'activity': Activity,
+  'newspaper': Newspaper,
+  'calculator': Calculator,
+  'coins': Coins,
+  'landmark': Landmark,
+  'coffee': Coffee,
+  'chef-hat': ChefHat,
+  'palette': Palette,
+  'code': Code,
+  'megaphone': Megaphone,
+  'stethoscope': Stethoscope,
+  'microscope': Microscope,
+  'bed': Bed,
+  'ticket': Ticket,
+  'paw-print': PawPrint,
+  'leaf': Leaf,
 };
 
 // Neutral fallback icon component using lucide `Badge` for consistent visuals
@@ -125,6 +166,22 @@ function getIconByName(name?: string): any | null {
 
 // Static mapping from normalized category slug/name to iconMap key
 const categoryIconMapping: Record<string, string> = {
+  'healthcare-fitness': 'heart-pulse',
+  'healthcare & fitness': 'heart-pulse',
+  'household-daily-needs': 'shopping-cart',
+  'household & daily needs': 'shopping-cart',
+  'sports-entertainment': 'activity',
+  'sports & entertainment': 'activity',
+  'travel-leisure': 'plane',
+  'travel & leisure': 'plane',
+  'business-sales': 'briefcase',
+  'business & sales': 'briefcase',
+  'finance-investments': 'trending-up',
+  'finance & investments': 'trending-up',
+  'food-beverages': 'utensils',
+  'food & beverages': 'utensils',
+  'freelance-online-services': 'laptop',
+  'freelance & online services': 'laptop',
   'education': 'graduation-cap',
   'education-learning': 'graduation-cap',
   'education & learning': 'graduation-cap',
@@ -175,6 +232,45 @@ const categoryIconMapping: Record<string, string> = {
 
 // Subcategory-specific icon mapping (normalized slug/name -> iconMap key)
 const subcategoryIconMapping: Record<string, string> = {
+  'news-media': 'newspaper',
+  'news & media': 'newspaper',
+  'accounting-audit': 'calculator',
+  'accounting & audit': 'calculator',
+  'investment-opportunities': 'coins',
+  'microfinance-cooperative': 'landmark',
+  'microfinance/cooperative listings': 'landmark',
+  'restaurants': 'utensils',
+  'restaurant': 'utensils',
+  'cafe': 'coffee',
+  'home-delivery': 'truck',
+  'home delivery': 'truck',
+  'catering': 'chef-hat',
+  'graphic-design': 'palette',
+  'graphic design': 'palette',
+  'web-development': 'code',
+  'web development': 'code',
+  'digital-marketing': 'megaphone',
+  'digital marketing': 'megaphone',
+  'clinics-hospitals': 'stethoscope',
+  'clinics & hospitals': 'stethoscope',
+  'diagnostic-labs': 'microscope',
+  'diagnostic labs': 'microscope',
+  'fitness-trainers': 'dumbbell',
+  'fitness trainers': 'dumbbell',
+  'tours-travels': 'plane',
+  'tours & travels': 'plane',
+  'hotels-resorts': 'bed',
+  'hotels & resorts': 'bed',
+  'event-movie-ticket-booking': 'ticket',
+  'event/movie ticket booking': 'ticket',
+  'pet-care-pet-food': 'paw-print',
+  'pet care & pet food': 'paw-print',
+  'agriculture-seeds-farming': 'leaf',
+  'agriculture, seeds & farming': 'leaf',
+  'grocery-daily-essentials': 'shopping-cart',
+  'grocery & daily essentials': 'shopping-cart',
+  'cleaning-pest-control': 'sparkles',
+  'cleaning & pest control': 'sparkles',
   'tuition-private-classes': 'graduation-cap',
   'dance-karate-gym-yoga': 'dumbbell',
   'dance-karate-gym-yoga-classes': 'dumbbell',
@@ -1211,7 +1307,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.category || 'Fashion'}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-[#0B8457]">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-[#0B8457]">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="flex items-center gap-1 text-yellow-400 text-xs">
                                   <Star className="w-3 h-3 fill-current" />
                                   <span>4.5</span>
@@ -1267,7 +1363,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{vehicle.brand} {vehicle.model}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{vehicle.year} • {vehicle.vehicleType}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-blue-600">₹{vehicle.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-blue-600">रू {vehicle.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {vehicle.condition}
                                 </div>
@@ -1313,7 +1409,7 @@ export default function Home() {
                               <CardContent className="p-4">
                                 <h4 className="font-semibold text-sm mb-1 line-clamp-2">{material.name}</h4>
                                 <p className="text-xs text-muted-foreground mb-2">{material.category}</p>
-                                <span className="text-lg font-bold text-[#0B8457]">₹{material.price?.toLocaleString('en-IN') || 'N/A'}/{material.unit}</span>
+                                <span className="text-lg font-bold text-[#0B8457]">रू {material.price?.toLocaleString('en-IN') || 'N/A'}/{material.unit}</span>
                               </CardContent>
                             </Card>
                           </Link>
@@ -1365,7 +1461,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-purple-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-purple-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'New'}
                                 </div>
@@ -1420,7 +1516,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.brand}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-pink-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-pink-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'New'}
                                 </div>
@@ -1475,7 +1571,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{property.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{property.city}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-amber-600">₹{property.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-amber-600">रू {property.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {property.bedrooms ? `${property.bedrooms}BHK` : 'Apt'}
                                 </div>
@@ -1530,7 +1626,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-orange-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-orange-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'New'}
                                 </div>
@@ -1585,7 +1681,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-rose-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-rose-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'New'}
                                 </div>
@@ -1640,7 +1736,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{course.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{course.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-indigo-600">₹{course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-indigo-600">रू {course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {course.duration ? course.duration : 'Online'}
                                 </div>
@@ -1695,7 +1791,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{course.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{course.subject}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-cyan-600">₹{course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-cyan-600">रू {course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {course.duration ? course.duration : 'Online'}
                                 </div>
@@ -1750,7 +1846,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.type}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-red-600">₹{service.fee?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-red-600">रू {service.fee?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.duration ? service.duration : 'Flex'}
                                 </div>
@@ -1805,7 +1901,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{course.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{course.language}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-teal-600">₹{course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-teal-600">रू {course.fee?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {course.duration ? course.duration : 'Online'}
                                 </div>
@@ -1860,7 +1956,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.serviceType}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-green-600">₹{service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-green-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -1974,7 +2070,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-yellow-600">₹{service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-yellow-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -2029,7 +2125,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.serviceType}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-fuchsia-600">₹{service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-fuchsia-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -2084,7 +2180,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-slate-600">₹{service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-slate-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -2139,7 +2235,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.condition}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-lime-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-lime-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'Used'}
                                 </div>
@@ -2196,7 +2292,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{vehicle.brand} {vehicle.model}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{vehicle.year} • {vehicle.vehicleType}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-slate-600">₹{vehicle.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-slate-600">रू {vehicle.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {vehicle.condition}
                                 </div>
@@ -2253,7 +2349,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{rental.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{rental.vehicleType} • {rental.brand} {rental.model}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-blue-600">₹{rental.pricePerDay?.toLocaleString('en-IN') || rental.price?.toLocaleString('en-IN') || 'N/A'}/day</span>
+                                <span className="text-lg font-bold text-blue-600">रू {rental.pricePerDay?.toLocaleString('en-IN') || rental.price?.toLocaleString('en-IN') || 'N/A'}/day</span>
                                   <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                     {String(rental.driverAvailable || '').includes('driver') ? 'With Driver' : 'Self Drive'}
                                   </div>
@@ -2308,7 +2404,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{product.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{product.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-violet-600">₹{product.price?.toLocaleString('en-IN') || 'N/A'}</span>
+                                <span className="text-lg font-bold text-violet-600">रू {product.price?.toLocaleString('en-IN') || 'N/A'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {product.rating ? `${product.rating}★` : 'New'}
                                 </div>
@@ -2363,7 +2459,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{course.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{course.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-sky-600">₹{course.price?.toLocaleString('en-IN') || 'Free'}</span>
+                                <span className="text-lg font-bold text-sky-600">रू {course.price?.toLocaleString('en-IN') || 'Free'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {course.rating ? `${course.rating}★` : 'New'}
                                 </div>

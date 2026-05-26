@@ -922,7 +922,7 @@ export default function SareeClothingShoppingForm(props?: {
                   <div className="space-y-4">
                     <div className="grid grid-cols-3 gap-4">
                       <div>
-                        <Label htmlFor="price">Price (₹) *</Label>
+                        <Label htmlFor="price">Price (रू ) *</Label>
                         <Input
                           id="price"
                           type="number"
@@ -933,7 +933,7 @@ export default function SareeClothingShoppingForm(props?: {
                       </div>
 
                       <div>
-                        <Label htmlFor="mrp">MRP (₹)</Label>
+                        <Label htmlFor="mrp">MRP (रू )</Label>
                         <Input id="mrp" type="number" step="0.01" {...register("mrp")} placeholder="0.00" />
                       </div>
 
@@ -952,7 +952,7 @@ export default function SareeClothingShoppingForm(props?: {
                     {listingType === "rent" && (
                       <div className="grid grid-cols-3 gap-4">
                         <div>
-                          <Label htmlFor="rentalPricePerDay">Rental/Day (₹)</Label>
+                          <Label htmlFor="rentalPricePerDay">Rental/Day (रू )</Label>
                           <Input
                             id="rentalPricePerDay"
                             type="number"
@@ -963,7 +963,7 @@ export default function SareeClothingShoppingForm(props?: {
                         </div>
 
                         <div>
-                          <Label htmlFor="rentalPricePerWeek">Rental/Week (₹)</Label>
+                          <Label htmlFor="rentalPricePerWeek">Rental/Week (रू )</Label>
                           <Input
                             id="rentalPricePerWeek"
                             type="number"
@@ -974,7 +974,7 @@ export default function SareeClothingShoppingForm(props?: {
                         </div>
 
                         <div>
-                          <Label htmlFor="securityDeposit">Security Deposit (₹)</Label>
+                          <Label htmlFor="securityDeposit">Security Deposit (रू )</Label>
                           <Input
                             id="securityDeposit"
                             type="number"
@@ -1137,7 +1137,7 @@ export default function SareeClothingShoppingForm(props?: {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="deliveryCharges">Delivery Charges (₹)</Label>
+                        <Label htmlFor="deliveryCharges">Delivery Charges (रू )</Label>
                         <Input
                           id="deliveryCharges"
                           type="number"
@@ -1148,7 +1148,7 @@ export default function SareeClothingShoppingForm(props?: {
                       </div>
 
                       <div>
-                        <Label htmlFor="freeDeliveryAbove">Free Delivery Above (₹)</Label>
+                        <Label htmlFor="freeDeliveryAbove">Free Delivery Above (रू )</Label>
                         <Input
                           id="freeDeliveryAbove"
                           type="number"
@@ -1233,7 +1233,7 @@ export default function SareeClothingShoppingForm(props?: {
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">{item.title}</TableCell>
                       <TableCell>{item.category}</TableCell>
-                      <TableCell>₹{Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
+                      <TableCell>रू {Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</TableCell>
                       <TableCell>
                         <Badge variant={item.inStock ? "default" : "secondary"}>
                           {item.inStock ? "In Stock" : "Out of Stock"}
@@ -1305,7 +1305,7 @@ export default function SareeClothingShoppingForm(props?: {
                 </div>
                 <div>
                   <Label>Price:</Label>
-                  <p className="text-2xl font-bold text-pink-600">₹{Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-2xl font-bold text-pink-600">रू {Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 <div>
                   <Label>Contact Phone:</Label>

@@ -584,7 +584,7 @@ export function CarsBikesForm() {
                       type="text"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                      placeholder="₹"
+                      placeholder="रू "
                       required
                     />
                   </div>
@@ -601,7 +601,7 @@ export function CarsBikesForm() {
                   {formData.emiAvailable && (
                     <>
                       <div>
-                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (रू )</Label>
                         <Input
                           id="emiStartingFrom"
                           type="text"
@@ -612,8 +612,8 @@ export function CarsBikesForm() {
                       </div>
                       <div>
                         <Label htmlFor="emiMonths">EMI Duration (Months)</Label>
-                        <Select 
-                          value={formData.emiMonths} 
+                        <Select
+                          value={formData.emiMonths}
                           onValueChange={(value) => setFormData({ ...formData, emiMonths: value })}
                         >
                           <SelectTrigger>
@@ -852,22 +852,22 @@ export function CarsBikesForm() {
             </TableHeader>
             <TableBody>
               {listings.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell className="font-medium">{item.title}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{item.listingType}</Badge>
-                    </TableCell>
-                    <TableCell>{item.brand} {item.model}</TableCell>
-                    <TableCell>{item.year}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <div>₹{item.price.toLocaleString()}</div>
-                        {item.emiAvailable && (
-                          <Badge className="bg-blue-600 text-xs w-fit">EMI ₹{item.emiStartingFrom}/{item.emiMonths}mo</Badge>
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell>
+                <TableRow key={item.id}>
+                  <TableCell className="font-medium">{item.title}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{item.listingType}</Badge>
+                  </TableCell>
+                  <TableCell>{item.brand} {item.model}</TableCell>
+                  <TableCell>{item.year}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <div>रू {item.price.toLocaleString()}</div>
+                      {item.emiAvailable && (
+                        <Badge className="bg-blue-600 text-xs w-fit">EMI रू {item.emiStartingFrom}/{item.emiMonths}mo</Badge>
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>
                     <div className="flex gap-2">
                       <Badge variant={item.isActive ? "default" : "secondary"}>
                         {item.isActive ? "Active" : "Inactive"}

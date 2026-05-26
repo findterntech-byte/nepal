@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,6 +80,7 @@ type SalesMarketingFormData = {
 export default function SalesMarketingForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -89,10 +91,21 @@ export default function SalesMarketingForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<SalesMarketingFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["sales-marketing"],
+    queryKey: ["sales-marketing", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/sales-marketing");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/sales-marketing${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -210,7 +223,12 @@ export default function SalesMarketingForm() {
   const removeImage = (index: number) => setImages((prev) => prev.filter((_, i) => i !== index));
 
   const onSubmit = (data: SalesMarketingFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
     editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload);
   };
 
@@ -234,7 +252,7 @@ export default function SalesMarketingForm() {
               <div className="space-y-2 text-sm">
                 <p><strong>Category:</strong> {service.serviceCategory}</p>
                 <p><strong>Location:</strong> {service.city}, {service.state}</p>
-                {service.startingPrice && <p><strong>Starting:</strong> ₹{service.startingPrice}</p>}
+                {service.startingPrice && <p><strong>Starting:</strong> रू {service.startingPrice}</p>}
               </div>
               <div className="flex gap-2 mt-4">
                 <Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4 mr-1" /> View</Button>
@@ -279,8 +297,8 @@ export default function SalesMarketingForm() {
               <div><Label htmlFor="city">City *</Label><Input id="city" {...register("city", { required: true })} placeholder="City" /></div>
               <div><Label htmlFor="state">State</Label><Input id="state" {...register("state")} placeholder="State" /></div>
               <div><Label htmlFor="fullAddress">Full Address</Label><Input id="fullAddress" {...register("fullAddress")} placeholder="Full Address" /></div>
-              <div><Label htmlFor="startingPrice">Starting Price (₹)</Label><Input id="startingPrice" type="number" {...register("startingPrice")} placeholder="Starting Price" /></div>
-              <div><Label htmlFor="hourlyRate">Hourly Rate (₹)</Label><Input id="hourlyRate" type="number" {...register("hourlyRate")} placeholder="Hourly Rate" /></div>
+              <div><Label htmlFor="startingPrice">Starting Price (रू )</Label><Input id="startingPrice" type="number" {...register("startingPrice")} placeholder="Starting Price" /></div>
+              <div><Label htmlFor="hourlyRate">Hourly Rate (रू )</Label><Input id="hourlyRate" type="number" {...register("hourlyRate")} placeholder="Hourly Rate" /></div>
               <div><Label htmlFor="teamSize">Team Size</Label><Input id="teamSize" type="number" {...register("teamSize")} placeholder="Team Size" /></div>
               <div><Label htmlFor="experienceYears">Experience (Years)</Label><Input id="experienceYears" type="number" {...register("experienceYears")} placeholder="Years of Experience" /></div>
               <div><Label htmlFor="certifications">Certifications</Label><Input id="certifications" {...register("certifications")} placeholder="Certifications" /></div>

@@ -36,15 +36,7 @@ import {
   Search,
   ChevronDown,
   Pencil,
-  Trash,
-  Heart,
-  Building2,
-  Briefcase,
-  Ticket,
-  Dog,
-  Sprout,
-  UtensilsCrossed,
-  Utensils
+  Trash
 } from 'lucide-react';
 import {
   Sidebar,
@@ -79,7 +71,7 @@ import { HeavyEquipmentForm } from "@/components/heavy-equipment-form";
 import { ShowroomsForm } from "@/components/showrooms-form";
 import { SecondHandCarsBikesForm } from "@/components/second-hand-cars-bikes-form";
 import CarBikeRentalsForm from "@/components/car-bike-rentals-form";
-import {TransportationMovingServicesForm} from "@/components/transportation-moving-services-form";
+import { TransportationMovingServicesForm } from "@/components/transportation-moving-services-form";
 import VehicleLicenseClassesForm from "@/components/vehicle-license-classes-form";
 import ElectronicsGadgetsForm from "@/components/electronics-gadgets-form";
 import PhonesTabletsAccessoriesForm from "@/components/phones-tablets-accessories-form";
@@ -106,31 +98,33 @@ import TelecommunicationServicesForm from "@/components/telecommunication-servic
 import ServiceCentreWarrantyForm from "@/components/service-centre-warranty-form";
 import CyberCafeInternetServicesForm from "@/components/cyber-cafe-internet-services-form";
 import DynamicFilter from '@/components/dynamic-filter';
-import ProfessionalServicesForm from "@/components/professional-services-form";
-import LaborWorkerServicesForm from "@/components/labor-worker-services-form";
-import EngineeringITServicesForm from "@/components/engineering-it-services-form";
-import LegalBankingServicesForm from "@/components/legal-banking-services-form";
-import InsuranceServicesForm from "@/components/insurance-services-form";
-import NGOSocialServicesForm from "@/components/ngo-social-services-form";
-import AgentsAgenciesForm from "@/components/agents-agencies-form";
-import ToursTravelsForm from "@/components/tours-travels-form";
-import HotelsResortsForm from "@/components/hotels-resorts-form";
-import EventTicketBookingForm from "@/components/event-ticket-booking-form";
-import PetCarePetFoodForm from "@/components/pet-care-pet-food-form";
-import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-form";
-import SalesMarketingForm from "@/components/sales-marketing-form";
-import CourierCargoForm from "@/components/courier-cargo-form";
-import NewsMediaForm from "@/components/news-media-form";
-import RestaurantForm from "@/components/restaurant-form";
-import HotelForm from "@/components/hotel-form";
-import CafeForm from "@/components/cafe-form";
-import HomeDeliveryForm from "@/components/home-delivery-form";
-import CateringForm from "@/components/catering-form";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import EducationalConsultancyStudyAbroadForm from "@/components/educational-consultancy-study-abroad-form";
-import ProProfilesForm from "@/components/pro-profiles-form";
-
+import ClinicsHospitalsForm from '@/components/clinics-hospitals-form';
+import FitnessTrainersForm from '@/components/fitness-trainers-form';
+import DiagnosticLabsForm from '@/components/diagnostic-labs-form';
+import SalesMarketingForm from '@/components/sales-marketing-form';
+import NewsMediaForm from '@/components/news-media-form';
+import CourierCargoForm from '@/components/courier-cargo-form';
+import AccountingAuditServicesForm from "@/components/accounting-audit-services-form";
+import InvestmentOpportunitiesForm from "@/components/investment-opportunities-form";
+import MicrofinanceCooperativeForm from "@/components/microfinance-cooperative-form";
+import RestaurantForm from "@/components/restaurant-form";
+import HomeDeliveryForm from "@/components/home-delivery-form";
+import CateringForm from "@/components/catering-form";
+import CafeForm from "@/components/cafe-form";
+import CleaningPestControlForm from "@/components/cleaning-pest-control-form";
+import GroceryDailyEssentialsForm from "@/components/grocery-daily-essentials-form";
+import ElectricalPlumbingRepairsForm from "@/components/electrical-plumbing-repairs-form";
+import GymsFitnessCentersForm from "@/components/gyms-fitness-centers-form";
+import MusicEntertainmentForm from "@/components/music-entertainment-form";
+import SportsEquipmentForm from "@/components/sports-equipment-form";
+import HotelsResortsForm from "@/components/hotels-resorts-form";
+import PetCarePetFoodForm from "@/components/pet-care-pet-food-form";
+import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-form";
+import EventTicketBookingForm from "@/components/event-ticket-booking-form";
+import ToursTravelsForm from "@/components/tours-travels-form";
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
   return <EducationalConsultancyStudyAbroadForm />;
@@ -227,9 +221,9 @@ function EventDecorationServicesSection() {
 
   return (
     <div className="space-y-6">
-      
 
-      
+
+
 
       <EventDecorationServicesForm />
 
@@ -282,7 +276,7 @@ function EventDecorationServicesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{service.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(service.basePrice).toLocaleString()}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(service.basePrice).toLocaleString()}</span>
                   <Badge variant={service.isActive ? 'default' : 'secondary'}>
                     {service.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -341,7 +335,7 @@ function EventDecorationServicesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Base Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingService.basePrice).toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingService.basePrice).toLocaleString()}</p>
                 </div>
                 {viewingService.capacity && (
                   <div className="p-4 bg-muted rounded-lg">
@@ -601,12 +595,12 @@ function FashionBeautyProductsSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingProduct.price).toLocaleString('en-IN')}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingProduct.price).toLocaleString('en-IN')}</p>
                 </div>
                 {viewingProduct.mrp && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">MRP</p>
-                    <p className="text-lg font-bold line-through">₹{Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
+                    <p className="text-lg font-bold line-through">रू {Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
                   </div>
                 )}
                 {viewingProduct.discountPercentage && (
@@ -699,7 +693,7 @@ function FashionBeautyProductsSection() {
                 <div className="space-y-1 text-sm">
                   {viewingProduct.contactPerson && <p><span className="font-medium">Contact Person:</span> {viewingProduct.contactPerson}</p>}
                   <p><span className="font-medium">Phone:</span> {viewingProduct.contactPhone}</p>
-                  {viewingProduct.contactEmail&& <p><span className="font-medium">Email:</span> {viewingProduct.contactEmail}</p>}
+                  {viewingProduct.contactEmail && <p><span className="font-medium">Email:</span> {viewingProduct.contactEmail}</p>}
                 </div>
               </div>
 
@@ -776,7 +770,7 @@ function FashionBeautyProductsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(product.price).toLocaleString('en-IN')}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(product.price).toLocaleString('en-IN')}</span>
                   <Badge variant={product.isActive ? 'default' : 'secondary'}>
                     {product.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -883,7 +877,7 @@ function SareeClothingShoppingSection() {
       if (response.ok) {
         fetchProducts();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const toggleFeatured = async (id: string) => {
@@ -894,7 +888,7 @@ function SareeClothingShoppingSection() {
       if (response.ok) {
         fetchProducts();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -959,7 +953,7 @@ function SareeClothingShoppingSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(product.price).toLocaleString('en-IN')}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(product.price).toLocaleString('en-IN')}</span>
                   <Badge variant={product.isActive ? 'default' : 'secondary'}>
                     {product.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -1034,12 +1028,12 @@ function SareeClothingShoppingSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingProduct.price).toLocaleString('en-IN')}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingProduct.price).toLocaleString('en-IN')}</p>
                 </div>
                 {viewingProduct.mrp && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">MRP</p>
-                    <p className="text-lg font-bold">₹{Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
                   </div>
                 )}
                 {viewingProduct.discountPercentage && (
@@ -1192,7 +1186,7 @@ function PharmacyMedicalStoresSection() {
     fetchStores();
   };
 
-  const handleEdit = (store: any) =>{
+  const handleEdit = (store: any) => {
     setEditingStore(store);
     setShowForm(true);
   };
@@ -1329,7 +1323,7 @@ function PharmacyMedicalStoresSection() {
                     {viewingStore.homeDelivery && <Badge variant="default">Home Delivery</Badge>}
                     {viewingStore.sameDayDelivery && <Badge variant="default">Same Day Delivery</Badge>}
                     {viewingStore.deliveryCharges && (
-                      <Badge variant="outline">Delivery: ₹{viewingStore.deliveryCharges}</Badge>
+                      <Badge variant="outline">Delivery: रू {viewingStore.deliveryCharges}</Badge>
                     )}
                   </div>
                 </div>
@@ -1655,7 +1649,7 @@ function CricketSportsTrainingSection() {
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
                   {item.pricePerSession != null && (
-                    <span className="font-semibold text-primary">₹{Number(item.pricePerSession).toLocaleString()}</span>
+                    <span className="font-semibold text-primary">रू {Number(item.pricePerSession).toLocaleString()}</span>
                   )}
                 </div>
               </div>
@@ -1854,7 +1848,7 @@ function JewelryAccessoriesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   <Badge variant={item.isActive ? 'default' : 'secondary'}>
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -1914,12 +1908,12 @@ function JewelryAccessoriesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 {viewingItem.originalPrice && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Original Price</p>
-                    <p className="text-lg font-bold line-through">₹{Number(viewingItem.originalPrice).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-lg font-bold line-through">रू {Number(viewingItem.originalPrice).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                   </div>
                 )}
                 {viewingItem.discountPercentage && (
@@ -1931,7 +1925,7 @@ function JewelryAccessoriesSection() {
                 {viewingItem.makingCharges && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Making Charges</p>
-                    <p className="text-lg font-bold">₹{Number(viewingItem.makingCharges).toLocaleString('en-IN')}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingItem.makingCharges).toLocaleString('en-IN')}</p>
                   </div>
                 )}
               </div>
@@ -2216,7 +2210,7 @@ function HealthWellnessServicesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   {service.consultationFee && (
-                    <span className="font-semibold text-lg text-primary">₹{service.consultationFee}</span>
+                    <span className="font-semibold text-lg text-primary">रू {service.consultationFee}</span>
                   )}
                   <Badge variant={service.isActive ? 'default' : 'secondary'}>
                     {service.isActive ? 'Active' : 'Inactive'}
@@ -2377,8 +2371,8 @@ function HouseholdServicesSection() {
       <Dialog open={showForm} onOpenChange={(open) => {
         setShowForm(open);
         if (!open) {
-            setEditingService(null);
-            setEditingItem(null); // Reset editingItem when dialog closes
+          setEditingService(null);
+          setEditingItem(null); // Reset editingItem when dialog closes
         }
       }}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-visible">
@@ -2442,9 +2436,9 @@ function HouseholdServicesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-semibold text-lg text-primary">₹{service.baseServiceCharge}</span>
+                    <span className="font-semibold text-lg text-primary">रू {service.baseServiceCharge}</span>
                     {service.hourlyRate && (
-                      <span className="text-sm text-muted-foreground ml-2">| ₹{service.hourlyRate}/hr</span>
+                      <span className="text-sm text-muted-foreground ml-2">| रू {service.hourlyRate}/hr</span>
                     )}
                   </div>
                   <Badge variant={service.isActive ? 'default' : 'secondary'}>
@@ -2530,24 +2524,24 @@ function HouseholdServicesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Base Charge</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingService.baseServiceCharge}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingService.baseServiceCharge}</p>
                 </div>
                 {viewingService.hourlyRate && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Hourly Rate</p>
-                    <p className="text-lg font-bold">₹{viewingService.hourlyRate}/hr</p>
+                    <p className="text-lg font-bold">रू {viewingService.hourlyRate}/hr</p>
                   </div>
                 )}
                 {viewingService.minimumCharge && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Min. Charge</p>
-                    <p className="text-lg font-bold">₹{viewingService.minimumCharge}</p>
+                    <p className="text-lg font-bold">रू {viewingService.minimumCharge}</p>
                   </div>
                 )}
                 {viewingService.emergencyCharges && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Emergency Charge</p>
-                    <p className="text-lg font-bold text-red-600">₹{viewingService.emergencyCharges}</p>
+                    <p className="text-lg font-bold text-red-600">रू {viewingService.emergencyCharges}</p>
                   </div>
                 )}
               </div>
@@ -2856,27 +2850,7 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
   };
 
   const staticItems = [
-    { title: "Dashboard", icon: Home, key: "dashboard" },
-    { title: "Professional Services", icon: Briefcase, key: "professional-services" },
-    { title: "Labor & Worker Services", icon: Users, key: "labor-worker-services" },
-    { title: "Engineering & IT Services", icon: Building, key: "engineering-it-services" },
-    { title: "Legal & Banking Services", icon: Shield, key: "legal-banking-services" },
-    { title: "Insurance Services", icon: Shield, key: "insurance-services" },
-    { title: "NGO & Social Services", icon: Heart, key: "ngo-social-services" },
-    { title: "Agents & Agencies", icon: Building2, key: "agents-agencies" },
-    { title: "Tours & Travels", icon: MapPin, key: "tours-travels" },
-    { title: "Hotels & Resorts", icon: Building, key: "hotels-resorts" },
-    { title: "Event & Movie Tickets", icon: Ticket, key: "event-ticket-booking" },
-    { title: "Pet Care & Pet Food", icon: Dog, key: "pet-care-pet-food" },
-    { title: "Agriculture & Farming", icon: Sprout, key: "agriculture-seeds-farming" },
-    { title: "Sales & Marketing", icon: TrendingUp, key: "sales-marketing" },
-    { title: "Courier & Cargo", icon: Truck, key: "courier-cargo" },
-    { title: "News & Media", icon: Newspaper, key: "news-media" },
-    { title: "Restaurants", icon: UtensilsCrossed, key: "restaurants" },
-    { title: "Hotel", icon: Building, key: "hotel" },
-    { title: "Cafe", icon: Coffee, key: "cafe" },
-    { title: "Home Delivery", icon: Truck, key: "home-delivery" },
-    { title: "Catering", icon: Utensils, key: "catering" },
+    { title: "Dashboard", icon: Home, key: "dashboard" }
   ];
 
   return (
@@ -2932,23 +2906,6 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
               <span className="flex-1 text-left">Platform</span>
             </button>
           </li>
-
-          <li className="mt-4 mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted-foreground px-3">Services</span>
-          </li>
-
-          {staticItems.slice(1).map((item) => (
-            <li key={item.key}>
-              <button
-                className={`w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors ${activeSection === item.key ? "bg-gradient-to-r from-blue-600 to-green-600 text-white" : "hover:bg-gray-50 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-200"}`}
-                onClick={() => setActiveSection(item.key)}
-                aria-current={activeSection === item.key ? 'page' : undefined}
-              >
-                {item.icon && <item.icon className="w-4 h-4" />}
-                <span className="flex-1 text-left">{item.title}</span>
-              </button>
-            </li>
-          ))}
 
           {filteredCategoryPreferences.length === 0 && (
             <li className="px-3 py-2 text-sm text-muted-foreground">No categories found.</li>
@@ -3024,58 +2981,58 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
 
 }
 
-  // Profile footer component with dropdown for Profile / Settings / Logout
-  function ProfileFooter() {
-    const { user } = useUser();
-    const [open, setOpen] = useState(false);
-    const menuRef = useRef<HTMLDivElement | null>(null);
+// Profile footer component with dropdown for Profile / Settings / Logout
+function ProfileFooter() {
+  const { user } = useUser();
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
-      function onDocClick(e: MouseEvent) {
-        if (!menuRef.current) return;
-        if (!menuRef.current.contains(e.target as Node)) {
-          setOpen(false);
-        }
+  useEffect(() => {
+    function onDocClick(e: MouseEvent) {
+      if (!menuRef.current) return;
+      if (!menuRef.current.contains(e.target as Node)) {
+        setOpen(false);
       }
-      document.addEventListener('mousedown', onDocClick);
-      return () => document.removeEventListener('mousedown', onDocClick);
-    }, []);
+    }
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
 
-    const handleLogout = () => {
-      localStorage.removeItem('user');
-      window.location.href = '/';
-    };
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
 
-    return (
-      <div className="relative" ref={menuRef}>
-        <button
-          className="w-full flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          onClick={() => setOpen(prev => !prev)}
-          aria-haspopup="menu"
-          aria-expanded={open}
-        >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center text-white font-semibold">{user?.firstName?.[0] || user?.username?.[0] || 'U'}</div>
-          <div className="flex-1 min-w-0 text-left">
-            <div className="text-sm font-medium truncate">{user?.firstName ? `${user.firstName} ${user.lastName || ''}` : user?.username || 'User'}</div>
-            <div className="text-xs text-muted-foreground truncate">{user?.email}</div>
-          </div>
-          <div>
-            <ChevronDown className="w-4 h-4 text-gray-400" />
-          </div>
-        </button>
+  return (
+    <div className="relative" ref={menuRef}>
+      <button
+        className="w-full flex items-center gap-3 px-2 py-2 rounded-md hover:bg-gray-50 dark:hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        onClick={() => setOpen(prev => !prev)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-green-600 flex items-center justify-center text-white font-semibold">{user?.firstName?.[0] || user?.username?.[0] || 'U'}</div>
+        <div className="flex-1 min-w-0 text-left">
+          <div className="text-sm font-medium truncate">{user?.firstName ? `${user.firstName} ${user.lastName || ''}` : user?.username || 'User'}</div>
+          <div className="text-xs text-muted-foreground truncate">{user?.email}</div>
+        </div>
+        <div>
+          <ChevronDown className="w-4 h-4 text-gray-400" />
+        </div>
+      </button>
 
-        {open && (
-          <div role="menu" aria-label="Profile menu" className="absolute right-0 bottom-14 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-20">
-            <div className="py-1">
-              <button role="menuitem" onClick={() => { window.location.href = '/profile'; }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</button>
-              <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
-              <button role="menuitem" onClick={handleLogout} className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
-            </div>
+      {open && (
+        <div role="menu" aria-label="Profile menu" className="absolute right-0 bottom-14 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg z-20">
+          <div className="py-1">
+            <button role="menuitem" onClick={() => { window.location.href = '/profile'; }} className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">Profile</button>
+            <div className="border-t border-gray-100 dark:border-gray-700 my-1" />
+            <button role="menuitem" onClick={handleLogout} className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</button>
           </div>
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Categories Section
 function CategoriesSection() {
@@ -3782,10 +3739,10 @@ function AnalyticsSection() {
 
   const statusData = data
     ? [
-        { name: 'Active', value: data.statusOverview.active, key: 'active' },
-        { name: 'Inactive', value: data.statusOverview.inactive, key: 'inactive' },
-        { name: 'Featured', value: data.statusOverview.featured, key: 'featured' },
-      ]
+      { name: 'Active', value: data.statusOverview.active, key: 'active' },
+      { name: 'Inactive', value: data.statusOverview.inactive, key: 'inactive' },
+      { name: 'Featured', value: data.statusOverview.featured, key: 'featured' },
+    ]
     : [];
 
   return (
@@ -4073,7 +4030,7 @@ function AnalyticsSection() {
                         <TableCell className="text-right">
                           <span className="text-sm font-medium">
                             {listing.price != null
-                              ? `₹${Number(listing.price).toLocaleString()}`
+                              ? `रू ${Number(listing.price).toLocaleString()}`
                               : '-'}
                           </span>
                         </TableCell>
@@ -4526,7 +4483,7 @@ function HostelsPgSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{hostel.description}</p>
                 )}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-lg text-primary">₹{hostel.pricePerMonth}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {hostel.pricePerMonth}/month</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
@@ -4615,18 +4572,18 @@ function HostelsPgSection() {
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Base Price</p>
-                    <p className="text-lg font-bold text-primary">₹{Number(viewingService.basePrice).toLocaleString()}</p>
+                    <p className="text-lg font-bold text-primary">रू {Number(viewingHostel.basePrice).toLocaleString()}</p>
                   </div>
-                  {viewingService.capacity && (
+                  {viewingHostel.capacity && (
                     <div className="p-4 bg-muted rounded-lg">
                       <p className="text-sm text-muted-foreground">Capacity</p>
-                      <p className="text-lg font-bold">{viewingService.capacity} people</p>
+                      <p className="text-lg font-bold">{viewingHostel.capacity} people</p>
                     </div>
                   )}
-                  {viewingService.hallArea && (
+                  {viewingHostel.hallArea && (
                     <div className="p-4 bg-muted rounded-lg">
                       <p className="text-sm text-muted-foreground">Hall Area</p>
-                      <p className="text-lg font-bold">{viewingService.hallArea} sq.ft</p>
+                      <p className="text-lg font-bold">{viewingHostel.hallArea} sq.ft</p>
                     </div>
                   )}
                   <p className="text-sm text-muted-foreground">Available Beds</p>
@@ -4893,7 +4850,7 @@ function ConstructionMaterialsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{material.description}</p>
                 )}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-lg text-primary">₹{material.price}/{material.unit}</span>
+                  <span className="font-semibold text-lg text-primary">रू {material.price}/{material.unit}</span>
                   <Badge variant={material.stockStatus === 'in_stock' ? 'default' : 'secondary'}>
                     {material.stockStatus?.replace('_', ' ').toUpperCase()}
                   </Badge>
@@ -4916,7 +4873,7 @@ function ConstructionMaterialsSection() {
                 Stock: <span className="font-medium">{material.stockStatus?.replace('_', ' ').toUpperCase()}</span>
               </div>
               <div className="text-lg font-bold text-primary">
-                ₹{material.price}/{material.unit}
+                रू {material.price}/{material.unit}
               </div>
             </CardFooter>
             <CardFooter className="pt-0 flex gap-2">
@@ -4960,7 +4917,7 @@ function ConstructionMaterialsSection() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingMaterial.price}/{viewingMaterial.unit}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingMaterial.price}/{viewingMaterial.unit}</p>
                 </div>
                 {viewingMaterial.minimumOrder && (
                   <div className="p-4 bg-muted rounded-lg">
@@ -5154,7 +5111,7 @@ function PropertyDealsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{deal.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{deal.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {deal.price}</span>
                   <Badge variant={deal.isActive ? 'default' : 'secondary'}>
                     {deal.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5340,7 +5297,7 @@ function CommercialPropertiesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{property.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{property.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {property.price}</span>
                   <Badge variant={property.isActive ? 'default' : 'secondary'}>
                     {property.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5526,7 +5483,7 @@ function IndustrialLandSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{land.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{land.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {land.price}</span>
                   <Badge variant={land.isActive ? 'default' : 'secondary'}>
                     {land.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5715,7 +5672,7 @@ function OfficeSpacesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{office.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{office.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {office.price}</span>
                   <Badge variant={office.isActive ? 'default' : 'secondary'}>
                     {office.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5901,7 +5858,7 @@ function RentalListingsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{rental.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{rental.price}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {rental.price}/month</span>
                   <Badge variant={rental.isActive ? 'default' : 'secondary'}>
                     {rental.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -6132,50 +6089,59 @@ export default function SellerDashboard() {
       case "health-&-wellness-services":
       case "health-wellness-services":
         return <HealthWellnessServicesSection />;
-      case "pro-profiles":
-      case "professional-profiles":
-        return <ProProfilesSection />;
 
-      case "professional-services":
-        return <ProfessionalServicesForm />;
-      case "labor-worker-services":
-        return <LaborWorkerServicesForm />;
-      case "engineering-it-services":
-        return <EngineeringITServicesForm />;
-      case "legal-banking-services":
-        return <LegalBankingServicesForm />;
-      case "insurance-services":
-        return <InsuranceServicesForm />;
-      case "ngo-social-services":
-        return <NGOSocialServicesForm />;
-      case "agents-agencies":
-        return <AgentsAgenciesForm />;
-      case "tours-travels":
-        return <ToursTravelsForm />;
-      case "hotels-resorts":
-        return <HotelsResortsForm />;
-      case "event-ticket-booking":
-        return <EventTicketBookingForm />;
-      case "pet-care-pet-food":
-        return <PetCarePetFoodForm />;
-      case "agriculture-seeds-farming":
-        return <AgricultureSeedsFarmingForm />;
-      case "sales-marketing":
+      case "sales-and-marketing-services":
+      case "sales-marketing-services":
         return <SalesMarketingForm />;
-      case "courier-cargo":
-        return <CourierCargoForm />;
+      case "news-and-media":
       case "news-media":
         return <NewsMediaForm />;
+      case "courier-and-cargo-services":
+      case "courier-cargo-services":
+        return <CourierCargoForm />;
+
+      case "accounting-and-audit":
+        return <AccountingAuditServicesForm />;
+      case "investment-opportunities":
+        return <InvestmentOpportunitiesForm />;
+      case "microfinance-cooperative-listings":
+      case "microfinance-cooperative":
+        return <MicrofinanceCooperativeForm />;
+
       case "restaurants":
+      case "restaurant":
         return <RestaurantForm />;
-      case "hotel":
-        return <HotelForm />;
-      case "cafe":
-        return <CafeForm />;
       case "home-delivery":
+      case "home-delivery-services":
         return <HomeDeliveryForm />;
       case "catering":
+      case "catering-services":
         return <CateringForm />;
+      case "cafe":
+        return <CafeForm />;
+
+      case "cleaning-and-pest-control":
+      case "cleaning-&-pest-control":
+      case "cleaning-pest-control":
+        return <CleaningPestControlForm />;
+
+      case "grocery-and-daily-essentials":
+      case "grocery-&-daily-essentials":
+      case "grocery-daily-essentials":
+        return <GroceryDailyEssentialsForm />;
+
+      case "electrical-plumbing-repairs":
+      case "electrical-&-plumbing-repairs":
+      case "electrical-plumbing":
+        return <ElectricalPlumbingRepairsForm />;
+
+      case "clinics-and-hospitals":
+      case "clinics-hospitals":
+        return <ClinicsHospitalsForm />;
+      case "fitness-trainers":
+        return <FitnessTrainersForm />;
+      case "diagnostic-labs":
+        return <DiagnosticLabsForm />;
 
       case "tuitionprivatclasses":
         return <TuitionPrivateClassesSection />;
@@ -6194,6 +6160,29 @@ export default function SellerDashboard() {
       case "skilltrainingcertification":
       case "skill-training--certification":
         return <SkillTrainingCertificationSection />;
+      case "gyms-&-fitness-centers":
+      case "gyms-and-fitness-centers":
+        return <GymsFitnessCentersForm />;
+      case "music-&-entertainment-services":
+      case "music-entertainment-services":
+      case "music-and-entertainment-services":
+        return <MusicEntertainmentForm />;
+      case "sports-equipment":
+        return <SportsEquipmentForm />;
+      case "hotels-&-resorts":
+      case "hotels-and-resorts":
+        return <HotelsResortsForm />;
+      case "pet-care-&-pet-food":
+      case "pet-care-and-pet-food":
+        return <PetCarePetFoodForm />;
+      case "agriculture-seeds-and-farming":
+        return <AgricultureSeedsFarmingForm />;
+      case "event/movie-ticket-booking":
+      case "event-movie-ticket-booking":
+      case "event-ticket-booking":
+        return <EventTicketBookingForm />;
+      case "tours-and-travels":
+        return <ToursTravelsForm />;
       default:
         return (
           <div className="space-y-6">
@@ -6435,7 +6424,7 @@ function TuitionPrivateClassesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-lg text-primary">
-                    ₹{classItem.feePerMonth || classItem.feePerHour || 'N/A'}
+                    रू {classItem.feePerMonth || classItem.feePerHour || 'N/A'}
                     {classItem.feePerMonth ? '/month' : classItem.feePerHour ? '/hour' : ''}
                   </span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
@@ -6498,13 +6487,13 @@ function TuitionPrivateClassesSection() {
                 {viewingClass.feePerHour && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Hour</p>
-                    <p className="text-lg font-bold text-primary">₹{viewingClass.feePerHour}</p>
+                    <p className="text-lg font-bold text-primary">रू {viewingClass.feePerHour}</p>
                   </div>
                 )}
                 {viewingClass.feePerMonth && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                    <p className="text-lg font-bold text-primary">₹{viewingClass.feePerMonth}</p>
+                    <p className="text-lg font-bold text-primary">रू {viewingClass.feePerMonth}</p>
                   </div>
                 )}
                 {viewingClass.batchSize && (
@@ -6787,7 +6776,7 @@ function DanceKarateGymYogaSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{classItem.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{classItem.feePerMonth}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {classItem.feePerMonth}/month</span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
                     {classItem.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -6852,12 +6841,12 @@ function DanceKarateGymYogaSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingClass.feePerMonth}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingClass.feePerMonth}</p>
                 </div>
                 {viewingClass.feePerSession && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Session</p>
-                    <p className="text-lg font-bold">₹{viewingClass.feePerSession}</p>
+                    <p className="text-lg font-bold">रू {viewingClass.feePerSession}</p>
                   </div>
                 )}
                 {viewingClass.sessionDurationMinutes && (
@@ -6918,7 +6907,7 @@ function DanceKarateGymYogaSection() {
                     {viewingClass.registrationFee && (
                       <div>
                         <span className="font-medium">Registration Fee:</span>
-                        <span className="ml-2 text-muted-foreground">₹{viewingClass.registrationFee}</span>
+                        <span className="ml-2 text-muted-foreground">रू {viewingClass.registrationFee}</span>
                       </div>
                     )}
                   </div>
@@ -7119,7 +7108,7 @@ function LanguageClassesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingClass.feePerMonth).toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingClass.feePerMonth).toLocaleString()}</p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Duration</p>
@@ -7280,7 +7269,7 @@ function LanguageClassesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{classItem.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(classItem.feePerMonth).toLocaleString()}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(classItem.feePerMonth).toLocaleString()}/month</span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
                     {classItem.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -7476,12 +7465,12 @@ function AcademiesMusicArtsSportsSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingAcademy.feePerMonth).toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingAcademy.feePerMonth).toLocaleString()}</p>
                 </div>
                 {viewingAcademy.admissionFee && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Admission Fee</p>
-                    <p className="text-lg font-bold">₹{Number(viewingAcademy.admissionFee).toLocaleString()}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingAcademy.admissionFee).toLocaleString()}</p>
                   </div>
                 )}
                 {viewingAcademy.establishedYear && (
@@ -7632,7 +7621,7 @@ function AcademiesMusicArtsSportsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{academy.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(academy.feePerMonth).toLocaleString()}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(academy.feePerMonth).toLocaleString()}/month</span>
                   <Badge variant={academy.isActive ? 'default' : 'secondary'}>
                     {academy.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -7802,7 +7791,7 @@ function SkillTrainingCertificationSection() {
                 {viewingTraining.totalFee && (
                   <div>
                     <span className="font-medium">Total Fee:</span>
-                    <span className="ml-2 text-muted-foreground">₹{viewingTraining.totalFee}</span>
+                    <span className="ml-2 text-muted-foreground">रू {viewingTraining.totalFee}</span>
                   </div>
                 )}
                 {(viewingTraining.city || viewingTraining.stateProvince) && (
@@ -7877,7 +7866,7 @@ function SkillTrainingCertificationSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{training.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{training.totalFee}</span>
+                  <span className="font-semibold text-lg text-primary">रू {training.totalFee}</span>
                   <Badge variant={training.isActive ? 'default' : 'secondary'}>
                     {training.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -8118,7 +8107,7 @@ function SchoolsCollegesCoachingSection() {
                 )}
                 <div className="flex items-center justify-between">
                   {institution.annualTuitionFee && (
-                    <span className="font-semibold text-lg text-primary">₹{institution.annualTuitionFee}/year</span>
+                    <span className="font-semibold text-lg text-primary">रू {institution.annualTuitionFee}/year</span>
                   )}
                   <Badge variant={institution.isActive ? 'default' : 'secondary'}>
                     {institution.isActive ? 'Active' : 'Inactive'}
@@ -8183,7 +8172,7 @@ function CarsBikesSection() {
         </div>
       </div>
       {(() => {
-         const { user } = useUser();
+        const { user } = useUser();
         return <CarsBikesForm userId={user?.id} role={user?.role} />;
       })()}
     </div>
@@ -8268,7 +8257,7 @@ function VehicleLicenseClassesSection() {
 function ElectronicsGadgetsSection() {
   return (
     <div className="space-y-6">
-    
+
       <ElectronicsGadgetsForm />
     </div>
   );
@@ -8278,7 +8267,7 @@ function ElectronicsGadgetsSection() {
 function PhonesTabletsAccessoriesSection() {
   return (
     <div className="space-y-6">
-     
+
       <PhonesTabletsAccessoriesForm />
     </div>
   );
@@ -8288,7 +8277,7 @@ function PhonesTabletsAccessoriesSection() {
 function SecondHandPhonesTabletsAccessoriesSection() {
   return (
     <div className="space-y-6">
-     
+
       <SecondHandPhonesTabletsAccessoriesForm />
     </div>
   );
@@ -8298,7 +8287,7 @@ function SecondHandPhonesTabletsAccessoriesSection() {
 function ComputerMobileLaptopRepairServicesSection() {
   return (
     <div className="space-y-6">
-      
+
       <ComputerMobileLaptopRepairServicesForm />
     </div>
   );
@@ -8463,7 +8452,7 @@ function FurnitureInteriorDecorSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{item.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {item.price}</span>
                   <Badge variant={item.isActive ? 'default' : 'secondary'}>
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -8548,12 +8537,12 @@ function FurnitureInteriorDecorSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingItem.price}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingItem.price}</p>
                 </div>
                 {viewingItem.originalPrice && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Original Price</p>
-                    <p className="text-lg font-bold line-through">₹{viewingItem.originalPrice}</p>
+                    <p className="text-lg font-bold line-through">रू {viewingItem.originalPrice}</p>
                   </div>
                 )}
               </div>

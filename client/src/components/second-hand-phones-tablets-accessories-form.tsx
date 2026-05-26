@@ -302,9 +302,9 @@ export default function SecondHandPhonesTabletsAccessoriesForm() {
                           {product.billAvailable && <Badge className="bg-blue-600">Bill</Badge>}
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">
-                          ₹{Number(product.price).toLocaleString()}
+                          रू {Number(product.price).toLocaleString()}
                           {product.originalPrice && product.originalPrice > product.price && (
-                            <span className="line-through ml-2 text-gray-500">₹{Number(product.originalPrice).toLocaleString()}</span>
+                            <span className="line-through ml-2 text-gray-500">रू {Number(product.originalPrice).toLocaleString()}</span>
                           )}
                           {product.negotiable && (
                             <span className="ml-2 text-blue-600 font-semibold">Negotiable</span>
@@ -560,12 +560,12 @@ export default function SecondHandPhonesTabletsAccessoriesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price">Price (रू ) *</Label>
                     <Input id="price" type="number" {...register("price", { required: true, valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="originalPrice">Original Price (₹)</Label>
+                    <Label htmlFor="originalPrice">Original Price (रू )</Label>
                     <Input id="originalPrice" type="number" {...register("originalPrice", { valueAsNumber: true })} />
                   </div>
 
@@ -696,7 +696,7 @@ export default function SecondHandPhonesTabletsAccessoriesForm() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Price</p>
-                  <p className="text-sm text-muted-foreground">₹{Number(viewingProduct.price).toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">रू {Number(viewingProduct.price).toLocaleString()}</p>
                 </div>
                 {viewingProduct.description && (
                   <div className="col-span-2">

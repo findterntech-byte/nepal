@@ -293,17 +293,17 @@ export default function LanguageClassesForm({ onSuccess, editingClass }: Languag
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="feePerMonth">Fee Per Month (₹) *</Label>
+              <Label htmlFor="feePerMonth">Fee Per Month (रू ) *</Label>
               <Input id="feePerMonth" type="number" {...register("feePerMonth", { required: true, valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="registrationFee">Registration Fee (₹)</Label>
+              <Label htmlFor="registrationFee">Registration Fee (रू )</Label>
               <Input id="registrationFee" type="number" {...register("registrationFee", { valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="totalCourseFee">Total Course Fee (₹)</Label>
+              <Label htmlFor="totalCourseFee">Total Course Fee (रू )</Label>
               <Input id="totalCourseFee" type="number" {...register("totalCourseFee", { valueAsNumber: true })} />
             </div>
           </div>

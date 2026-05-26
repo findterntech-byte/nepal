@@ -191,7 +191,7 @@ export default function HotelsResortsPage() {
                   <div className="space-y-2 text-sm">
                     <p><strong>Location:</strong> {service.city}, {service.state}</p>
                     {service.pricePerNight && (
-                      <p><strong>Price:</strong> ₹{service.pricePerNight}/night</p>
+                      <p><strong>Price:</strong> रू {service.pricePerNight}/night</p>
                     )}
                     {service.numberOfRooms && (
                       <p><strong>Rooms:</strong> {service.numberOfRooms}</p>

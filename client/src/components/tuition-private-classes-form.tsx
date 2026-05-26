@@ -370,17 +370,17 @@ export default function TuitionPrivateClassesForm({ onSuccess, editingClass }: T
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>Fee Per Hour (₹)</Label>
+              <Label>Fee Per Hour (रू )</Label>
               <Input type="number" step="0.01" {...register("feePerHour")} />
             </div>
 
             <div>
-              <Label>Fee Per Month (₹)</Label>
+              <Label>Fee Per Month (रू )</Label>
               <Input type="number" step="0.01" {...register("feePerMonth")} />
             </div>
 
             <div>
-              <Label>Fee Per Subject (₹)</Label>
+              <Label>Fee Per Subject (रू )</Label>
               <Input type="number" step="0.01" {...register("feePerSubject")} />
             </div>
           </div>

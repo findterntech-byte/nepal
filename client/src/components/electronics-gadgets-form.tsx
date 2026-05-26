@@ -350,7 +350,7 @@ export default function ElectronicsGadgetsForm() {
                         <h3 className="font-semibold text-lg">{gadget.title}</h3>
                         <div className="flex gap-2 mt-2 flex-wrap">
                           {gadget.emiAvailable && (
-                            <Badge className="bg-blue-600">EMI ₹{Number(gadget.emiStartingFrom).toLocaleString()}/{gadget.emiMonths}mo</Badge>
+                            <Badge className="bg-blue-600">EMI रू {Number(gadget.emiStartingFrom).toLocaleString()}/{gadget.emiMonths}mo</Badge>
                           )}
                           <Badge variant="outline">{gadget.category}</Badge>
                           <Badge variant="outline">{gadget.brand} {gadget.model}</Badge>
@@ -360,9 +360,9 @@ export default function ElectronicsGadgetsForm() {
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">
-                          ₹{Number(gadget.price).toLocaleString()}
+                          रू {Number(gadget.price).toLocaleString()}
                           {gadget.originalPrice && (
-                            <span className="line-through ml-2">₹{Number(gadget.originalPrice).toLocaleString()}</span>
+                            <span className="line-through ml-2">रू {Number(gadget.originalPrice).toLocaleString()}</span>
                           )}
                         </p>
                         {gadget.city && (
@@ -544,12 +544,12 @@ export default function ElectronicsGadgetsForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price">Price (रू ) *</Label>
                     <Input id="price" type="text" {...register("price", { required: true})} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="originalPrice">Original Price (₹)</Label>
+                    <Label htmlFor="originalPrice">Original Price (रू )</Label>
                     <Input id="originalPrice" type="number" {...register("originalPrice", { valueAsNumber: true })} />
                   </div>
 
@@ -566,7 +566,7 @@ export default function ElectronicsGadgetsForm() {
                   {emiLocal && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (रू )</Label>
                         <Input id="emiStartingFrom" type="text" {...register("emiStartingFrom")} placeholder="e.g., 1500" />
                       </div>
                       <div className="space-y-2">
@@ -681,7 +681,7 @@ export default function ElectronicsGadgetsForm() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Price</p>
-                  <p className="text-sm text-muted-foreground">₹{Number(viewingGadget.price).toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">रू {Number(viewingGadget.price).toLocaleString()}</p>
                 </div>
               </div>
             </div>

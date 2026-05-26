@@ -72,7 +72,7 @@ export default function ListingDetail({ listing, titleField = "title", subtitleF
 
   const hasPrice = typeof listing.price === "number" || (typeof listing.price === "string" && String(listing.price).trim().length > 0);
   const numericPrice = hasPrice ? Number(listing.price) : NaN;
-  const formattedPrice = !isNaN(numericPrice) ? `₹${numericPrice.toLocaleString()}` : hasPrice ? `₹${String(listing.price)}` : "";
+  const formattedPrice = !isNaN(numericPrice) ? `रू ${numericPrice.toLocaleString()}` : hasPrice ? `रू ${String(listing.price)}` : "";
 
   // Derive all keys from the listing object so we can optionally show everything
   const allKeysFromListing = useMemo(() => {
@@ -198,7 +198,7 @@ export default function ListingDetail({ listing, titleField = "title", subtitleF
           ) : null}
           {listing.feePerMonth || listing.feePerHour || listing.feePerSubject ? (
             <div className="mt-3 text-xl font-semibold text-green-700">
-              {listing.feePerMonth ? `₹${Number(listing.feePerMonth).toLocaleString()}/month` : listing.feePerHour ? `₹${Number(listing.feePerHour).toLocaleString()}/hr` : listing.feePerSubject ? `₹${Number(listing.feePerSubject).toLocaleString()}/subject` : null}
+              {listing.feePerMonth ? `रू ${Number(listing.feePerMonth).toLocaleString()}/month` : listing.feePerHour ? `रू ${Number(listing.feePerHour).toLocaleString()}/hr` : listing.feePerSubject ? `रू ${Number(listing.feePerSubject).toLocaleString()}/subject` : null}
             </div>
           ) : null}
         </div>

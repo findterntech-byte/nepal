@@ -487,7 +487,7 @@ function CarBikeRentalsForm() {
                     <p className="text-sm text-muted-foreground line-clamp-2">{rental.description}</p>
                   )}
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-semibold text-lg text-primary">₹{rental.rentalPricePerDay}/day</span>
+                    <span className="font-semibold text-lg text-primary">रू {rental.rentalPricePerDay}/day</span>
                     <Badge variant={rental.availabilityStatus === 'available' ? 'default' : 'secondary'}>
                       {rental.availabilityStatus || 'available'}
                     </Badge>
@@ -759,7 +759,7 @@ function CarBikeRentalsForm() {
                     <Input id="mileageLimitPerDay" type="number" {...register("mileageLimitPerDay", { valueAsNumber: true })} />
                   </div>
                   <div>
-                    <Label htmlFor="extraKmCharge">Extra Km Charge (₹/km)</Label>
+                    <Label htmlFor="extraKmCharge">Extra Km Charge (रू /km)</Label>
                     <Input id="extraKmCharge" type="number" {...register("extraKmCharge", { valueAsNumber: true })} />
                   </div>
                   <div>
@@ -1034,24 +1034,24 @@ function CarBikeRentalsForm() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Per Day</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingRental.rentalPricePerDay}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingRental.rentalPricePerDay}</p>
                 </div>
                 {viewingRental.rentalPricePerHour && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Per Hour</p>
-                    <p className="text-lg font-bold">₹{viewingRental.rentalPricePerHour}</p>
+                    <p className="text-lg font-bold">रू {viewingRental.rentalPricePerHour}</p>
                   </div>
                 )}
                 {viewingRental.rentalPricePerWeek && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Per Week</p>
-                    <p className="text-lg font-bold">₹{viewingRental.rentalPricePerWeek}</p>
+                    <p className="text-lg font-bold">रू {viewingRental.rentalPricePerWeek}</p>
                   </div>
                 )}
                 {viewingRental.securityDeposit && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Security Deposit</p>
-                    <p className="text-lg font-bold text-orange-600">₹{viewingRental.securityDeposit}</p>
+                    <p className="text-lg font-bold text-orange-600">रू {viewingRental.securityDeposit}</p>
                   </div>
                 )}
               </div>

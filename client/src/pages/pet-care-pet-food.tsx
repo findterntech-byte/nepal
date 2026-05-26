@@ -191,7 +191,7 @@ export default function PetCarePetFoodPage() {
                       <p><strong>Experience:</strong> {service.experienceYears} years</p>
                     )}
                     {service.consultationFee && (
-                      <p><strong>Consultation:</strong> ₹{service.consultationFee}</p>
+                      <p><strong>Consultation:</strong> रू {service.consultationFee}</p>
                     )}
                   </div>
                   <div className="mt-4 flex gap-2 flex-wrap">

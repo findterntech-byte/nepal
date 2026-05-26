@@ -401,12 +401,12 @@ export default function ProfessionalServicesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="hourlyRate">Hourly Rate (₹)</Label>
+                    <Label htmlFor="hourlyRate">Hourly Rate (रू )</Label>
                     <Input id="hourlyRate" type="number" {...register("hourlyRate", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="consultationFee">Consultation Fee (₹)</Label>
+                    <Label htmlFor="consultationFee">Consultation Fee (रू )</Label>
                     <Input id="consultationFee" type="number" {...register("consultationFee", { valueAsNumber: true })} />
                   </div>
 

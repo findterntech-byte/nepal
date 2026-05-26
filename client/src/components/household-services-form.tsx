@@ -447,7 +447,7 @@ export default function HouseholdServicesForm({ onSuccess, editingService }: Hou
                 name="baseServiceCharge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Base Service Charge (₹) *</FormLabel>
+                    <FormLabel>Base Service Charge (रू ) *</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="500" {...field} />
                     </FormControl>
@@ -461,7 +461,7 @@ export default function HouseholdServicesForm({ onSuccess, editingService }: Hou
                 name="hourlyRate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Hourly Rate (₹)</FormLabel>
+                    <FormLabel>Hourly Rate (रू )</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="200" {...field} />
                     </FormControl>
@@ -475,7 +475,7 @@ export default function HouseholdServicesForm({ onSuccess, editingService }: Hou
                 name="minimumCharge"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Minimum Charge (₹)</FormLabel>
+                    <FormLabel>Minimum Charge (रू )</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="300" {...field} />
                     </FormControl>

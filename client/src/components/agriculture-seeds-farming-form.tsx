@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -95,6 +96,7 @@ type AgricultureFormData = {
 export default function AgricultureSeedsFarmingForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -105,10 +107,21 @@ export default function AgricultureSeedsFarmingForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<AgricultureFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["agriculture"],
+    queryKey: ["agriculture", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/agriculture");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/agriculture${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -244,7 +257,13 @@ export default function AgricultureSeedsFarmingForm() {
   };
 
   const onSubmit = (data: AgricultureFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    
     if (editingService) {
       updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
@@ -392,11 +411,11 @@ export default function AgricultureSeedsFarmingForm() {
                 <Input id="experienceYears" type="number" {...register("experienceYears")} placeholder="Years of Experience" />
               </div>
               <div>
-                <Label htmlFor="productPriceMin">Min Price (₹)</Label>
+                <Label htmlFor="productPriceMin">Min Price (रू )</Label>
                 <Input id="productPriceMin" type="number" {...register("productPriceMin")} placeholder="Minimum Price" />
               </div>
               <div>
-                <Label htmlFor="productPriceMax">Max Price (₹)</Label>
+                <Label htmlFor="productPriceMax">Max Price (रू )</Label>
                 <Input id="productPriceMax" type="number" {...register("productPriceMax")} placeholder="Maximum Price" />
               </div>
               <div>

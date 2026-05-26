@@ -243,7 +243,7 @@ export default function CyberCafeInternetServicesForm() {
                           {service.printingService && <Badge className="bg-cyan-600">Printing</Badge>}
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">
-                          ₹{Number(service.internetPricePerHour).toLocaleString()}/hour
+                          रू {Number(service.internetPricePerHour).toLocaleString()}/hour
                           {service.internetSpeed && <span className="ml-2 text-green-600 font-semibold">• {service.internetSpeed}</span>}
                         </p>
                         {service.city && <p className="text-sm text-muted-foreground">{service.city}</p>}
@@ -347,42 +347,42 @@ export default function CyberCafeInternetServicesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="internetPricePerHour">Internet Price/Hour (₹) *</Label>
+                    <Label htmlFor="internetPricePerHour">Internet Price/Hour (रू ) *</Label>
                     <Input id="internetPricePerHour" type="number" step="0.01" {...register("internetPricePerHour", { required: true, valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="internetPricePerDay">Internet Price/Day (₹)</Label>
+                    <Label htmlFor="internetPricePerDay">Internet Price/Day (रू )</Label>
                     <Input id="internetPricePerDay" type="number" step="0.01" {...register("internetPricePerDay", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="printingPriceBw">B&W Printing/Page (₹)</Label>
+                    <Label htmlFor="printingPriceBw">B&W Printing/Page (रू )</Label>
                     <Input id="printingPriceBw" type="number" step="0.01" {...register("printingPriceBw", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="printingPriceColor">Color Printing/Page (₹)</Label>
+                    <Label htmlFor="printingPriceColor">Color Printing/Page (रू )</Label>
                     <Input id="printingPriceColor" type="number" step="0.01" {...register("printingPriceColor", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="scanningPrice">Scanning Price (₹)</Label>
+                    <Label htmlFor="scanningPrice">Scanning Price (रू )</Label>
                     <Input id="scanningPrice" type="number" step="0.01" {...register("scanningPrice", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="photocopyingPrice">Photocopying Price (₹)</Label>
+                    <Label htmlFor="photocopyingPrice">Photocopying Price (रू )</Label>
                     <Input id="photocopyingPrice" type="number" step="0.01" {...register("photocopyingPrice", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="gamingPricePerHour">Gaming Price/Hour (₹)</Label>
+                    <Label htmlFor="gamingPricePerHour">Gaming Price/Hour (रू )</Label>
                     <Input id="gamingPricePerHour" type="number" step="0.01" {...register("gamingPricePerHour", { valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="minimumCharge">Minimum Charge (₹)</Label>
+                    <Label htmlFor="minimumCharge">Minimum Charge (रू )</Label>
                     <Input id="minimumCharge" type="number" step="0.01" {...register("minimumCharge", { valueAsNumber: true })} />
                   </div>
                 </div>
@@ -779,7 +779,7 @@ export default function CyberCafeInternetServicesForm() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Internet Price/Hour</p>
-                  <p className="text-sm text-muted-foreground">₹{Number(viewingService.internetPricePerHour).toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">रू {Number(viewingService.internetPricePerHour).toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Internet Speed</p>

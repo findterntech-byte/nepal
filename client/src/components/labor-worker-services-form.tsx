@@ -322,9 +322,9 @@ export default function LaborWorkerServicesForm() {
               <CardHeader><CardTitle>Pricing</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2"><Label>Hourly Rate (₹)</Label><Input type="number" {...register("hourlyRate", { valueAsNumber: true })} /></div>
-                  <div className="space-y-2"><Label>Daily Rate (₹)</Label><Input type="number" {...register("dailyRate", { valueAsNumber: true })} /></div>
-                  <div className="space-y-2"><Label>Monthly Rate (₹)</Label><Input type="number" {...register("monthlyRate", { valueAsNumber: true })} /></div>
+                  <div className="space-y-2"><Label>Hourly Rate (रू )</Label><Input type="number" {...register("hourlyRate", { valueAsNumber: true })} /></div>
+                  <div className="space-y-2"><Label>Daily Rate (रू )</Label><Input type="number" {...register("dailyRate", { valueAsNumber: true })} /></div>
+                  <div className="space-y-2"><Label>Monthly Rate (रू )</Label><Input type="number" {...register("monthlyRate", { valueAsNumber: true })} /></div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Switch id="freeDemo" onCheckedChange={(checked) => setValue("freeDemo", checked)} />

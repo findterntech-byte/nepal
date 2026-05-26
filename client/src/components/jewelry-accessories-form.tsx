@@ -309,13 +309,13 @@ export default function JewelryAccessoriesForm({ onSuccess, editingItem }: Jewel
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="price">Price (₹) *</Label>
+              <Label htmlFor="price">Price (रू ) *</Label>
               <Input id="price" type="number" {...register("price", { required: true })} placeholder="5000" />
               {errors.price && <span className="text-red-500 text-sm">Price is required</span>}
             </div>
 
             <div>
-              <Label htmlFor="originalPrice">Original Price (₹)</Label>
+              <Label htmlFor="originalPrice">Original Price (रू )</Label>
               <Input id="originalPrice" type="number" {...register("originalPrice")} placeholder="7000" />
             </div>
           </div>
@@ -327,7 +327,7 @@ export default function JewelryAccessoriesForm({ onSuccess, editingItem }: Jewel
             </div>
 
             <div>
-              <Label htmlFor="makingCharges">Making Charges (₹)</Label>
+              <Label htmlFor="makingCharges">Making Charges (रू )</Label>
               <Input id="makingCharges" type="number" {...register("makingCharges")} placeholder="500" />
             </div>
           </div>

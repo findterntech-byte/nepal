@@ -108,7 +108,7 @@ export default function SalesMarketingPage() {
                   <div className="space-y-2 text-sm">
                     <p><strong>Category:</strong> {service.serviceCategory}</p>
                     <p><strong>Location:</strong> {service.city}, {service.state}</p>
-                    {service.startingPrice && <p><strong>Starting:</strong> ₹{service.startingPrice}</p>}
+                    {service.startingPrice && <p><strong>Starting:</strong> रू {service.startingPrice}</p>}
                   </div>
                   <div className="mt-4 flex gap-2 flex-wrap">
                     {service.digitalMarketing && <Badge variant="outline">Digital</Badge>}

@@ -219,7 +219,7 @@ export default function LegalBankingServicesForm() {
                   <div className="space-y-2"><Label>Specialization</Label><Input {...register("specialization")} placeholder="e.g., Criminal Law, Property Law" /></div>
                   <div className="space-y-2"><Label>Service Areas</Label><Input {...register("serviceAreas")} /></div>
                   <div className="space-y-2"><Label>Languages Known</Label><Input {...register("languagesKnown")} /></div>
-                  <div className="space-y-2"><Label>Consultation Fee (₹)</Label><Input type="number" {...register("consultationFee", { valueAsNumber: true })} /></div>
+                  <div className="space-y-2"><Label>Consultation Fee (रू )</Label><Input type="number" {...register("consultationFee", { valueAsNumber: true })} /></div>
                 </div>
               </CardContent>
             </Card>

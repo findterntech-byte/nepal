@@ -264,7 +264,7 @@ export default function HealthWellnessServicesForm({ onSuccess, editingService }
             </div>
 
             <div>
-              <Label htmlFor="consultationFee">Consultation Fee (₹)</Label>
+              <Label htmlFor="consultationFee">Consultation Fee (रू )</Label>
               <Input id="consultationFee" type="number" {...register("consultationFee")} placeholder="500" />
             </div>
           </div>

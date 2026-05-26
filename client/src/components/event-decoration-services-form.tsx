@@ -884,7 +884,7 @@ export function EventDecorationServicesForm() {
                   <span className="text-muted-foreground">{service.contactPhone}</span>
                 </div>
                 <div className="flex items-center justify-between pt-2">
-                  <span className="font-bold text-primary">₹{Number(service.basePrice).toLocaleString()}</span>
+                  <span className="font-bold text-primary">रू {Number(service.basePrice).toLocaleString()}</span>
                   {service.rating && (
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -916,7 +916,7 @@ export function EventDecorationServicesForm() {
               <p className="text-muted-foreground">{viewingItem.description}</p>
               <div className="grid grid-cols-2 gap-4">
                 <div><strong>Service Type:</strong> {viewingItem.serviceType}</div>
-                <div><strong>Base Price:</strong> ₹{Number(viewingItem.basePrice).toLocaleString()}</div>
+                <div><strong>Base Price:</strong> रू {Number(viewingItem.basePrice).toLocaleString()}</div>
                 <div><strong>Contact:</strong> {viewingItem.contactPhone}</div>
                 <div><strong>City:</strong> {viewingItem.city || 'N/A'}</div>
               </div>

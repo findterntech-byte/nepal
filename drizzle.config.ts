@@ -9,6 +9,7 @@ export default defineConfig({
   out: "./migrations",
   schema: "./shared/schema.ts",
   dialect: "postgresql",
+  tablesFilter: ["grocery_daily_essentials", "cleaning_pest_control", "electrical_plumbing_repairs"],
   dbCredentials: {
     url: process.env.DATABASE_URL || "postgresql://nepal_user:StrongPassword123@72.61.245.133:5432/nepaldatabase",
   },

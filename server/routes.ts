@@ -72,6 +72,9 @@ import {
   insuranceServices,
   ngoSocialServices,
   agentsAgencies,
+  accountingAuditServices,
+  investmentOpportunities,
+  microfinanceCooperative,
   toursTravels,
   hotelsResorts,
   eventTickets,
@@ -84,6 +87,18 @@ import {
   cafes,
   homeDeliveryServices,
   cateringServices,
+  clinicsHospitals,
+  diagnosticLabs,
+  fitnessTrainers,
+  gymsFitnessCenters,
+  sportsEquipment,
+  musicEntertainment,
+  groceryDailyEssentials,
+  cleaningPestControl,
+  electricalPlumbingRepairs,
+  accountingAudit,
+  investmentOpportunities,
+  microfinanceCooperative,
 } from "../shared/schema";
 import { uploadMedia, handleMediaUpload } from './upload';
 import { eq, sql, desc, or, and, asc, isNotNull } from "drizzle-orm";
@@ -12444,6 +12459,204 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     }
   });
 
+  // Accounting & Audit Services (public endpoint)
+  app.get("/api/accounting-audit-services", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const serviceCategory = req.query.serviceCategory as string;
+      let whereCondition = eq(accountingAuditServices.isActive, true);
+      if (serviceCategory) {
+        whereCondition = and(eq(accountingAuditServices.isActive, true), eq(accountingAuditServices.serviceCategory, serviceCategory)) as any;
+      }
+      const items = await db.query.accountingAuditServices.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(accountingAuditServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Accounting & Audit Services Admin
+  app.get("/api/admin/accounting-audit-services", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(accountingAuditServices.userId, userId), eq(accountingAuditServices.role, role))
+          : eq(accountingAuditServices.userId, userId))
+        : undefined;
+      const items = await db.query.accountingAuditServices.findMany({
+        where: whereCondition as any,
+        orderBy: desc(accountingAuditServices.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/accounting-audit-services", async (req, res) => {
+    try {
+      const [item] = await db.insert(accountingAuditServices).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/accounting-audit-services/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(accountingAuditServices).set(req.body).where(eq(accountingAuditServices.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/accounting-audit-services/:id", async (req, res) => {
+    try {
+      await db.delete(accountingAuditServices).where(eq(accountingAuditServices.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Investment Opportunities (public endpoint)
+  app.get("/api/investment-opportunities", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const investmentType = req.query.investmentType as string;
+      let whereCondition = eq(investmentOpportunities.isActive, true);
+      if (investmentType) {
+        whereCondition = and(eq(investmentOpportunities.isActive, true), eq(investmentOpportunities.investmentType, investmentType)) as any;
+      }
+      const items = await db.query.investmentOpportunities.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(investmentOpportunities.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Investment Opportunities Admin
+  app.get("/api/admin/investment-opportunities", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(investmentOpportunities.userId, userId), eq(investmentOpportunities.role, role))
+          : eq(investmentOpportunities.userId, userId))
+        : undefined;
+      const items = await db.query.investmentOpportunities.findMany({
+        where: whereCondition as any,
+        orderBy: desc(investmentOpportunities.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/investment-opportunities", async (req, res) => {
+    try {
+      const [item] = await db.insert(investmentOpportunities).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/investment-opportunities/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(investmentOpportunities).set(req.body).where(eq(investmentOpportunities.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/investment-opportunities/:id", async (req, res) => {
+    try {
+      await db.delete(investmentOpportunities).where(eq(investmentOpportunities.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Microfinance & Cooperative (public endpoint)
+  app.get("/api/microfinance-cooperative", async (req, res) => {
+    try {
+      const limit = Math.min(parseInt(req.query.limit as string) || 100, 200);
+      const organizationType = req.query.organizationType as string;
+      let whereCondition = eq(microfinanceCooperative.isActive, true);
+      if (organizationType) {
+        whereCondition = and(eq(microfinanceCooperative.isActive, true), eq(microfinanceCooperative.organizationType, organizationType)) as any;
+      }
+      const items = await db.query.microfinanceCooperative.findMany({
+        where: whereCondition,
+        limit,
+        orderBy: desc(microfinanceCooperative.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Microfinance & Cooperative Admin
+  app.get("/api/admin/microfinance-cooperative", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(microfinanceCooperative.userId, userId), eq(microfinanceCooperative.role, role))
+          : eq(microfinanceCooperative.userId, userId))
+        : undefined;
+      const items = await db.query.microfinanceCooperative.findMany({
+        where: whereCondition as any,
+        orderBy: desc(microfinanceCooperative.createdAt),
+      });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/microfinance-cooperative", async (req, res) => {
+    try {
+      const [item] = await db.insert(microfinanceCooperative).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/microfinance-cooperative/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(microfinanceCooperative).set(req.body).where(eq(microfinanceCooperative.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/microfinance-cooperative/:id", async (req, res) => {
+    try {
+      await db.delete(microfinanceCooperative).where(eq(microfinanceCooperative.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Tours & Travels (public endpoint)
   app.get("/api/tours-travels", async (req, res) => {
     try {
@@ -12466,7 +12679,14 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
 
   app.get("/api/admin/tours-travels", async (req, res) => {
     try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(toursTravels.userId, userId), eq(toursTravels.role, role))
+          : eq(toursTravels.userId, userId))
+        : undefined;
       const items = await db.query.toursTravels.findMany({
+        where: whereCondition as any,
         orderBy: desc(toursTravels.createdAt),
       });
       res.json(items);
@@ -12536,7 +12756,14 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
 
   app.get("/api/admin/hotels-resorts", async (req, res) => {
     try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(hotelsResorts.userId, userId), eq(hotelsResorts.role, role))
+          : eq(hotelsResorts.userId, userId))
+        : undefined;
       const items = await db.query.hotelsResorts.findMany({
+        where: whereCondition as any,
         orderBy: desc(hotelsResorts.createdAt),
       });
       res.json(items);
@@ -12606,7 +12833,14 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
 
   app.get("/api/admin/event-tickets", async (req, res) => {
     try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(eventTickets.userId, userId), eq(eventTickets.role, role))
+          : eq(eventTickets.userId, userId))
+        : undefined;
       const items = await db.query.eventTickets.findMany({
+        where: whereCondition as any,
         orderBy: desc(eventTickets.createdAt),
       });
       res.json(items);
@@ -12676,7 +12910,14 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
 
   app.get("/api/admin/pet-care", async (req, res) => {
     try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(petCare.userId, userId), eq(petCare.role, role))
+          : eq(petCare.userId, userId))
+        : undefined;
       const items = await db.query.petCare.findMany({
+        where: whereCondition as any,
         orderBy: desc(petCare.createdAt),
       });
       res.json(items);
@@ -12746,7 +12987,14 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
 
   app.get("/api/admin/agriculture", async (req, res) => {
     try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(agriculture.userId, userId), eq(agriculture.role, role))
+          : eq(agriculture.userId, userId))
+        : undefined;
       const items = await db.query.agriculture.findMany({
+        where: whereCondition as any,
         orderBy: desc(agriculture.createdAt),
       });
       res.json(items);
@@ -12803,7 +13051,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
 
   app.get("/api/admin/sales-marketing", async (req, res) => {
-    try { const items = await db.query.salesMarketing.findMany({ orderBy: desc(salesMarketing.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(salesMarketing.userId, userId), eq(salesMarketing.role, role))
+          : eq(salesMarketing.userId, userId))
+        : undefined;
+      const items = await db.query.salesMarketing.findMany({
+        where: whereCondition as any,
+        orderBy: desc(salesMarketing.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/sales-marketing/:id", async (req, res) => {
@@ -12823,6 +13083,61 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
 
+  app.get("/api/graphic-design-web-development-digital-marketing", async (req, res) => {
+    try {
+      const items = await db.query.salesMarketing.findMany({ where: eq(salesMarketing.isActive, true), orderBy: desc(salesMarketing.createdAt) });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/graphic-design-web-development-digital-marketing", async (req, res) => {
+    try {
+      const items = await db.query.salesMarketing.findMany({ orderBy: desc(salesMarketing.createdAt) });
+      res.json(items);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/admin/graphic-design-web-development-digital-marketing/:id", async (req, res) => {
+    try {
+      const [item] = await db.select().from(salesMarketing).where(eq(salesMarketing.id, req.params.id));
+      if (!item) return res.status(404).json({ message: "Not found" });
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/admin/graphic-design-web-development-digital-marketing", async (req, res) => {
+    try {
+      const [item] = await db.insert(salesMarketing).values(req.body).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/admin/graphic-design-web-development-digital-marketing/:id", async (req, res) => {
+    try {
+      const [item] = await db.update(salesMarketing).set(req.body).where(eq(salesMarketing.id, req.params.id)).returning();
+      res.json(item);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.delete("/api/admin/graphic-design-web-development-digital-marketing/:id", async (req, res) => {
+    try {
+      await db.delete(salesMarketing).where(eq(salesMarketing.id, req.params.id));
+      res.json({ message: "Deleted" });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   // Courier & Cargo (public)
   app.get("/api/courier-cargo", async (req, res) => {
     try { const items = await db.query.courierCargo.findMany({ where: eq(courierCargo.isActive, true), orderBy: desc(courierCargo.createdAt) }); res.json(items); }
@@ -12830,7 +13145,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
 
   app.get("/api/admin/courier-cargo", async (req, res) => {
-    try { const items = await db.query.courierCargo.findMany({ orderBy: desc(courierCargo.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(courierCargo.userId, userId), eq(courierCargo.role, role))
+          : eq(courierCargo.userId, userId))
+        : undefined;
+      const items = await db.query.courierCargo.findMany({
+        where: whereCondition as any,
+        orderBy: desc(courierCargo.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/courier-cargo/:id", async (req, res) => {
@@ -12857,7 +13184,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
 
   app.get("/api/admin/news-media", async (req, res) => {
-    try { const items = await db.query.newsMedia.findMany({ orderBy: desc(newsMedia.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(newsMedia.userId, userId), eq(newsMedia.role, role))
+          : eq(newsMedia.userId, userId))
+        : undefined;
+      const items = await db.query.newsMedia.findMany({
+        where: whereCondition as any,
+        orderBy: desc(newsMedia.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/news-media/:id", async (req, res) => {
@@ -12895,7 +13234,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   // Restaurants - Admin
   app.get("/api/admin/restaurants", async (req, res) => {
-    try { const items = await db.query.restaurants.findMany({ orderBy: desc(restaurants.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(restaurants.userId, userId), eq(restaurants.role, role))
+          : eq(restaurants.userId, userId))
+        : undefined;
+      const items = await db.query.restaurants.findMany({
+        where: whereCondition as any,
+        orderBy: desc(restaurants.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/restaurants/:id", async (req, res) => {
@@ -12932,7 +13283,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   // Cafes - Admin
   app.get("/api/admin/cafes", async (req, res) => {
-    try { const items = await db.query.cafes.findMany({ orderBy: desc(cafes.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(cafes.userId, userId), eq(cafes.role, role))
+          : eq(cafes.userId, userId))
+        : undefined;
+      const items = await db.query.cafes.findMany({
+        where: whereCondition as any,
+        orderBy: desc(cafes.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/cafes/:id", async (req, res) => {
@@ -12969,7 +13332,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   // Home Delivery - Admin
   app.get("/api/admin/home-delivery", async (req, res) => {
-    try { const items = await db.query.homeDeliveryServices.findMany({ orderBy: desc(homeDeliveryServices.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(homeDeliveryServices.userId, userId), eq(homeDeliveryServices.role, role))
+          : eq(homeDeliveryServices.userId, userId))
+        : undefined;
+      const items = await db.query.homeDeliveryServices.findMany({
+        where: whereCondition as any,
+        orderBy: desc(homeDeliveryServices.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/home-delivery/:id", async (req, res) => {
@@ -13006,7 +13381,19 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   // Catering - Admin
   app.get("/api/admin/catering", async (req, res) => {
-    try { const items = await db.query.cateringServices.findMany({ orderBy: desc(cateringServices.createdAt) }); res.json(items); }
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(cateringServices.userId, userId), eq(cateringServices.role, role))
+          : eq(cateringServices.userId, userId))
+        : undefined;
+      const items = await db.query.cateringServices.findMany({
+        where: whereCondition as any,
+        orderBy: desc(cateringServices.createdAt),
+      });
+      res.json(items);
+    }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
   app.get("/api/admin/catering/:id", async (req, res) => {
@@ -13023,6 +13410,594 @@ app.patch("/api/admin/skill-training-certification/:id/toggle-featured", async (
   });
   app.delete("/api/admin/catering/:id", async (req, res) => {
     try { await db.delete(cateringServices).where(eq(cateringServices.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Clinics & Hospitals - Public
+  app.get("/api/clinics-hospitals", async (req, res) => {
+    try {
+      const { city, facilityType } = req.query;
+      let whereCondition = eq(clinicsHospitals.isActive, true);
+      if (city) whereCondition = and(eq(clinicsHospitals.isActive, true), eq(clinicsHospitals.city, city as string)) as any;
+      const items = await db.query.clinicsHospitals.findMany({
+        where: whereCondition,
+        orderBy: [desc(clinicsHospitals.isFeatured), desc(clinicsHospitals.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Clinics & Hospitals - Admin
+  app.get("/api/admin/clinics-hospitals", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(clinicsHospitals.userId, userId), eq(clinicsHospitals.role, role))
+          : eq(clinicsHospitals.userId, userId))
+        : undefined;
+      const items = await db.query.clinicsHospitals.findMany({
+        where: whereCondition as any,
+        orderBy: desc(clinicsHospitals.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/clinics-hospitals/:id", async (req, res) => {
+    try { const [item] = await db.select().from(clinicsHospitals).where(eq(clinicsHospitals.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/clinics-hospitals", async (req, res) => {
+    try { const [item] = await db.insert(clinicsHospitals).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/clinics-hospitals/:id", async (req, res) => {
+    try { const [item] = await db.update(clinicsHospitals).set(req.body).where(eq(clinicsHospitals.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/clinics-hospitals/:id", async (req, res) => {
+    try { await db.delete(clinicsHospitals).where(eq(clinicsHospitals.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Diagnostic Labs - Public
+  app.get("/api/diagnostic-labs", async (req, res) => {
+    try {
+      const { city, labType } = req.query;
+      let whereCondition = eq(diagnosticLabs.isActive, true);
+      if (city) whereCondition = and(eq(diagnosticLabs.isActive, true), eq(diagnosticLabs.city, city as string)) as any;
+      const items = await db.query.diagnosticLabs.findMany({
+        where: whereCondition,
+        orderBy: [desc(diagnosticLabs.isFeatured), desc(diagnosticLabs.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Diagnostic Labs - Admin
+  app.get("/api/admin/diagnostic-labs", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(diagnosticLabs.userId, userId), eq(diagnosticLabs.role, role))
+          : eq(diagnosticLabs.userId, userId))
+        : undefined;
+      const items = await db.query.diagnosticLabs.findMany({
+        where: whereCondition as any,
+        orderBy: desc(diagnosticLabs.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/diagnostic-labs/:id", async (req, res) => {
+    try { const [item] = await db.select().from(diagnosticLabs).where(eq(diagnosticLabs.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/diagnostic-labs", async (req, res) => {
+    try { const [item] = await db.insert(diagnosticLabs).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/diagnostic-labs/:id", async (req, res) => {
+    try { const [item] = await db.update(diagnosticLabs).set(req.body).where(eq(diagnosticLabs.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/diagnostic-labs/:id", async (req, res) => {
+    try { await db.delete(diagnosticLabs).where(eq(diagnosticLabs.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Fitness Trainers - Public
+  app.get("/api/fitness-trainers", async (req, res) => {
+    try {
+      const { city, specialization } = req.query;
+      let whereCondition = eq(fitnessTrainers.isActive, true);
+      if (city) whereCondition = and(eq(fitnessTrainers.isActive, true), eq(fitnessTrainers.city, city as string)) as any;
+      const items = await db.query.fitnessTrainers.findMany({
+        where: whereCondition,
+        orderBy: [desc(fitnessTrainers.isFeatured), desc(fitnessTrainers.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Fitness Trainers - Admin
+  app.get("/api/admin/fitness-trainers", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(fitnessTrainers.userId, userId), eq(fitnessTrainers.role, role))
+          : eq(fitnessTrainers.userId, userId))
+        : undefined;
+      const items = await db.query.fitnessTrainers.findMany({
+        where: whereCondition as any,
+        orderBy: desc(fitnessTrainers.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/fitness-trainers/:id", async (req, res) => {
+    try { const [item] = await db.select().from(fitnessTrainers).where(eq(fitnessTrainers.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/fitness-trainers", async (req, res) => {
+    try { const [item] = await db.insert(fitnessTrainers).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/fitness-trainers/:id", async (req, res) => {
+    try { const [item] = await db.update(fitnessTrainers).set(req.body).where(eq(fitnessTrainers.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/fitness-trainers/:id", async (req, res) => {
+    try { await db.delete(fitnessTrainers).where(eq(fitnessTrainers.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Gyms & Fitness Centers - Public
+  app.get("/api/gyms-fitness-centers", async (req, res) => {
+    try {
+      const { city, facilityType } = req.query;
+      let whereCondition = eq(gymsFitnessCenters.isActive, true);
+      if (city) whereCondition = and(eq(gymsFitnessCenters.isActive, true), eq(gymsFitnessCenters.city, city as string)) as any;
+      const items = await db.query.gymsFitnessCenters.findMany({
+        where: whereCondition,
+        orderBy: [desc(gymsFitnessCenters.isFeatured), desc(gymsFitnessCenters.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Gyms & Fitness Centers - Admin
+  app.get("/api/admin/gyms-fitness-centers", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(gymsFitnessCenters.userId, userId), eq(gymsFitnessCenters.role, role))
+          : eq(gymsFitnessCenters.userId, userId))
+        : undefined;
+      const items = await db.query.gymsFitnessCenters.findMany({
+        where: whereCondition as any,
+        orderBy: desc(gymsFitnessCenters.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/gyms-fitness-centers/:id", async (req, res) => {
+    try { const [item] = await db.select().from(gymsFitnessCenters).where(eq(gymsFitnessCenters.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/gyms-fitness-centers", async (req, res) => {
+    try { const [item] = await db.insert(gymsFitnessCenters).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/gyms-fitness-centers/:id", async (req, res) => {
+    try { const [item] = await db.update(gymsFitnessCenters).set(req.body).where(eq(gymsFitnessCenters.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/gyms-fitness-centers/:id", async (req, res) => {
+    try { await db.delete(gymsFitnessCenters).where(eq(gymsFitnessCenters.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Sports Equipment - Public
+  app.get("/api/sports-equipment", async (req, res) => {
+    try {
+      const { city, category } = req.query;
+      let whereCondition = eq(sportsEquipment.isActive, true);
+      if (city) whereCondition = and(eq(sportsEquipment.isActive, true), eq(sportsEquipment.city, city as string)) as any;
+      const items = await db.query.sportsEquipment.findMany({
+        where: whereCondition,
+        orderBy: [desc(sportsEquipment.isFeatured), desc(sportsEquipment.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Sports Equipment - Admin
+  app.get("/api/admin/sports-equipment", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(sportsEquipment.userId, userId), eq(sportsEquipment.role, role))
+          : eq(sportsEquipment.userId, userId))
+        : undefined;
+      const items = await db.query.sportsEquipment.findMany({
+        where: whereCondition as any,
+        orderBy: desc(sportsEquipment.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/sports-equipment/:id", async (req, res) => {
+    try { const [item] = await db.select().from(sportsEquipment).where(eq(sportsEquipment.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/sports-equipment", async (req, res) => {
+    try { const [item] = await db.insert(sportsEquipment).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/sports-equipment/:id", async (req, res) => {
+    try { const [item] = await db.update(sportsEquipment).set(req.body).where(eq(sportsEquipment.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/sports-equipment/:id", async (req, res) => {
+    try { await db.delete(sportsEquipment).where(eq(sportsEquipment.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Music & Entertainment - Public
+  app.get("/api/music-entertainment", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(musicEntertainment.isActive, true);
+      if (city) whereCondition = and(eq(musicEntertainment.isActive, true), eq(musicEntertainment.city, city as string)) as any;
+      const items = await db.query.musicEntertainment.findMany({
+        where: whereCondition,
+        orderBy: [desc(musicEntertainment.isFeatured), desc(musicEntertainment.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Music & Entertainment - Admin
+  app.get("/api/admin/music-entertainment", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(musicEntertainment.userId, userId), eq(musicEntertainment.role, role))
+          : eq(musicEntertainment.userId, userId))
+        : undefined;
+      const items = await db.query.musicEntertainment.findMany({
+        where: whereCondition as any,
+        orderBy: desc(musicEntertainment.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/music-entertainment/:id", async (req, res) => {
+    try { const [item] = await db.select().from(musicEntertainment).where(eq(musicEntertainment.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/music-entertainment", async (req, res) => {
+    try { const [item] = await db.insert(musicEntertainment).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/music-entertainment/:id", async (req, res) => {
+    try { const [item] = await db.update(musicEntertainment).set(req.body).where(eq(musicEntertainment.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/music-entertainment/:id", async (req, res) => {
+    try { await db.delete(musicEntertainment).where(eq(musicEntertainment.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Grocery & Daily Essentials - Public
+  app.get("/api/grocery-daily-essentials", async (req, res) => {
+    try {
+      const { city } = req.query;
+      let whereCondition = eq(groceryDailyEssentials.isActive, true);
+      if (city) whereCondition = and(eq(groceryDailyEssentials.isActive, true), eq(groceryDailyEssentials.city, city as string)) as any;
+      const items = await db.query.groceryDailyEssentials.findMany({
+        where: whereCondition,
+        orderBy: [desc(groceryDailyEssentials.isFeatured), desc(groceryDailyEssentials.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Grocery & Daily Essentials - Admin
+  app.get("/api/admin/grocery-daily-essentials", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(groceryDailyEssentials.userId, userId), eq(groceryDailyEssentials.role, role))
+          : eq(groceryDailyEssentials.userId, userId))
+        : undefined;
+      const items = await db.query.groceryDailyEssentials.findMany({
+        where: whereCondition as any,
+        orderBy: desc(groceryDailyEssentials.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/grocery-daily-essentials/:id", async (req, res) => {
+    try { const [item] = await db.select().from(groceryDailyEssentials).where(eq(groceryDailyEssentials.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/grocery-daily-essentials", async (req, res) => {
+    try { const [item] = await db.insert(groceryDailyEssentials).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/grocery-daily-essentials/:id", async (req, res) => {
+    try { const [item] = await db.update(groceryDailyEssentials).set(req.body).where(eq(groceryDailyEssentials.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/grocery-daily-essentials/:id", async (req, res) => {
+    try { await db.delete(groceryDailyEssentials).where(eq(groceryDailyEssentials.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Cleaning & Pest Control - Public
+  app.get("/api/cleaning-pest-control", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(cleaningPestControl.isActive, true);
+      if (city) whereCondition = and(eq(cleaningPestControl.isActive, true), eq(cleaningPestControl.city, city as string)) as any;
+      const items = await db.query.cleaningPestControl.findMany({
+        where: whereCondition,
+        orderBy: [desc(cleaningPestControl.isFeatured), desc(cleaningPestControl.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Cleaning & Pest Control - Admin
+  app.get("/api/admin/cleaning-pest-control", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(cleaningPestControl.userId, userId), eq(cleaningPestControl.role, role))
+          : eq(cleaningPestControl.userId, userId))
+        : undefined;
+      const items = await db.query.cleaningPestControl.findMany({
+        where: whereCondition as any,
+        orderBy: desc(cleaningPestControl.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/cleaning-pest-control/:id", async (req, res) => {
+    try { const [item] = await db.select().from(cleaningPestControl).where(eq(cleaningPestControl.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/cleaning-pest-control", async (req, res) => {
+    try { const [item] = await db.insert(cleaningPestControl).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/cleaning-pest-control/:id", async (req, res) => {
+    try { const [item] = await db.update(cleaningPestControl).set(req.body).where(eq(cleaningPestControl.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/cleaning-pest-control/:id", async (req, res) => {
+    try { await db.delete(cleaningPestControl).where(eq(cleaningPestControl.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Electrical/Plumbing Repairs - Public
+  app.get("/api/electrical-plumbing-repairs", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(electricalPlumbingRepairs.isActive, true);
+      if (city) whereCondition = and(eq(electricalPlumbingRepairs.isActive, true), eq(electricalPlumbingRepairs.city, city as string)) as any;
+      const items = await db.query.electricalPlumbingRepairs.findMany({
+        where: whereCondition,
+        orderBy: [desc(electricalPlumbingRepairs.isFeatured), desc(electricalPlumbingRepairs.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Electrical/Plumbing Repairs - Admin
+  app.get("/api/admin/electrical-plumbing-repairs", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(electricalPlumbingRepairs.userId, userId), eq(electricalPlumbingRepairs.role, role))
+          : eq(electricalPlumbingRepairs.userId, userId))
+        : undefined;
+      const items = await db.query.electricalPlumbingRepairs.findMany({
+        where: whereCondition as any,
+        orderBy: desc(electricalPlumbingRepairs.createdAt)
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/electrical-plumbing-repairs/:id", async (req, res) => {
+    try { const [item] = await db.select().from(electricalPlumbingRepairs).where(eq(electricalPlumbingRepairs.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/electrical-plumbing-repairs", async (req, res) => {
+    try { const [item] = await db.insert(electricalPlumbingRepairs).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/electrical-plumbing-repairs/:id", async (req, res) => {
+    try { const [item] = await db.update(electricalPlumbingRepairs).set(req.body).where(eq(electricalPlumbingRepairs.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/electrical-plumbing-repairs/:id", async (req, res) => {
+    try { await db.delete(electricalPlumbingRepairs).where(eq(electricalPlumbingRepairs.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Accounting & Audit - Public
+  app.get("/api/accounting-audit", async (req, res) => {
+    try {
+      const { city, serviceType } = req.query;
+      let whereCondition = eq(accountingAudit.isActive, true);
+      if (city) whereCondition = and(eq(accountingAudit.isActive, true), eq(accountingAudit.city, city as string)) as any;
+      const items = await db.query.accountingAudit.findMany({
+        where: whereCondition,
+        orderBy: [desc(accountingAudit.isFeatured), desc(accountingAudit.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Accounting & Audit - Admin
+  app.get("/api/admin/accounting-audit", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(accountingAudit.userId, userId), eq(accountingAudit.role, role))
+          : eq(accountingAudit.userId, userId))
+        : undefined;
+      const items = await db.query.accountingAudit.findMany({
+        where: whereCondition as any,
+        orderBy: desc(accountingAudit.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/accounting-audit/:id", async (req, res) => {
+    try { const [item] = await db.select().from(accountingAudit).where(eq(accountingAudit.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/accounting-audit", async (req, res) => {
+    try { const [item] = await db.insert(accountingAudit).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/accounting-audit/:id", async (req, res) => {
+    try { const [item] = await db.update(accountingAudit).set(req.body).where(eq(accountingAudit.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/accounting-audit/:id", async (req, res) => {
+    try { await db.delete(accountingAudit).where(eq(accountingAudit.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Investment Opportunities - Public
+  app.get("/api/investment-opportunities", async (req, res) => {
+    try {
+      const { city, investmentType, sector } = req.query;
+      let whereCondition = eq(investmentOpportunities.isActive, true);
+      if (city) whereCondition = and(eq(investmentOpportunities.isActive, true), eq(investmentOpportunities.city, city as string)) as any;
+      const items = await db.query.investmentOpportunities.findMany({
+        where: whereCondition,
+        orderBy: [desc(investmentOpportunities.isFeatured), desc(investmentOpportunities.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Investment Opportunities - Admin
+  app.get("/api/admin/investment-opportunities", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(investmentOpportunities.userId, userId), eq(investmentOpportunities.role, role))
+          : eq(investmentOpportunities.userId, userId))
+        : undefined;
+      const items = await db.query.investmentOpportunities.findMany({
+        where: whereCondition as any,
+        orderBy: desc(investmentOpportunities.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/investment-opportunities/:id", async (req, res) => {
+    try { const [item] = await db.select().from(investmentOpportunities).where(eq(investmentOpportunities.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/investment-opportunities", async (req, res) => {
+    try { const [item] = await db.insert(investmentOpportunities).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/investment-opportunities/:id", async (req, res) => {
+    try { const [item] = await db.update(investmentOpportunities).set(req.body).where(eq(investmentOpportunities.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/investment-opportunities/:id", async (req, res) => {
+    try { await db.delete(investmentOpportunities).where(eq(investmentOpportunities.id, req.params.id)); res.json({ message: "Deleted" }); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+
+  // Microfinance/Cooperative Listings - Public
+  app.get("/api/microfinance-cooperative", async (req, res) => {
+    try {
+      const { city, organizationType } = req.query;
+      let whereCondition = eq(microfinanceCooperative.isActive, true);
+      if (city) whereCondition = and(eq(microfinanceCooperative.isActive, true), eq(microfinanceCooperative.city, city as string)) as any;
+      const items = await db.query.microfinanceCooperative.findMany({
+        where: whereCondition,
+        orderBy: [desc(microfinanceCooperative.isFeatured), desc(microfinanceCooperative.createdAt)],
+        limit: 50,
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  // Microfinance/Cooperative Listings - Admin
+  app.get("/api/admin/microfinance-cooperative", async (req, res) => {
+    try {
+      const { userId, role } = req.query as { userId?: string; role?: string };
+      const whereCondition = userId
+        ? (role
+          ? and(eq(microfinanceCooperative.userId, userId), eq(microfinanceCooperative.role, role))
+          : eq(microfinanceCooperative.userId, userId))
+        : undefined;
+      const items = await db.query.microfinanceCooperative.findMany({
+        where: whereCondition as any,
+        orderBy: desc(microfinanceCooperative.createdAt),
+      });
+      res.json(items);
+    }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.get("/api/admin/microfinance-cooperative/:id", async (req, res) => {
+    try { const [item] = await db.select().from(microfinanceCooperative).where(eq(microfinanceCooperative.id, req.params.id)); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.post("/api/admin/microfinance-cooperative", async (req, res) => {
+    try { const [item] = await db.insert(microfinanceCooperative).values(req.body).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.put("/api/admin/microfinance-cooperative/:id", async (req, res) => {
+    try { const [item] = await db.update(microfinanceCooperative).set(req.body).where(eq(microfinanceCooperative.id, req.params.id)).returning(); res.json(item); }
+    catch (error: any) { res.status(500).json({ message: error.message }); }
+  });
+  app.delete("/api/admin/microfinance-cooperative/:id", async (req, res) => {
+    try { await db.delete(microfinanceCooperative).where(eq(microfinanceCooperative.id, req.params.id)); res.json({ message: "Deleted" }); }
     catch (error: any) { res.status(500).json({ message: error.message }); }
   });
 

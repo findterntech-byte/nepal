@@ -342,7 +342,7 @@ export default function PhonesTabletsAccessoriesForm() {
                         <h3 className="font-semibold text-lg">{product.title}</h3>
                         <div className="flex gap-2 mt-2 flex-wrap">
                           {product.emiAvailable && (
-                            <Badge className="bg-blue-600">EMI ₹{Number(product.emiStartingFrom).toLocaleString()}/{product.emiMonths}mo</Badge>
+                            <Badge className="bg-blue-600">EMI रू {Number(product.emiStartingFrom).toLocaleString()}/{product.emiMonths}mo</Badge>
                           )}
                           <Badge variant="outline">{product.category}</Badge>
                           <Badge variant="outline">{product.brand} {product.model}</Badge>
@@ -358,9 +358,9 @@ export default function PhonesTabletsAccessoriesForm() {
                           {product.isBestSeller && <Badge className="bg-yellow-600">Best Seller</Badge>}
                         </div>
                         <p className="text-sm text-muted-foreground mt-2">
-                          ₹{Number(product.price).toLocaleString()}
+                          रू {Number(product.price).toLocaleString()}
                           {product.mrp && product.mrp > product.price && (
-                            <span className="line-through ml-2 text-gray-500">₹{Number(product.mrp).toLocaleString()}</span>
+                            <span className="line-through ml-2 text-gray-500">रू {Number(product.mrp).toLocaleString()}</span>
                           )}
                           {product.discountPercentage && (
                             <span className="ml-2 text-green-600 font-semibold">{product.discountPercentage}% off</span>
@@ -504,12 +504,12 @@ export default function PhonesTabletsAccessoriesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price">Price (रू ) *</Label>
                     <Input id="price" type="text" {...register("price", { required: true})} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="mrp">MRP (₹)</Label>
+                    <Label htmlFor="mrp">MRP (रू )</Label>
                     <Input id="mrp" type="number" {...register("mrp", { valueAsNumber: true })} />
                   </div>
 
@@ -526,7 +526,7 @@ export default function PhonesTabletsAccessoriesForm() {
                   {emiLocal && (
                     <>
                       <div className="space-y-2">
-                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (रू )</Label>
                         <Input id="emiStartingFrom" type="text" {...register("emiStartingFrom")} placeholder="e.g., 1500" />
                       </div>
                       <div className="space-y-2">
@@ -706,7 +706,7 @@ export default function PhonesTabletsAccessoriesForm() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Price</p>
-                  <p className="text-sm text-muted-foreground">₹{Number(viewingProduct.price).toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">रू {Number(viewingProduct.price).toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Stock Status</p>

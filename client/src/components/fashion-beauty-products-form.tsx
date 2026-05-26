@@ -437,12 +437,12 @@ export default function FashionBeautyProductsForm({ onSuccess, editingProduct }:
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="price">Price (₹) *</Label>
+                  <Label htmlFor="price">Price (रू ) *</Label>
                   <Input id="price" type="number" step="0.01" {...register("price", { required: true })} />
                 </div>
 
                 <div>
-                  <Label htmlFor="mrp">MRP (₹)</Label>
+                  <Label htmlFor="mrp">MRP (रू )</Label>
                   <Input id="mrp" type="number" step="0.01" {...register("mrp")} />
                 </div>
 
@@ -455,17 +455,17 @@ export default function FashionBeautyProductsForm({ onSuccess, editingProduct }:
               {listingType === "rent" && (
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="rentalPricePerDay">Rental/Day (₹)</Label>
+                    <Label htmlFor="rentalPricePerDay">Rental/Day (रू )</Label>
                     <Input id="rentalPricePerDay" type="number" step="0.01" {...register("rentalPricePerDay")} />
                   </div>
 
                   <div>
-                    <Label htmlFor="rentalPricePerWeek">Rental/Week (₹)</Label>
+                    <Label htmlFor="rentalPricePerWeek">Rental/Week (रू )</Label>
                     <Input id="rentalPricePerWeek" type="number" step="0.01" {...register("rentalPricePerWeek")} />
                   </div>
 
                   <div>
-                    <Label htmlFor="securityDeposit">Security Deposit (₹)</Label>
+                    <Label htmlFor="securityDeposit">Security Deposit (रू )</Label>
                     <Input id="securityDeposit" type="number" step="0.01" {...register("securityDeposit")} />
                   </div>
                 </div>
@@ -641,12 +641,12 @@ export default function FashionBeautyProductsForm({ onSuccess, editingProduct }:
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="deliveryCharges">Delivery Charges (₹)</Label>
+                  <Label htmlFor="deliveryCharges">Delivery Charges (रू )</Label>
                   <Input id="deliveryCharges" type="number" step="0.01" {...register("deliveryCharges")} />
                 </div>
 
                 <div>
-                  <Label htmlFor="freeDeliveryAbove">Free Delivery Above (₹)</Label>
+                  <Label htmlFor="freeDeliveryAbove">Free Delivery Above (रू )</Label>
                   <Input id="freeDeliveryAbove" type="number" step="0.01" {...register("freeDeliveryAbove")} />
                 </div>
               </div>

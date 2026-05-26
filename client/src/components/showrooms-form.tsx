@@ -597,7 +597,7 @@ export function ShowroomsForm() {
                     {formData.emiAvailable && (
                       <>
                         <div>
-                          <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                          <Label htmlFor="emiStartingFrom">EMI Starting From (रू )</Label>
                           <Input
                             id="emiStartingFrom"
                             type="text"
@@ -718,9 +718,9 @@ export function ShowroomsForm() {
                     <TableCell>{item.vehicleType}</TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-1">
-                        <div>₹{parseFloat(item.price.toString()).toLocaleString()}</div>
+                        <div>रू {parseFloat(item.price.toString()).toLocaleString()}</div>
                         {(item as any).emiAvailable && (
-                          <Badge className="bg-blue-600 text-xs w-fit">EMI ₹{(item as any).emiStartingFrom}/{(item as any).emiMonths}mo</Badge>
+                          <Badge className="bg-blue-600 text-xs w-fit">EMI रू {(item as any).emiStartingFrom}/{(item as any).emiMonths}mo</Badge>
                         )}
                       </div>
                     </TableCell>

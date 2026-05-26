@@ -478,7 +478,7 @@ export default function PharmacyMedicalStoresForm({ onSuccess, editingStore, onC
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="deliveryCharges">Delivery Charges (₹)</Label>
+                    <Label htmlFor="deliveryCharges">Delivery Charges (रू )</Label>
                     <Input id="deliveryCharges" type="number" {...register("deliveryCharges", { valueAsNumber: true })} />
                   </div>
 

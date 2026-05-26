@@ -384,7 +384,7 @@ export default function SchoolsCollegesCoachingForm({ onSuccess, editingInstitut
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label>Annual Tuition Fee (₹)</Label>
+              <Label>Annual Tuition Fee (रू )</Label>
               <Input
                 type="number"
                 value={formData.annualTuitionFee}
@@ -393,7 +393,7 @@ export default function SchoolsCollegesCoachingForm({ onSuccess, editingInstitut
             </div>
 
             <div>
-              <Label>Total Fee Per Year (₹)</Label>
+              <Label>Total Fee Per Year (रू )</Label>
               <Input
                 type="number"
                 value={formData.totalFeePerYear}

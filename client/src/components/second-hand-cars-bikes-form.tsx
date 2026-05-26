@@ -653,7 +653,7 @@ export function SecondHandCarsBikesForm() {
                       type="text"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                      placeholder="₹"
+                      placeholder="रू "
                       required
                     />
                   </div>
@@ -833,7 +833,7 @@ export function SecondHandCarsBikesForm() {
                   {formData.emiAvailable && (
                     <>
                       <div>
-                        <Label htmlFor="emiStartingFrom">EMI Starting From (₹)</Label>
+                        <Label htmlFor="emiStartingFrom">EMI Starting From (रू )</Label>
                         <Input
                           id="emiStartingFrom"
                           type="text"
@@ -939,9 +939,9 @@ export function SecondHandCarsBikesForm() {
                   <TableCell>{item.year}</TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1">
-                      <div>₹{item.price.toLocaleString()}</div>
+                      <div>रू {item.price.toLocaleString()}</div>
                       {(item as any).emiAvailable && (
-                        <Badge className="bg-blue-600 text-xs w-fit">EMI ₹{(item as any).emiStartingFrom}/{(item as any).emiMonths}mo</Badge>
+                        <Badge className="bg-blue-600 text-xs w-fit">EMI रू {(item as any).emiStartingFrom}/{(item as any).emiMonths}mo</Badge>
                       )}
                     </div>
                   </TableCell>

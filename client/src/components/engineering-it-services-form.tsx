@@ -239,7 +239,7 @@ export default function EngineeringITServicesForm() {
             <Card><CardHeader><CardTitle>Pricing & Services</CardTitle></CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2"><Label>Hourly Rate (₹)</Label><Input type="number" {...register("hourlyRate", { valueAsNumber: true })} /></div>
+                  <div className="space-y-2"><Label>Hourly Rate (रू )</Label><Input type="number" {...register("hourlyRate", { valueAsNumber: true })} /></div>
                   <div className="flex items-center space-x-2"><Switch id="projectBasedPricing" onCheckedChange={(checked) => setValue("projectBasedPricing", checked)} /><Label>Project Based Pricing</Label></div>
                   <div className="flex items-center space-x-2"><Switch id="freeConsultation" onCheckedChange={(checked) => setValue("freeConsultation", checked)} /><Label>Free Consultation</Label></div>
                   <div className="flex items-center space-x-2"><Switch id="remoteService" onCheckedChange={(checked) => setValue("remoteService", checked)} /><Label>Remote Service</Label></div>

@@ -108,6 +108,11 @@ import LegalBankingServicesForm from "@/components/legal-banking-services-form";
 import InsuranceServicesForm from "@/components/insurance-services-form";
 import NGOSocialServicesForm from "@/components/ngo-social-services-form";
 import AgentsAgenciesForm from "@/components/agents-agencies-form";
+import AccountingAuditServicesForm from "@/components/accounting-audit-services-form";
+import InvestmentOpportunitiesForm from "@/components/investment-opportunities-form";
+import MicrofinanceCooperativeForm from "@/components/microfinance-cooperative-form";
+import GroceryDailyEssentialsForm from "@/components/grocery-daily-essentials-form";
+import CleaningPestControlForm from "@/components/cleaning-pest-control-form";
 import ToursTravelsForm from "@/components/tours-travels-form";
 import HotelsResortsForm from "@/components/hotels-resorts-form";
 import EventTicketBookingForm from "@/components/event-ticket-booking-form";
@@ -116,12 +121,19 @@ import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-
 import SalesMarketingForm from "@/components/sales-marketing-form";
 import CourierCargoForm from "@/components/courier-cargo-form";
 import NewsMediaForm from "@/components/news-media-form";
+import GraphicDesignWebDevelopmentDigitalMarketingForm from "@/components/graphic-design-web-development-digital-marketing-form";
 import RestaurantForm from "@/components/restaurant-form";
 import HotelForm from "@/components/hotel-form";
 import CafeForm from "@/components/cafe-form";
 import HomeDeliveryForm from "@/components/home-delivery-form";
 import CateringForm from "@/components/catering-form";
-
+import ClinicsHospitalsForm from "@/components/clinics-hospitals-form";
+import DiagnosticLabsForm from "@/components/diagnostic-labs-form";
+import FitnessTrainersForm from "@/components/fitness-trainers-form";
+import GymsFitnessCentersForm from "@/components/gyms-fitness-centers-form";
+import SportsEquipmentForm from "@/components/sports-equipment-form";
+import MusicEntertainmentForm from "@/components/music-entertainment-form";
+import ElectricalPlumbingRepairsForm from "@/components/electrical-plumbing-repairs-form";
 // Educational Consultancy - Study Abroad Section Component
 function EducationalConsultancyStudyAbroadSection() {
   return <EducationalConsultancyStudyAbroadForm />;
@@ -259,12 +271,12 @@ function FashionBeautyProductsSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingProduct.price).toLocaleString('en-IN')}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingProduct.price).toLocaleString('en-IN')}</p>
                 </div>
                 {viewingProduct.mrp && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">MRP</p>
-                    <p className="text-lg font-bold line-through">₹{Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
+                    <p className="text-lg font-bold line-through">रू {Number(viewingProduct.mrp).toLocaleString('en-IN')}</p>
                   </div>
                 )}
                 {viewingProduct.discountPercentage && (
@@ -434,7 +446,7 @@ function FashionBeautyProductsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(product.price).toLocaleString('en-IN')}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(product.price).toLocaleString('en-IN')}</span>
                   <Badge variant={product.isActive ? 'default' : 'secondary'}>
                     {product.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -620,12 +632,12 @@ function SareeClothingShoppingSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingProduct.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingProduct.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 {viewingProduct.mrp && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">MRP</p>
-                    <p className="text-lg font-bold">₹{Number(viewingProduct.mrp).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingProduct.mrp).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                   </div>
                 )}
                 {viewingProduct.discountPercentage && (
@@ -788,7 +800,7 @@ function SareeClothingShoppingSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{product.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(product.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   <Badge variant={product.isActive ? 'default' : 'secondary'}>
                     {product.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -1014,7 +1026,7 @@ function PharmacyMedicalStoresSection() {
                     {viewingStore.homeDelivery && <Badge variant="default">Home Delivery</Badge>}
                     {viewingStore.sameDayDelivery && <Badge variant="default">Same Day Delivery</Badge>}
                     {viewingStore.deliveryCharges && (
-                      <Badge variant="outline">Delivery: ₹{viewingStore.deliveryCharges}</Badge>
+                      <Badge variant="outline">Delivery: रू {viewingStore.deliveryCharges}</Badge>
                     )}
                   </div>
                 </div>
@@ -1315,7 +1327,7 @@ function CricketSportsTrainingSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{program.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{program.pricePerMonth}</span>
+                  <span className="font-semibold text-lg text-primary">रू {program.pricePerMonth}</span>
                   <Badge variant={program.isActive ? 'default' : 'secondary'}>
                     {program.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -1536,7 +1548,7 @@ function JewelryAccessoriesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(item.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   <Badge variant={item.isActive ? 'default' : 'secondary'}>
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -1596,12 +1608,12 @@ function JewelryAccessoriesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingItem.price).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
                 {viewingItem.originalPrice && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Original Price</p>
-                    <p className="text-lg font-bold line-through">₹{Number(viewingItem.originalPrice).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                    <p className="text-lg font-bold line-through">रू {Number(viewingItem.originalPrice).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                   </div>
                 )}
                 {viewingItem.discountPercentage && (
@@ -1613,7 +1625,7 @@ function JewelryAccessoriesSection() {
                 {viewingItem.makingCharges && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Making Charges</p>
-                    <p className="text-lg font-bold">₹{Number(viewingItem.makingCharges).toLocaleString('en-IN')}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingItem.makingCharges).toLocaleString('en-IN')}</p>
                   </div>
                 )}
               </div>
@@ -1887,7 +1899,7 @@ function HealthWellnessServicesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   {service.consultationFee && (
-                    <span className="font-semibold text-lg text-primary">₹{service.consultationFee}</span>
+                    <span className="font-semibold text-lg text-primary">रू {service.consultationFee}</span>
                   )}
                   <Badge variant={service.isActive ? 'default' : 'secondary'}>
                     {service.isActive ? 'Active' : 'Inactive'}
@@ -2113,9 +2125,9 @@ function HouseholdServicesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="font-semibold text-lg text-primary">₹{service.baseServiceCharge}</span>
+                    <span className="font-semibold text-lg text-primary">रू {service.baseServiceCharge}</span>
                     {service.hourlyRate && (
-                      <span className="text-sm text-muted-foreground ml-2">| ₹{service.hourlyRate}/hr</span>
+                      <span className="text-sm text-muted-foreground ml-2">| रू {service.hourlyRate}/hr</span>
                     )}
                   </div>
                   <Badge variant={service.isActive ? 'default' : 'secondary'}>
@@ -2201,24 +2213,24 @@ function HouseholdServicesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Base Charge</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingService.baseServiceCharge}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingService.baseServiceCharge}</p>
                 </div>
                 {viewingService.hourlyRate && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Hourly Rate</p>
-                    <p className="text-lg font-bold">₹{viewingService.hourlyRate}/hr</p>
+                    <p className="text-lg font-bold">रू {viewingService.hourlyRate}/hr</p>
                   </div>
                 )}
                 {viewingService.minimumCharge && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Min. Charge</p>
-                    <p className="text-lg font-bold">₹{viewingService.minimumCharge}</p>
+                    <p className="text-lg font-bold">रू {viewingService.minimumCharge}</p>
                   </div>
                 )}
                 {viewingService.emergencyCharges && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Emergency Charge</p>
-                    <p className="text-lg font-bold text-red-600">₹{viewingService.emergencyCharges}</p>
+                    <p className="text-lg font-bold text-red-600">रू {viewingService.emergencyCharges}</p>
                   </div>
                 )}
               </div>
@@ -3616,7 +3628,7 @@ function HostelsPgSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{hostel.description}</p>
                 )}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-lg text-primary">₹{hostel.pricePerMonth}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {hostel.pricePerMonth}/month</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
@@ -3712,7 +3724,7 @@ function HostelsPgSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price/Month</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingHostel.pricePerMonth}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingHostel.pricePerMonth}</p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Total Beds</p>
@@ -4011,7 +4023,7 @@ function ConstructionMaterialsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{material.description}</p>
                 )}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-lg text-primary">₹{material.price}/{material.unit}</span>
+                  <span className="font-semibold text-lg text-primary">रू {material.price}/{material.unit}</span>
                   <Badge variant={material.stockStatus === 'in_stock' ? 'default' : 'secondary'}>
                     {material.stockStatus?.replace('_', ' ').toUpperCase()}
                   </Badge>
@@ -4034,7 +4046,7 @@ function ConstructionMaterialsSection() {
                 Stock: <span className="font-medium">{material.stockStatus?.replace('_', ' ').toUpperCase()}</span>
               </div>
               <div className="text-lg font-bold text-primary">
-                ₹{material.price}/{material.unit}
+                रू {material.price}/{material.unit}
               </div>
             </CardFooter>
             <CardFooter className="pt-0 flex gap-2">
@@ -4078,7 +4090,7 @@ function ConstructionMaterialsSection() {
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingMaterial.price}/{viewingMaterial.unit}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingMaterial.price}/{viewingMaterial.unit}</p>
                 </div>
                 {viewingMaterial.minimumOrder && (
                   <div className="p-4 bg-muted rounded-lg">
@@ -4272,7 +4284,7 @@ function PropertyDealsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{deal.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{deal.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {deal.price}</span>
                   <Badge variant={deal.isActive ? 'default' : 'secondary'}>
                     {deal.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -4458,7 +4470,7 @@ function CommercialPropertiesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{property.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{property.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {property.price}</span>
                   <Badge variant={property.isActive ? 'default' : 'secondary'}>
                     {property.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -4644,7 +4656,7 @@ function IndustrialLandSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{land.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{land.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {land.price}</span>
                   <Badge variant={land.isActive ? 'default' : 'secondary'}>
                     {land.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -4833,7 +4845,7 @@ function OfficeSpacesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{office.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{office.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {office.price}</span>
                   <Badge variant={office.isActive ? 'default' : 'secondary'}>
                     {office.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5019,7 +5031,7 @@ function RentalListingsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{rental.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{rental.price}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {rental.price}/month</span>
                   <Badge variant={rental.isActive ? 'default' : 'secondary'}>
                     {rental.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -5498,6 +5510,16 @@ export default function AdminDashboard() {
         return <NGOSocialServicesForm />;
       case "agents-agencies":
         return <AgentsAgenciesForm />;
+      case "accounting-audit":
+        return <AccountingAuditServicesForm />;
+      case "investment-opportunities":
+        return <InvestmentOpportunitiesForm />;
+      case "microfinance-cooperative-listings":
+        return <MicrofinanceCooperativeForm />;
+      case "grocery-daily-essentials":
+        return <GroceryDailyEssentialsForm />;
+      case "cleaning-pest-control":
+        return <CleaningPestControlForm />;
       case "tours-travels":
         return <ToursTravelsForm />;
       case "hotels-resorts":
@@ -5514,6 +5536,11 @@ export default function AdminDashboard() {
         return <CourierCargoForm />;
       case "news-media":
         return <NewsMediaForm />;
+      case "graphic-design-web-development-digital-marketing":
+      case "graphic-design":
+      case "web-development":
+      case "digital-marketing":
+        return <GraphicDesignWebDevelopmentDigitalMarketingForm />;
       case "restaurants":
         return <RestaurantForm />;
       case "hotel":
@@ -5524,6 +5551,20 @@ export default function AdminDashboard() {
         return <HomeDeliveryForm />;
       case "catering":
         return <CateringForm />;
+      case "clinics-hospitals":
+        return <ClinicsHospitalsForm />;
+      case "diagnostic-labs":
+        return <DiagnosticLabsForm />;
+      case "fitness-trainers":
+        return <FitnessTrainersForm />;
+      case "gyms-fitness-centers":
+        return <GymsFitnessCentersForm />;
+      case "sports-equipment":
+        return <SportsEquipmentForm />;
+      case "music-entertainment-services":
+        return <MusicEntertainmentForm />;
+        case "electricalplumbingrepairs":
+  return <ElectricalPlumbingRepairsForm />;
       case "sliders":
         return <SlidersSection />;
       case "slider-card":
@@ -5914,7 +5955,7 @@ function TuitionPrivateClassesSection() {
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-lg text-primary">
-                    ₹{classItem.feePerMonth || classItem.feePerHour || 'N/A'}
+                    रू {classItem.feePerMonth || classItem.feePerHour || 'N/A'}
                     {classItem.feePerMonth ? '/month' : classItem.feePerHour ? '/hour' : ''}
                   </span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
@@ -5977,13 +6018,13 @@ function TuitionPrivateClassesSection() {
                 {viewingClass.feePerHour && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Hour</p>
-                    <p className="text-lg font-bold text-primary">₹{viewingClass.feePerHour}</p>
+                    <p className="text-lg font-bold text-primary">रू {viewingClass.feePerHour}</p>
                   </div>
                 )}
                 {viewingClass.feePerMonth && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                    <p className="text-lg font-bold text-primary">₹{viewingClass.feePerMonth}</p>
+                    <p className="text-lg font-bold text-primary">रू {viewingClass.feePerMonth}</p>
                   </div>
                 )}
                 {viewingClass.batchSize && (
@@ -6271,7 +6312,7 @@ function DanceKarateGymYogaSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{classItem.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{classItem.feePerMonth}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {classItem.feePerMonth}/month</span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
                     {classItem.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -6337,13 +6378,13 @@ function DanceKarateGymYogaSection() {
                 {viewingClass.feePerMonth && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                    <p className="text-lg font-bold text-primary">₹{viewingClass.feePerMonth}</p>
+                    <p className="text-lg font-bold text-primary">रू {viewingClass.feePerMonth}</p>
                   </div>
                 )}
                 {viewingClass.feePerSession && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Fee Per Session</p>
-                    <p className="text-lg font-bold">₹{viewingClass.feePerSession}</p>
+                    <p className="text-lg font-bold">रू {viewingClass.feePerSession}</p>
                   </div>
                 )}
                 {viewingClass.sessionDurationMinutes && (
@@ -6404,7 +6445,7 @@ function DanceKarateGymYogaSection() {
                     {viewingClass.registrationFee && (
                       <div>
                         <span className="font-medium">Registration Fee:</span>
-                        <span className="ml-2 text-muted-foreground">₹{viewingClass.registrationFee}</span>
+                        <span className="ml-2 text-muted-foreground">रू {viewingClass.registrationFee}</span>
                       </div>
                     )}
                   </div>
@@ -6606,7 +6647,7 @@ function LanguageClassesSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingClass.feePerMonth).toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingClass.feePerMonth).toLocaleString()}</p>
                 </div>
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Duration</p>
@@ -6767,7 +6808,7 @@ function LanguageClassesSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{classItem.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(classItem.feePerMonth).toLocaleString()}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(classItem.feePerMonth).toLocaleString()}/month</span>
                   <Badge variant={classItem.isActive ? 'default' : 'secondary'}>
                     {classItem.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -6963,12 +7004,12 @@ function AcademiesMusicArtsSportsSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Fee Per Month</p>
-                  <p className="text-lg font-bold text-primary">₹{Number(viewingAcademy.feePerMonth).toLocaleString()}</p>
+                  <p className="text-lg font-bold text-primary">रू {Number(viewingAcademy.feePerMonth).toLocaleString()}</p>
                 </div>
                 {viewingAcademy.admissionFee && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Admission Fee</p>
-                    <p className="text-lg font-bold">₹{Number(viewingAcademy.admissionFee).toLocaleString()}</p>
+                    <p className="text-lg font-bold">रू {Number(viewingAcademy.admissionFee).toLocaleString()}</p>
                   </div>
                 )}
                 {viewingAcademy.establishedYear && (
@@ -7119,7 +7160,7 @@ function AcademiesMusicArtsSportsSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{academy.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{Number(academy.feePerMonth).toLocaleString()}/month</span>
+                  <span className="font-semibold text-lg text-primary">रू {Number(academy.feePerMonth).toLocaleString()}/month</span>
                   <Badge variant={academy.isActive ? 'default' : 'secondary'}>
                     {academy.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -7310,7 +7351,7 @@ function SkillTrainingCertificationSection() {
                 {viewingTraining.totalFee && (
                   <div>
                     <span className="font-medium">Total Fee:</span>
-                    <span className="ml-2 text-muted-foreground">₹{viewingTraining.totalFee}</span>
+                    <span className="ml-2 text-muted-foreground">रू {viewingTraining.totalFee}</span>
                   </div>
                 )}
                 {(viewingTraining.city || viewingTraining.stateProvince) && (
@@ -7386,7 +7427,7 @@ function SkillTrainingCertificationSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{training.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{training.totalFee}</span>
+                  <span className="font-semibold text-lg text-primary">रू {training.totalFee}</span>
                   <Badge variant={training.isActive ? 'default' : 'secondary'}>
                     {training.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -7649,7 +7690,7 @@ function SchoolsCollegesCoachingSection() {
                 )}
                 <div className="flex items-center justify-between">
                   {institution.annualTuitionFee && (
-                    <span className="font-semibold text-lg text-primary">₹{institution.annualTuitionFee}/year</span>
+                    <span className="font-semibold text-lg text-primary">रू {institution.annualTuitionFee}/year</span>
                   )}
                   <Badge variant={institution.isActive ? 'default' : 'secondary'}>
                     {institution.isActive ? 'Active' : 'Inactive'}
@@ -7991,7 +8032,7 @@ function FurnitureInteriorDecorSection() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
                 )}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{item.price}</span>
+                  <span className="font-semibold text-lg text-primary">रू {item.price}</span>
                   <Badge variant={item.isActive ? 'default' : 'secondary'}>
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Badge>
@@ -8076,12 +8117,12 @@ function FurnitureInteriorDecorSection() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="p-4 bg-muted rounded-lg">
                   <p className="text-sm text-muted-foreground">Price</p>
-                  <p className="text-lg font-bold text-primary">₹{viewingItem.price}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingItem.price}</p>
                 </div>
                 {viewingItem.originalPrice && (
                   <div className="p-4 bg-muted rounded-lg">
                     <p className="text-sm text-muted-foreground">Original Price</p>
-                    <p className="text-lg font-bold line-through">₹{viewingItem.originalPrice}</p>
+                    <p className="text-lg font-bold line-through">रू {viewingItem.originalPrice}</p>
                   </div>
                 )}
               </div>

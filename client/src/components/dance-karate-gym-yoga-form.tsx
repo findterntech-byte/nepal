@@ -155,17 +155,17 @@ export default function DanceKarateGymYogaForm({ onSuccess, editingClass }: Danc
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>Fee Per Month (₹) *</Label>
+              <Label>Fee Per Month (रू ) *</Label>
               <Input type="number" step="0.01" {...register("feePerMonth", { required: true })} />
             </div>
 
             <div>
-              <Label>Fee Per Session (₹)</Label>
+              <Label>Fee Per Session (रू )</Label>
               <Input type="number" step="0.01" {...register("feePerSession")} />
             </div>
 
             <div>
-              <Label>Registration Fee (₹)</Label>
+              <Label>Registration Fee (रू )</Label>
               <Input type="number" step="0.01" {...register("registrationFee")} />
             </div>
           </div>

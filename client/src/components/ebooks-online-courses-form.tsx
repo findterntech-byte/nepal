@@ -479,11 +479,11 @@ export default function EbooksOnlineCoursesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price">Price (रू ) *</Label>
                     <Input id="price" type="number" step="0.01" {...register("price", { required: true })} />
                   </div>
                   <div>
-                    <Label htmlFor="originalPrice">Original Price (₹)</Label>
+                    <Label htmlFor="originalPrice">Original Price (रू )</Label>
                     <Input id="originalPrice" type="number" step="0.01" {...register("originalPrice")} />
                   </div>
                   <div>
@@ -564,7 +564,7 @@ export default function EbooksOnlineCoursesForm() {
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Price</h3>
-                  <p className="text-lg font-bold text-primary">₹{viewingItem.price}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingItem.price}</p>
                 </div>
                 {viewingItem.instructorName && (
                   <div>
@@ -603,7 +603,7 @@ export default function EbooksOnlineCoursesForm() {
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">Price:</span>
-                  <span className="font-semibold text-primary">₹{item.price}</span>
+                  <span className="font-semibold text-primary">रू {item.price}</span>
                 </div>
                 {item.author && (
                   <div className="flex justify-between text-sm">

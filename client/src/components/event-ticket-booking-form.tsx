@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -76,6 +77,7 @@ type EventTicketFormData = {
 export default function EventTicketBookingForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -86,10 +88,21 @@ export default function EventTicketBookingForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<EventTicketFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["event-tickets"],
+    queryKey: ["event-tickets", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/event-tickets");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/event-tickets${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch events");
       return response.json();
     },
@@ -225,7 +238,13 @@ export default function EventTicketBookingForm() {
   };
 
   const onSubmit = (data: EventTicketFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    
     if (editingService) {
       updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
@@ -262,7 +281,7 @@ export default function EventTicketBookingForm() {
                 <p className="text-sm"><strong>Type:</strong> {service.eventType}</p>
                 <p className="text-sm"><strong>Date:</strong> {service.eventDate || "TBA"}</p>
                 <p className="text-sm"><strong>Location:</strong> {service.city}, {service.state}</p>
-                <p className="text-sm"><strong>Price:</strong> {service.freeEntry ? "Free" : `₹${service.ticketPriceMin} - ₹${service.ticketPriceMax}`}</p>
+                <p className="text-sm"><strong>Price:</strong> {service.freeEntry ? "Free" : `रू ${service.ticketPriceMin} - रू ${service.ticketPriceMax}`}</p>
               </div>
               <div className="flex gap-2 mt-4">
                 <Button size="sm" variant="outline" onClick={() => handleView(service)}>
@@ -373,11 +392,11 @@ export default function EventTicketBookingForm() {
                 <Input id="eventEndTime" type="time" {...register("eventEndTime")} />
               </div>
               <div>
-                <Label htmlFor="ticketPriceMin">Min Price (₹)</Label>
+                <Label htmlFor="ticketPriceMin">Min Price (रू )</Label>
                 <Input id="ticketPriceMin" type="number" {...register("ticketPriceMin")} placeholder="Minimum Price" />
               </div>
               <div>
-                <Label htmlFor="ticketPriceMax">Max Price (₹)</Label>
+                <Label htmlFor="ticketPriceMax">Max Price (रू )</Label>
                 <Input id="ticketPriceMax" type="number" {...register("ticketPriceMax")} placeholder="Maximum Price" />
               </div>
               <div>
@@ -539,7 +558,7 @@ export default function EventTicketBookingForm() {
               <div><strong>Time:</strong> {viewingService?.eventTime || "TBA"}</div>
               <div><strong>Venue:</strong> {viewingService?.venueName || "N/A"}</div>
               <div><strong>Location:</strong> {viewingService?.city}, {viewingService?.state}</div>
-              <div><strong>Price:</strong> {viewingService?.freeEntry ? "Free" : `₹${viewingService?.ticketPriceMin} - ₹${viewingService?.ticketPriceMax}`}</div>
+              <div><strong>Price:</strong> {viewingService?.freeEntry ? "Free" : `रू ${viewingService?.ticketPriceMin} - रू ${viewingService?.ticketPriceMax}`}</div>
               <div><strong>Contact:</strong> {viewingService?.contactPhone}</div>
               <div><strong>Organizer:</strong> {viewingService?.organizerName || viewingService?.businessName}</div>
             </div>

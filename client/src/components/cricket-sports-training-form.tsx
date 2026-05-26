@@ -370,7 +370,7 @@ export default function CricketSportsTrainingForm() {
               </div>
 
               <div>
-                <Label>Price Per Session (₹)</Label>
+                <Label>Price Per Session (रू )</Label>
                 <Input
                   type="number"
                   value={formData.pricePerSession}
@@ -379,7 +379,7 @@ export default function CricketSportsTrainingForm() {
               </div>
 
               <div>
-                <Label>Price Per Month (₹)</Label>
+                <Label>Price Per Month (रू )</Label>
                 <Input
                   type="number"
                   value={formData.pricePerMonth}
@@ -539,7 +539,7 @@ export default function CricketSportsTrainingForm() {
                 )}
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-lg text-primary">
-                    ₹{item.pricePerMonth || item.pricePerSession}/mo
+                    रू {item.pricePerMonth || item.pricePerSession}/mo
                   </span>
                   <Badge variant={item.isActive ? 'default' : 'secondary'}>
                     {item.isActive ? 'Active' : 'Inactive'}

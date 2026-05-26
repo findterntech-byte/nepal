@@ -479,7 +479,7 @@ export default function FurnitureInteriorDecorForm({ editingItem, onSuccess }: F
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (₹) *</FormLabel>
+                    <FormLabel>Price (रू ) *</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="15000" {...field} />
                     </FormControl>
@@ -493,7 +493,7 @@ export default function FurnitureInteriorDecorForm({ editingItem, onSuccess }: F
                 name="originalPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Original Price (₹)</FormLabel>
+                    <FormLabel>Original Price (रू )</FormLabel>
                     <FormControl>
                       <Input type="number" placeholder="20000" {...field} />
                     </FormControl>

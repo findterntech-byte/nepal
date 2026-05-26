@@ -143,9 +143,9 @@ export default function EventTicketBookingPage() {
             <SelectContent>
               <SelectItem value="all">All Prices</SelectItem>
               <SelectItem value="free">Free</SelectItem>
-              <SelectItem value="under500">Under ₹500</SelectItem>
-              <SelectItem value="500to1000">₹500 - ₹1000</SelectItem>
-              <SelectItem value="above1000">Above ₹1000</SelectItem>
+              <SelectItem value="under500">Under रू 500</SelectItem>
+              <SelectItem value="500to1000">रू 500 - रू 1000</SelectItem>
+              <SelectItem value="above1000">Above रू 1000</SelectItem>
             </SelectContent>
           </Select>
           <Select value={selectedCity} onValueChange={setSelectedCity}>
@@ -205,7 +205,7 @@ export default function EventTicketBookingPage() {
                       <p><strong>Time:</strong> {service.eventTime}</p>
                     )}
                     <p><strong>Venue:</strong> {service.venueName || service.city}</p>
-                    <p><strong>Price:</strong> {service.freeEntry ? "Free" : `₹${service.ticketPriceMin} - ₹${service.ticketPriceMax}`}</p>
+                    <p><strong>Price:</strong> {service.freeEntry ? "Free" : `रू ${service.ticketPriceMin} - रू ${service.ticketPriceMax}`}</p>
                   </div>
                   <div className="mt-4 flex gap-2 flex-wrap">
                     {service.onlineBooking && <Badge variant="outline">Online Booking</Badge>}

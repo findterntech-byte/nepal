@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -77,6 +78,7 @@ type HomeDeliveryFormData = {
 export default function HomeDeliveryForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -84,7 +86,25 @@ export default function HomeDeliveryForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { register, handleSubmit, reset, setValue } = useForm<HomeDeliveryFormData>();
 
-  const { data: services = [], isLoading } = useQuery({ queryKey: ["home-delivery"], queryFn: async () => { const res = await fetch("/api/admin/home-delivery"); if (!res.ok) throw new Error("Failed"); return res.json(); } });
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: ["home-delivery", userId || null, role || null],
+    queryFn: async () => {
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/home-delivery${query.toString() ? `?${query.toString()}` : ''}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    }
+  });
 
   const createMutation = useMutation({
     mutationFn: async (data: HomeDeliveryFormData) => { const res = await fetch("/api/admin/home-delivery", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }); if (!res.ok) throw new Error("Failed"); return res.json(); },
@@ -112,13 +132,21 @@ export default function HomeDeliveryForm() {
   const uploadMultipleFiles = async (files: File[]): Promise<string[]> => { const fd = new FormData(); files.forEach((f) => fd.append("files", f)); const res = await fetch("/api/upload-multiple", { method: "POST", body: fd }); const data = await res.json(); return Array.isArray(data?.files) ? data.files.map((x: any) => x?.url).filter((u: any) => typeof u === "string") : []; };
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => { const files = Array.from(e.target.files || []); if (!files.length) return; try { const urls = await uploadMultipleFiles(files); setImages((prev) => [...prev, ...urls]); } catch (err) { toast({ title: "Error", description: "Upload failed", variant: "destructive" }); } finally { if (fileInputRef.current) fileInputRef.current.value = ""; } };
   const removeImage = (index: number) => setImages((prev) => prev.filter((_, i) => i !== index));
-  const onSubmit = (data: HomeDeliveryFormData) => { const payload = { ...data, images }; editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload); };
+  const onSubmit = (data: HomeDeliveryFormData) => {
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload);
+  };
 
   return (
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6"><h1 className="text-2xl font-bold">Home Delivery</h1><Button onClick={() => setIsDialogOpen(true)}><Plus className="mr-2 h-4 w-4" /> Add New</Button></div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((service: any) => (<Card key={service.id}><CardHeader><div className="flex justify-between"><div><CardTitle className="text-lg">{service.title}</CardTitle><p className="text-sm text-muted-foreground">{service.businessName}</p></div>{service.isFeatured && <Badge>Featured</Badge>}</div></CardHeader><CardContent><div className="space-y-2 text-sm"><p><strong>Category:</strong> {service.serviceCategory}</p><p><strong>City:</strong> {service.city}</p>{service.minimumOrder && <p><strong>Min Order:</strong> ₹{service.minimumOrder}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent></Card>))}
+        {services.map((service: any) => (<Card key={service.id}><CardHeader><div className="flex justify-between"><div><CardTitle className="text-lg">{service.title}</CardTitle><p className="text-sm text-muted-foreground">{service.businessName}</p></div>{service.isFeatured && <Badge>Featured</Badge>}</div></CardHeader><CardContent><div className="space-y-2 text-sm"><p><strong>Category:</strong> {service.serviceCategory}</p><p><strong>City:</strong> {service.city}</p>{service.minimumOrder && <p><strong>Min Order:</strong> रू {service.minimumOrder}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent></Card>))}
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}><DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{editingService ? "Edit" : "Add"} Home Delivery Service</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -132,9 +160,9 @@ export default function HomeDeliveryForm() {
             <div><Label>Website</Label><Input {...register("website")} /></div>
             <div><Label>City *</Label><Input {...register("city", { required: true })} /></div>
             <div><Label>State</Label><Input {...register("state")} /></div>
-            <div><Label>Minimum Order (₹)</Label><Input type="number" {...register("minimumOrder")} /></div>
-            <div><Label>Delivery Charges (₹)</Label><Input type="number" {...register("deliveryCharges")} /></div>
-            <div><Label>Free Delivery Above (₹)</Label><Input type="number" {...register("freeDeliveryAbove")} /></div>
+            <div><Label>Minimum Order (रू )</Label><Input type="number" {...register("minimumOrder")} /></div>
+            <div><Label>Delivery Charges (रू )</Label><Input type="number" {...register("deliveryCharges")} /></div>
+            <div><Label>Free Delivery Above (रू )</Label><Input type="number" {...register("freeDeliveryAbove")} /></div>
             <div><Label>Delivery Radius (km)</Label><Input type="number" {...register("deliveryRadius")} /></div>
             <div><Label>Est. Delivery Time</Label><Input {...register("estimatedDeliveryTime")} placeholder="30-45 mins" /></div>
           </div>

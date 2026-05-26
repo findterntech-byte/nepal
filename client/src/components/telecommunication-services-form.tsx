@@ -365,19 +365,19 @@ export default function TelecommunicationServicesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label>Monthly Price (₹) *</Label>
+                    <Label>Monthly Price (रू ) *</Label>
                     <Input type="number" value={formData.monthlyPrice} onChange={(e) => setFormData({ ...formData, monthlyPrice: e.target.value })} required />
                   </div>
                   <div>
-                    <Label>Yearly Price (₹)</Label>
+                    <Label>Yearly Price (रू )</Label>
                     <Input type="number" value={formData.yearlyPrice} onChange={(e) => setFormData({ ...formData, yearlyPrice: e.target.value })} />
                   </div>
                   <div>
-                    <Label>Installation Charges (₹)</Label>
+                    <Label>Installation Charges (रू )</Label>
                     <Input type="number" value={formData.installationCharges} onChange={(e) => setFormData({ ...formData, installationCharges: e.target.value })} />
                   </div>
                   <div>
-                    <Label>Security Deposit (₹)</Label>
+                    <Label>Security Deposit (रू )</Label>
                     <Input type="number" value={formData.securityDeposit} onChange={(e) => setFormData({ ...formData, securityDeposit: e.target.value })} />
                   </div>
                 </div>
@@ -433,7 +433,7 @@ export default function TelecommunicationServicesForm() {
                         <Badge variant="outline">{service.serviceType}</Badge>
                         {service.isFeatured && <Badge className="bg-yellow-500">Featured</Badge>}
                       </div>
-                      <p className="text-sm text-muted-foreground mt-2">₹{service.monthlyPrice}/month</p>
+                      <p className="text-sm text-muted-foreground mt-2">रू {service.monthlyPrice}/month</p>
                     </div>
                   </div>
                 </div>
@@ -461,7 +461,7 @@ export default function TelecommunicationServicesForm() {
                     <Badge variant="outline">{viewingService.serviceType}</Badge>
                     {viewingService.isFeatured && <Badge className="bg-yellow-500">Featured</Badge>}
                   </div>
-                  <p className="text-sm text-muted-foreground mt-2">₹{viewingService.monthlyPrice}/month</p>
+                  <p className="text-sm text-muted-foreground mt-2">रू {viewingService.monthlyPrice}/month</p>
                 </div>
               </div>
 

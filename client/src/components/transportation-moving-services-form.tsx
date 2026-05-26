@@ -523,7 +523,7 @@ export function TransportationMovingServicesForm() {
                   <p className="text-sm text-muted-foreground line-clamp-2">{service.description}</p>
                 )}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-lg text-primary">₹{service.basePrice}/{service.priceType.replace('_', ' ')}</span>
+                  <span className="font-semibold text-lg text-primary">रू {service.basePrice}/{service.priceType.replace('_', ' ')}</span>
                   {service.rating && (
                     <div className="flex items-center gap-1">
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -737,7 +737,7 @@ export function TransportationMovingServicesForm() {
                   </div>
                   <div>
                     <Label htmlFor="insuranceCoverage">Insurance Coverage</Label>
-                    <Input id="insuranceCoverage" value={formData.insuranceCoverage} onChange={(e) => setFormData({ ...formData, insuranceCoverage: e.target.value })} placeholder="e.g., Up to ₹5 lakhs" />
+                    <Input id="insuranceCoverage" value={formData.insuranceCoverage} onChange={(e) => setFormData({ ...formData, insuranceCoverage: e.target.value })} placeholder="e.g., Up to रू 5 lakhs" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -949,9 +949,9 @@ export function TransportationMovingServicesForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold mb-2">Pricing</h3>
-                  <p>Base: ₹{viewingItem.basePrice} / {viewingItem.priceType.replace('_', ' ')}</p>
-                  {viewingItem.pricePerKm && <p>Per KM: ₹{viewingItem.pricePerKm}</p>}
-                  {viewingItem.minimumCharge && <p>Minimum: ₹{viewingItem.minimumCharge}</p>}
+                  <p>Base: रू {viewingItem.basePrice} / {viewingItem.priceType.replace('_', ' ')}</p>
+                  {viewingItem.pricePerKm && <p>Per KM: रू {viewingItem.pricePerKm}</p>}
+                  {viewingItem.minimumCharge && <p>Minimum: रू {viewingItem.minimumCharge}</p>}
                 </div>
                 <div>
                   <h3 className="font-semibold mb-2">Contact</h3>

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -88,6 +89,7 @@ type RestaurantFormData = {
 export default function RestaurantForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -97,9 +99,24 @@ export default function RestaurantForm() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { register, handleSubmit, reset, setValue, watch } = useForm<RestaurantFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["restaurants"],
-    queryFn: async () => { const response = await fetch("/api/admin/restaurants"); if (!response.ok) throw new Error("Failed"); return response.json(); },
+    queryKey: ["restaurants", userId || null, role || null],
+    queryFn: async () => {
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/restaurants${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Failed");
+      return response.json();
+    },
   });
 
   const createMutation = useMutation({
@@ -137,7 +154,15 @@ export default function RestaurantForm() {
   const uploadMultipleFiles = async (files: File[]): Promise<string[]> => { const fd = new FormData(); files.forEach((f) => fd.append("files", f)); const res = await fetch("/api/upload-multiple", { method: "POST", body: fd }); if (!res.ok) throw new Error("Upload failed"); const data = await res.json(); return Array.isArray(data?.files) ? data.files.map((x: any) => x?.url).filter((u: any) => typeof u === "string") : []; };
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => { const files = Array.from(e.target.files || []); if (!files.length) return; setUploadingImages(true); setImageError(null); try { const urls = await uploadMultipleFiles(files); setImages((prev) => [...prev, ...urls]); } catch (err: any) { setImageError(err.message); } finally { setUploadingImages(false); if (fileInputRef.current) fileInputRef.current.value = ""; } };
   const removeImage = (index: number) => setImages((prev) => prev.filter((_, i) => i !== index));
-  const onSubmit = (data: RestaurantFormData) => { const payload = { ...data, images }; editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload); };
+  const onSubmit = (data: RestaurantFormData) => {
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload);
+  };
 
   return (
     <div className="container mx-auto py-6">
@@ -146,7 +171,7 @@ export default function RestaurantForm() {
         {services.map((service: any) => (
           <Card key={service.id} className="hover:shadow-md">
             <CardHeader><div className="flex justify-between"><div><CardTitle className="text-lg">{service.title}</CardTitle><p className="text-sm text-muted-foreground">{service.businessName}</p></div>{service.isFeatured && <Badge>Featured</Badge>}</div></CardHeader>
-            <CardContent><div className="space-y-2 text-sm"><p><strong>Type:</strong> {service.restaurantType}</p><p><strong>City:</strong> {service.city}</p>{service.averageCost && <p><strong>Avg Cost:</strong> ₹{service.averageCost}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent>
+            <CardContent><div className="space-y-2 text-sm"><p><strong>Type:</strong> {service.restaurantType}</p><p><strong>City:</strong> {service.city}</p>{service.averageCost && <p><strong>Avg Cost:</strong> रू {service.averageCost}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent>
           </Card>))}
       </div>
       {services.length === 0 && !isLoading && <div className="text-center py-12">No restaurants found</div>}
@@ -163,7 +188,7 @@ export default function RestaurantForm() {
             <div><Label>City *</Label><Input {...register("city", { required: true })} /></div>
             <div><Label>State</Label><Input {...register("state")} /></div>
             <div><Label>Full Address</Label><Input {...register("fullAddress")} /></div>
-            <div><Label>Average Cost (₹)</Label><Input type="number" {...register("averageCost")} /></div>
+            <div><Label>Average Cost (रू )</Label><Input type="number" {...register("averageCost")} /></div>
             <div><Label>Seating Capacity</Label><Input type="number" {...register("seatingCapacity")} /></div>
             <div><Label>Opening Time</Label><Input type="time" {...register("openingTime")} /></div>
             <div><Label>Closing Time</Label><Input type="time" {...register("closingTime")} /></div>

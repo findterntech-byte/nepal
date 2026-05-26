@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -89,6 +90,7 @@ type CourierCargoFormData = {
 export default function CourierCargoForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -99,10 +101,21 @@ export default function CourierCargoForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<CourierCargoFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["courier-cargo"],
+    queryKey: ["courier-cargo", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/courier-cargo");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/courier-cargo${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -202,7 +215,15 @@ export default function CourierCargoForm() {
   };
 
   const removeImage = (index: number) => setImages((prev) => prev.filter((_, i) => i !== index));
-  const onSubmit = (data: CourierCargoFormData) => { const payload = { ...data, images }; editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload); };
+  const onSubmit = (data: CourierCargoFormData) => {
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    editingService ? updateMutation.mutate({ id: editingService.id, data: payload }) : createMutation.mutate(payload);
+  };
 
   return (
     <div className="container mx-auto py-6">
@@ -224,7 +245,7 @@ export default function CourierCargoForm() {
               <div className="space-y-2 text-sm">
                 <p><strong>Category:</strong> {service.serviceCategory}</p>
                 <p><strong>Location:</strong> {service.city}, {service.state}</p>
-                {service.perKgRate && <p><strong>Rate:</strong> ₹{service.perKgRate}/kg</p>}
+                {service.perKgRate && <p><strong>Rate:</strong> रू {service.perKgRate}/kg</p>}
               </div>
               <div className="flex gap-2 mt-4">
                 <Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4 mr-1" /> View</Button>
@@ -267,8 +288,8 @@ export default function CourierCargoForm() {
               <div><Label htmlFor="city">City *</Label><Input id="city" {...register("city", { required: true })} placeholder="City" /></div>
               <div><Label htmlFor="state">State</Label><Input id="state" {...register("state")} placeholder="State" /></div>
               <div><Label htmlFor="fullAddress">Full Address</Label><Input id="fullAddress" {...register("fullAddress")} placeholder="Full Address" /></div>
-              <div><Label htmlFor="perKgRate">Per Kg Rate (₹)</Label><Input id="perKgRate" type="number" {...register("perKgRate")} placeholder="Rate per kg" /></div>
-              <div><Label htmlFor="minimumCharge">Minimum Charge (₹)</Label><Input id="minimumCharge" type="number" {...register("minimumCharge")} placeholder="Minimum Charge" /></div>
+              <div><Label htmlFor="perKgRate">Per Kg Rate (रू )</Label><Input id="perKgRate" type="number" {...register("perKgRate")} placeholder="Rate per kg" /></div>
+              <div><Label htmlFor="minimumCharge">Minimum Charge (रू )</Label><Input id="minimumCharge" type="number" {...register("minimumCharge")} placeholder="Minimum Charge" /></div>
               <div><Label htmlFor="fleetSize">Fleet Size</Label><Input id="fleetSize" type="number" {...register("fleetSize")} placeholder="Number of vehicles" /></div>
               <div><Label htmlFor="experienceYears">Experience (Years)</Label><Input id="experienceYears" type="number" {...register("experienceYears")} placeholder="Years of Experience" /></div>
               <div><Label htmlFor="certifications">Certifications</Label><Input id="certifications" {...register("certifications")} placeholder="ISO, etc." /></div>
@@ -338,7 +359,7 @@ export default function CourierCargoForm() {
               <div><strong>Business:</strong> {viewingService?.businessName}</div>
               <div><strong>Contact:</strong> {viewingService?.contactPhone}</div>
               <div><strong>Location:</strong> {viewingService?.city}, {viewingService?.state}</div>
-              <div><strong>Rate:</strong> ₹{viewingService?.perKgRate || "N/A"}/kg</div>
+              <div><strong>Rate:</strong> रू {viewingService?.perKgRate || "N/A"}/kg</div>
               <div><strong>Experience:</strong> {viewingService?.experienceYears || "N/A"} years</div>
             </div>
             {viewingService?.description && (<div><strong>Description:</strong><p className="mt-1">{viewingService.description}</p></div>)}

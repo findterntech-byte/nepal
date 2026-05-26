@@ -45,6 +45,14 @@ import LegalBankingServicesPage from "@/pages/legal-banking-services";
 import InsuranceServicesPage from "@/pages/insurance-services";
 import NGOSocialServicesPage from "@/pages/ngo-social-services";
 import AgentsAgenciesPage from "@/pages/agents-agencies";
+import AccountingAuditServicesPage from "@/pages/accounting-audit-services";
+import InvestmentOpportunitiesPage from "@/pages/investment-opportunities";
+import MicrofinanceCooperativePage from "@/pages/microfinance-cooperative";
+import GroceryDailyEssentialsPage from "@/pages/grocery-daily-essentials";
+import CleaningPestControlPage from "@/pages/cleaning-pest-control";
+
+import GroceryDailyEssentialsForm from "@/components/grocery-daily-essentials-form";
+import CleaningPestControlForm from "@/components/cleaning-pest-control-form";
 
 import ToursTravelsPage from "@/pages/tours-travels";
 import HotelsResortsPage from "@/pages/hotels-resorts";
@@ -54,6 +62,7 @@ import AgricultureSeedsFarmingPage from "@/pages/agriculture-seeds-farming";
 import SalesMarketingPage from "@/pages/sales-marketing";
 import CourierCargoPage from "@/pages/courier-cargo";
 import NewsMediaPage from "@/pages/news-media";
+import GraphicDesignWebDevelopmentDigitalMarketingPage from "@/pages/graphic-design-web-development-digital-marketing";
 
 import ToursTravelsForm from "@/components/tours-travels-form";
 import HotelsResortsForm from "@/components/hotels-resorts-form";
@@ -63,6 +72,7 @@ import AgricultureSeedsFarmingForm from "@/components/agriculture-seeds-farming-
 import SalesMarketingForm from "@/components/sales-marketing-form";
 import CourierCargoForm from "@/components/courier-cargo-form";
 import NewsMediaForm from "@/components/news-media-form";
+import GraphicDesignWebDevelopmentDigitalMarketingForm from "@/components/graphic-design-web-development-digital-marketing-form";
 
 import FloatingContact from "@/components/floating-contact";
 
@@ -126,6 +136,11 @@ function Router() {
       <Route path="/insurance-services" component={InsuranceServicesPage} />
       <Route path="/ngo-social-services" component={NGOSocialServicesPage} />
       <Route path="/agents-agencies" component={AgentsAgenciesPage} />
+      <Route path="/accounting-audit-services" component={AccountingAuditServicesPage} />
+      <Route path="/investment-opportunities" component={InvestmentOpportunitiesPage} />
+      <Route path="/microfinance-cooperative" component={MicrofinanceCooperativePage} />
+      <Route path="/grocery-daily-essentials" component={GroceryDailyEssentialsPage} />
+      <Route path="/cleaning-pest-control" component={CleaningPestControlPage} />
 
       <Route path="/tours-travels" component={ToursTravelsPage} />
       <Route path="/hotels-resorts" component={HotelsResortsPage} />
@@ -135,6 +150,7 @@ function Router() {
       <Route path="/sales-marketing" component={SalesMarketingPage} />
       <Route path="/courier-cargo" component={CourierCargoPage} />
       <Route path="/news-media" component={NewsMediaPage} />
+      <Route path="/graphic-design-web-development-digital-marketing" component={GraphicDesignWebDevelopmentDigitalMarketingPage} />
 
       <Route path="/admin/tours-travels" component={ToursTravelsForm} />
       <Route path="/admin/hotels-resorts" component={HotelsResortsForm} />
@@ -144,6 +160,9 @@ function Router() {
       <Route path="/admin/sales-marketing" component={SalesMarketingForm} />
       <Route path="/admin/courier-cargo" component={CourierCargoForm} />
       <Route path="/admin/news-media" component={NewsMediaForm} />
+      <Route path="/admin/graphic-design-web-development-digital-marketing" component={GraphicDesignWebDevelopmentDigitalMarketingForm} />
+      <Route path="/admin/grocery-daily-essentials" component={GroceryDailyEssentialsForm} />
+      <Route path="/admin/cleaning-pest-control" component={CleaningPestControlForm} />
 
       <Route path="/:categorySlug/:id" component={CategoryItemDetail} /> {/* Generic dynamic route for all categories */}
       

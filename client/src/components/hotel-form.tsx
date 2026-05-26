@@ -110,7 +110,7 @@ export default function HotelForm() {
     <div className="container mx-auto py-6">
       <div className="flex justify-between items-center mb-6"><h1 className="text-2xl font-bold">Hotels</h1><Button onClick={() => setIsDialogOpen(true)}><Plus className="mr-2 h-4 w-4" /> Add New</Button></div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {services.map((service: any) => (<Card key={service.id}><CardHeader><div className="flex justify-between"><div><CardTitle className="text-lg">{service.title}</CardTitle><p className="text-sm text-muted-foreground">{service.businessName}</p></div>{service.starRating && <Badge>{service.starRating}★</Badge>}</div></CardHeader><CardContent><div className="space-y-2 text-sm"><p><strong>Type:</strong> {service.hotelType}</p><p><strong>City:</strong> {service.city}</p>{service.pricePerNight && <p><strong>Price:</strong> ₹{service.pricePerNight}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent></Card>))}
+        {services.map((service: any) => (<Card key={service.id}><CardHeader><div className="flex justify-between"><div><CardTitle className="text-lg">{service.title}</CardTitle><p className="text-sm text-muted-foreground">{service.businessName}</p></div>{service.starRating && <Badge>{service.starRating}★</Badge>}</div></CardHeader><CardContent><div className="space-y-2 text-sm"><p><strong>Type:</strong> {service.hotelType}</p><p><strong>City:</strong> {service.city}</p>{service.pricePerNight && <p><strong>Price:</strong> रू {service.pricePerNight}</p>}</div><div className="flex gap-2 mt-4"><Button size="sm" variant="outline" onClick={() => handleView(service)}><Eye className="h-4 w-4" /></Button><Button size="sm" variant="outline" onClick={() => handleEdit(service)}><Edit className="h-4 w-4" /></Button><Button size="sm" variant="destructive" onClick={() => handleDelete(service.id)}><Trash2 className="h-4 w-4" /></Button></div></CardContent></Card>))}
       </div>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}><DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto"><DialogHeader><DialogTitle>{editingService ? "Edit" : "Add"} Hotel</DialogTitle></DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -125,7 +125,7 @@ export default function HotelForm() {
             <div><Label>Website</Label><Input {...register("website")} /></div>
             <div><Label>City *</Label><Input {...register("city", { required: true })} /></div>
             <div><Label>State</Label><Input {...register("state")} /></div>
-            <div><Label>Price Per Night (₹)</Label><Input type="number" {...register("pricePerNight")} /></div>
+            <div><Label>Price Per Night (रू )</Label><Input type="number" {...register("pricePerNight")} /></div>
             <div><Label>Number of Rooms</Label><Input type="number" {...register("numberOfRooms")} /></div>
             <div><Label>Check-In Time</Label><Input type="time" {...register("checkInTime")} /></div>
             <div><Label>Check-Out Time</Label><Input type="time" {...register("checkOutTime")} /></div>

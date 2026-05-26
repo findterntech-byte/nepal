@@ -298,17 +298,17 @@ export default function SkillTrainingCertificationForm({ onSuccess, editingTrain
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="totalFee">Total Fee (₹) *</Label>
+              <Label htmlFor="totalFee">Total Fee (रू ) *</Label>
               <Input id="totalFee" type="number" {...register("totalFee", { required: true, valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="registrationFee">Registration Fee (₹)</Label>
+              <Label htmlFor="registrationFee">Registration Fee (रू )</Label>
               <Input id="registrationFee" type="number" {...register("registrationFee", { valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="examFee">Exam Fee (₹)</Label>
+              <Label htmlFor="examFee">Exam Fee (रू )</Label>
               <Input id="examFee" type="number" {...register("examFee", { valueAsNumber: true })} />
             </div>
           </div>
@@ -363,7 +363,7 @@ export default function SkillTrainingCertificationForm({ onSuccess, editingTrain
           </div>
 
           <div>
-            <Label htmlFor="averageSalaryPackage">Average Salary Package (₹)</Label>
+            <Label htmlFor="averageSalaryPackage">Average Salary Package (रू )</Label>
             <Input id="averageSalaryPackage" type="number" {...register("averageSalaryPackage", { valueAsNumber: true })} />
           </div>
         </CardContent>

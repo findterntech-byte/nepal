@@ -67,7 +67,7 @@ function CategorySpecificFields({ service }: { service: ServiceData }) {
       { label: "Instructor Name", key: "instructorName" },
       { label: "Class Type", key: "classType" },
       { label: "Class Category", key: "classCategory" },
-      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `₹${v}` },
+      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `रू ${v}` },
       { label: "Sessions Per Week", key: "sessionsPerWeek" },
       { label: "Session Duration", key: "sessionDurationMinutes", format: (v) => `${v} minutes` },
       { label: "Equipment Provided", key: "equipmentProvided", format: (v) => v ? "Yes" : "No" },
@@ -80,7 +80,7 @@ function CategorySpecificFields({ service }: { service: ServiceData }) {
       { label: "Instructor Name", key: "instructorName" },
       { label: "Language", key: "language" },
       { label: "Level", key: "proficiencyLevel" },
-      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `₹${v}` },
+      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `रू ${v}` },
       { label: "Sessions Per Week", key: "sessionsPerWeek" },
       { label: "Class Duration", key: "sessionDurationMinutes", format: (v) => `${v} minutes` },
       { label: "Batch Size", key: "batchSize" },
@@ -91,7 +91,7 @@ function CategorySpecificFields({ service }: { service: ServiceData }) {
       { label: "Instructor Name", key: "instructorName" },
       { label: "Subject", key: "subject" },
       { label: "Class Level", key: "classLevel" },
-      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `₹${v}` },
+      { label: "Fee Per Month", key: "feePerMonth", format: (v) => `रू ${v}` },
       { label: "Sessions Per Week", key: "sessionsPerWeek" },
       { label: "Class Duration", key: "sessionDurationMinutes", format: (v) => `${v} minutes` },
       { label: "Batch Size", key: "batchSize" },
@@ -103,7 +103,7 @@ function CategorySpecificFields({ service }: { service: ServiceData }) {
       { label: "Specialist", key: "specialistName" },
       { label: "Qualifications", key: "qualifications" },
       { label: "Experience", key: "experienceYears", format: (v) => `${v} years` },
-      { label: "Consultation Fee", key: "consultationFee", format: (v) => `₹${v}` },
+      { label: "Consultation Fee", key: "consultationFee", format: (v) => `रू ${v}` },
       { label: "Available Days", key: "availableDays" },
       { label: "Appointment Duration", key: "appointmentDurationMinutes", format: (v) => `${v} minutes` },
     ],
@@ -111,7 +111,7 @@ function CategorySpecificFields({ service }: { service: ServiceData }) {
       { label: "Trainer Name", key: "trainerName" },
       { label: "Skill Type", key: "skillType" },
       { label: "Course Duration", key: "courseDurationDays", format: (v) => `${v} days` },
-      { label: "Fee", key: "courseFee", format: (v) => `₹${v}` },
+      { label: "Fee", key: "courseFee", format: (v) => `रू ${v}` },
       { label: "Batch Size", key: "batchSize" },
       { label: "Certification", key: "certificationProvided", format: (v) => v ? "Yes" : "No" },
       { label: "Job Placement", key: "jobPlacementAssistance", format: (v) => v ? "Available" : "Not Available" },
@@ -225,7 +225,7 @@ function KeyInfoRow({ service }: { service: ServiceData }) {
     if (v === null || v === undefined || v === "") return "N/A";
     if (k.toLowerCase().includes("price") || k.toLowerCase().includes("fee") || k === "price") {
       const num = Number(v);
-      if (!isNaN(num)) return `₹${num.toLocaleString("en-IN")}`;
+      if (!isNaN(num)) return `रू ${num.toLocaleString("en-IN")}`;
     }
     if (k.toLowerCase().includes("date") || k.toLowerCase().includes("at")) {
       try {
@@ -711,7 +711,7 @@ export default function ServiceDetails() {
                 {service.price && (
                   <div className="flex items-baseline gap-2 mb-6 pb-6 border-b border-gray-200">
                     <span className="text-4xl font-bold text-[#0B8457]">
-                      ₹{service.price?.toLocaleString("en-IN")}
+                      रू {service.price?.toLocaleString("en-IN")}
                     </span>
                     {service.priceType && (
                       <span className="text-gray-600">/{service.priceType}</span>

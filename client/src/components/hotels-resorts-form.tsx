@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -84,6 +85,7 @@ type HotelsResortsFormData = {
 export default function HotelsResortsForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -94,10 +96,21 @@ export default function HotelsResortsForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<HotelsResortsFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["hotels-resorts"],
+    queryKey: ["hotels-resorts", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/hotels-resorts");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/hotels-resorts${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -233,7 +246,13 @@ export default function HotelsResortsForm() {
   };
 
   const onSubmit = (data: HotelsResortsFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    
     if (editingService) {
       updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
@@ -271,7 +290,7 @@ export default function HotelsResortsForm() {
                 <p className="text-sm"><strong>Location:</strong> {service.city}, {service.state}</p>
                 <p className="text-sm"><strong>Contact:</strong> {service.contactPhone}</p>
                 {service.pricePerNight && (
-                  <p className="text-sm"><strong>Price:</strong> ₹{service.pricePerNight}/night</p>
+                  <p className="text-sm"><strong>Price:</strong> रू {service.pricePerNight}/night</p>
                 )}
               </div>
               <div className="flex gap-2 mt-4">
@@ -380,7 +399,7 @@ export default function HotelsResortsForm() {
                 <Input id="areaName" {...register("areaName")} placeholder="Area Name" />
               </div>
               <div>
-                <Label htmlFor="pricePerNight">Price Per Night (₹)</Label>
+                <Label htmlFor="pricePerNight">Price Per Night (रू )</Label>
                 <Input id="pricePerNight" type="number" {...register("pricePerNight")} placeholder="Starting Price" />
               </div>
               <div>
@@ -532,7 +551,7 @@ export default function HotelsResortsForm() {
               <div><strong>Phone:</strong> {viewingService?.contactPhone}</div>
               <div><strong>Email:</strong> {viewingService?.contactEmail || "N/A"}</div>
               <div><strong>Location:</strong> {viewingService?.city}, {viewingService?.state}</div>
-              <div><strong>Price:</strong> ₹{viewingService?.pricePerNight || "N/A"}/night</div>
+              <div><strong>Price:</strong> रू {viewingService?.pricePerNight || "N/A"}/night</div>
               <div><strong>Rooms:</strong> {viewingService?.numberOfRooms || "N/A"}</div>
             </div>
             {viewingService?.description && (

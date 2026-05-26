@@ -588,22 +588,22 @@ export default function VehicleLicenseClassesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-4 gap-4">
                   <div>
-                    <Label htmlFor="courseFee">Course Fee (₹) *</Label>
+                    <Label htmlFor="courseFee">Course Fee (रू ) *</Label>
                     <Input id="courseFee" type="number" {...register("courseFee", { required: true, valueAsNumber: true })} />
                   </div>
 
                   <div>
-                    <Label htmlFor="registrationFee">Registration Fee (₹)</Label>
+                    <Label htmlFor="registrationFee">Registration Fee (रू )</Label>
                     <Input id="registrationFee" type="number" {...register("registrationFee", { valueAsNumber: true })} />
                   </div>
 
                   <div>
-                    <Label htmlFor="testFee">Test Fee (₹)</Label>
+                    <Label htmlFor="testFee">Test Fee (रू )</Label>
                     <Input id="testFee" type="number" {...register("testFee", { valueAsNumber: true })} />
                   </div>
 
                   <div>
-                    <Label htmlFor="totalFee">Total Fee (₹)</Label>
+                    <Label htmlFor="totalFee">Total Fee (रू )</Label>
                     <Input id="totalFee" type="number" {...register("totalFee", { valueAsNumber: true })} />
                   </div>
 
@@ -1016,7 +1016,7 @@ export default function VehicleLicenseClassesForm() {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold mb-2">Course Fee</h3>
-                  <p className="text-lg font-bold text-primary">₹{viewingClass.courseFee}</p>
+                  <p className="text-lg font-bold text-primary">रू {viewingClass.courseFee}</p>
                 </div>
 
                 <div>
@@ -1077,7 +1077,7 @@ export default function VehicleLicenseClassesForm() {
               <div className="space-y-3">
                 {licenseClass.description && <p className="text-sm text-muted-foreground line-clamp-2">{licenseClass.description}</p>}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-lg text-primary">₹{licenseClass.courseFee}</span>
+                  <span className="font-semibold text-lg text-primary">रू {licenseClass.courseFee}</span>
                   <Badge variant={licenseClass.isActive ? "default" : "secondary"}>
                     {licenseClass.availabilityStatus}
                   </Badge>

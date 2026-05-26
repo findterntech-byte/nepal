@@ -246,17 +246,17 @@ export default function AcademiesMusicArtsSportsForm({ onSuccess, editingAcademy
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="feePerMonth">Fee Per Month (₹) *</Label>
+              <Label htmlFor="feePerMonth">Fee Per Month (रू ) *</Label>
               <Input id="feePerMonth" type="number" {...register("feePerMonth", { required: true, valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="admissionFee">Admission Fee (₹)</Label>
+              <Label htmlFor="admissionFee">Admission Fee (रू )</Label>
               <Input id="admissionFee" type="number" {...register("admissionFee", { valueAsNumber: true })} />
             </div>
 
             <div>
-              <Label htmlFor="instrumentRentalFee">Instrument/Equipment Rental (₹)</Label>
+              <Label htmlFor="instrumentRentalFee">Instrument/Equipment Rental (रू )</Label>
               <Input id="instrumentRentalFee" type="number" {...register("instrumentRentalFee", { valueAsNumber: true })} />
             </div>
           </div>

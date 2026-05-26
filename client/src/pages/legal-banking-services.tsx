@@ -137,7 +137,7 @@ export default function LegalBankingServicesPage() {
                     </div>
                     {item.firmName && <div className="text-xs text-muted-foreground">Firm: {item.firmName}</div>}
                     {item.specialization && <div className="text-xs text-muted-foreground line-clamp-1">Specialization: {item.specialization}</div>}
-                    {item.consultationFee && <div className="text-xs">Consultation: ₹{item.consultationFee}</div>}
+                    {item.consultationFee && <div className="text-xs">Consultation: रू {item.consultationFee}</div>}
                     {item.city && <div className="text-xs text-muted-foreground">📍 {item.city}</div>}
                     {item.contactPhone && <div className="text-xs">📞 {item.contactPhone}</div>}
                   </CardContent>

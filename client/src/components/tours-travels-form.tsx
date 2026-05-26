@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useUser } from "@/hooks/use-user";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -82,6 +83,7 @@ type ToursTravelsFormData = {
 export default function ToursTravelsForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<any>(null);
   const [viewingService, setViewingService] = useState<any>(null);
@@ -92,10 +94,21 @@ export default function ToursTravelsForm() {
 
   const { register, handleSubmit, reset, setValue, watch } = useForm<ToursTravelsFormData>();
 
+  const getStoredUser = () => {
+    try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+  };
+
+  const userId = user?.id || getStoredUser()?.id;
+  const role = user?.role || getStoredUser()?.role;
+
   const { data: services = [], isLoading } = useQuery({
-    queryKey: ["tours-travels"],
+    queryKey: ["tours-travels", userId || null, role || null],
     queryFn: async () => {
-      const response = await fetch("/api/admin/tours-travels");
+      const query = new URLSearchParams();
+      if (userId) query.set('userId', userId);
+      if (role) query.set('role', role);
+      const url = `/api/admin/tours-travels${query.toString() ? `?${query.toString()}` : ''}`;
+      const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to fetch services");
       return response.json();
     },
@@ -231,7 +244,13 @@ export default function ToursTravelsForm() {
   };
 
   const onSubmit = (data: ToursTravelsFormData) => {
-    const payload = { ...data, images };
+    const payload: any = { ...data, images };
+    const stored = (() => {
+      try { return JSON.parse(localStorage.getItem('user') || 'null'); } catch { return null; }
+    })();
+    payload.userId = payload.userId || user?.id || stored?.id;
+    payload.role = payload.role || user?.role || stored?.role;
+    
     if (editingService) {
       updateMutation.mutate({ id: editingService.id, data: payload });
     } else {
@@ -266,7 +285,7 @@ export default function ToursTravelsForm() {
                 <p className="text-sm"><strong>Location:</strong> {service.city}, {service.state}</p>
                 <p className="text-sm"><strong>Contact:</strong> {service.contactPhone}</p>
                 {service.startingPrice && (
-                  <p className="text-sm"><strong>Starting Price:</strong> ₹{service.startingPrice}</p>
+                  <p className="text-sm"><strong>Starting Price:</strong> रू {service.startingPrice}</p>
                 )}
               </div>
               <div className="flex gap-2 mt-4">
@@ -360,11 +379,11 @@ export default function ToursTravelsForm() {
                 <Input id="fullAddress" {...register("fullAddress")} placeholder="Full Address" />
               </div>
               <div>
-                <Label htmlFor="startingPrice">Starting Price (₹)</Label>
+                <Label htmlFor="startingPrice">Starting Price (रू )</Label>
                 <Input id="startingPrice" type="number" {...register("startingPrice")} placeholder="Starting Price" />
               </div>
               <div>
-                <Label htmlFor="maxPrice">Max Price (₹)</Label>
+                <Label htmlFor="maxPrice">Max Price (रू )</Label>
                 <Input id="maxPrice" type="number" {...register("maxPrice")} placeholder="Maximum Price" />
               </div>
               <div>
@@ -486,7 +505,7 @@ export default function ToursTravelsForm() {
               <div><strong>Phone:</strong> {viewingService?.contactPhone}</div>
               <div><strong>Email:</strong> {viewingService?.contactEmail || "N/A"}</div>
               <div><strong>City:</strong> {viewingService?.city}, {viewingService?.state}</div>
-              <div><strong>Starting Price:</strong> ₹{viewingService?.startingPrice || "N/A"}</div>
+              <div><strong>Starting Price:</strong> रू {viewingService?.startingPrice || "N/A"}</div>
               <div><strong>Experience:</strong> {viewingService?.experienceYears || "N/A"} years</div>
             </div>
             {viewingService?.description && (

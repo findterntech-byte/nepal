@@ -90,7 +90,7 @@ export default function SearchPage() {
                                 <h3 className="font-semibold text-gray-900 line-clamp-2 mb-1">{title}</h3>
                                 {price && (
                                   <p className="text-lg font-bold text-primary mb-1">
-                                    {typeof price === 'number' ? `₹${price.toLocaleString('en-IN')}` : price}
+                                    {typeof price === 'number' ? `रू ${price.toLocaleString('en-IN')}` : price}
                                   </p>
                                 )}
                                 {location && (

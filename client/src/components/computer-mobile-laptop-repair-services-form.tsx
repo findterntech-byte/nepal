@@ -280,7 +280,7 @@ export default function  ComputerMobileLaptopRepairServicesForm() {
                             {service.pickupDeliveryService && <Badge className="bg-orange-600">Pickup/Delivery</Badge>}
                           </div>
                           <p className="text-sm text-muted-foreground mt-2">
-                            Base Charge: ₹{Number(service.baseServiceCharge).toLocaleString()}
+                            Base Charge: रू {Number(service.baseServiceCharge).toLocaleString()}
                             {service.freeInspection && <span className="ml-2 text-green-600 font-semibold">Free Inspection</span>}
                           </p>
                           {service.city && <p className="text-sm text-muted-foreground">{service.city}</p>}
@@ -390,12 +390,12 @@ export default function  ComputerMobileLaptopRepairServicesForm() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="baseServiceCharge">Base Service Charge (₹) *</Label>
+                    <Label htmlFor="baseServiceCharge">Base Service Charge (रू ) *</Label>
                     <Input id="baseServiceCharge" type="number" {...register("baseServiceCharge", { required: true, valueAsNumber: true })} />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="inspectionCharge">Inspection Charge (₹)</Label>
+                    <Label htmlFor="inspectionCharge">Inspection Charge (रू )</Label>
                     <Input id="inspectionCharge" type="number" {...register("inspectionCharge", { valueAsNumber: true })} />
                   </div>
 
@@ -671,7 +671,7 @@ export default function  ComputerMobileLaptopRepairServicesForm() {
                 </div>
                 <div>
                   <p className="text-sm font-medium">Base Charge</p>
-                  <p className="text-sm text-muted-foreground">₹{Number(viewingService.baseServiceCharge).toLocaleString()}</p>
+                  <p className="text-sm text-muted-foreground">रू {Number(viewingService.baseServiceCharge).toLocaleString()}</p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Contact</p>

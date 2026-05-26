@@ -183,7 +183,7 @@ export default function ToursTravelsPage() {
                     <p><strong>Category:</strong> {service.serviceCategory}</p>
                     <p><strong>Location:</strong> {service.city}, {service.state}</p>
                     {service.startingPrice && (
-                      <p><strong>Starting from:</strong> ₹{service.startingPrice}</p>
+                      <p><strong>Starting from:</strong> रू {service.startingPrice}</p>
                     )}
                     {service.experienceYears && (
                       <p><strong>Experience:</strong> {service.experienceYears} years</p>
