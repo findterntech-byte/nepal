@@ -560,9 +560,9 @@ export default function Home() {
         const categoriesRes = await fetch('/api/admin/categories');
         if (!categoriesRes.ok) return {};
         const allCategories = await categoriesRes.json();
-        
+
         const grouped: Record<string, any> = {};
-        
+
         // Map subcategory names/slugs to their API table endpoints
         const subcategoryToTable: Record<string, string> = {
           // Education
@@ -652,21 +652,21 @@ export default function Home() {
           'saree-clothing',
           'agents-agencies',
         ]);
-        
+
         // For each category, try to fetch products
         for (const category of allCategories) {
           if (!category.subcategories || category.subcategories.length === 0) continue;
-          
+
           for (const subcategory of category.subcategories) {
             if (!subcategory.isActive) continue;
-            
+
             const subSlug = toSlug(subcategory.slug || subcategory.name || '');
             const tableName = subcategoryToTable[subSlug] || subSlug;
             const apiEndpoint = tableName === 'furniture-interior-decor' ? 'furniture-decor' : tableName;
             let products: any[] = [];
 
             if (!tableName || !allowedApiTables.has(tableName)) continue;
-            
+
             try {
               // Try to fetch from the mapped table endpoint
               const res = await fetch(`/api/${encodeURIComponent(apiEndpoint)}?limit=10`);
@@ -686,18 +686,18 @@ export default function Home() {
             } catch (err) {
               console.error(`Error fetching products from /api/${tableName}:`, err);
             }
-            
+
             if (products.length > 0) {
               const key = `${category.id}__${subcategory.id}`;
-              grouped[key] = { 
-                category, 
-                subcategory, 
-                products: products.slice(0, 4) 
+              grouped[key] = {
+                category,
+                subcategory,
+                products: products.slice(0, 4)
               };
             }
           }
         }
-        
+
         return grouped;
       } catch (err) {
         console.error('Error fetching category products:', err);
@@ -894,7 +894,7 @@ export default function Home() {
       // Normalize images field - handle both string and array formats
       return data.map((item: any) => ({
         ...item,
-        images: typeof item.images === 'string' 
+        images: typeof item.images === 'string'
           ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
           : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
       }));
@@ -912,7 +912,7 @@ export default function Home() {
       // Normalize images field
       return data.map((item: any) => ({
         ...item,
-        images: typeof item.images === 'string' 
+        images: typeof item.images === 'string'
           ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
           : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
       }));
@@ -930,7 +930,7 @@ export default function Home() {
       // Normalize images field
       return data.map((item: any) => ({
         ...item,
-        images: typeof item.images === 'string' 
+        images: typeof item.images === 'string'
           ? (() => { try { const p = JSON.parse(item.images); return Array.isArray(p) ? p : [item.images]; } catch { return [item.images]; } })()
           : Array.isArray(item.images) ? item.images : item.imageUrl ? [item.imageUrl] : []
       }));
@@ -974,55 +974,53 @@ export default function Home() {
       {/* Category Navigation - Clean & Luxury with Animations */}
       <section className="container mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl border border-gray-200/60 shadow-sm overflow-hidden">
-            <div className="relative">
-              <div className="overflow-x-auto scrollbar-hide">
-                <div className="flex items-center gap-2 px-6 py-4 min-w-max">
-              {categories.map((category: any, index: number) => {
-                const Icon = resolveIconForCategory(category);
-                const isActive = activeCategory === category.id;
-                return (
-                  <button
-                    key={category.id}
-                    onClick={() => setActiveCategory(isActive ? "" : category.id)}
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                    className={`flex flex-col items-center justify-center px-8 py-4 min-w-[140px] rounded-xl transition-all duration-500 animate-fade-in-up ${
-                      isActive
+          <div className="relative">
+            <div className="overflow-x-auto scrollbar-hide">
+              <div className="flex items-center gap-2 px-6 py-4 min-w-max">
+                {categories.map((category: any, index: number) => {
+                  const Icon = resolveIconForCategory(category);
+                  const isActive = activeCategory === category.id;
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveCategory(isActive ? "" : category.id)}
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                      className={`flex flex-col items-center justify-center px-8 py-4 min-w-[140px] rounded-xl transition-all duration-500 animate-fade-in-up ${isActive
                         ? 'bg-gradient-to-br from-[#0B8457] to-[#059669] text-white shadow-2xl scale-110 -translate-y-1'
                         : 'bg-gray-50/80 hover:bg-gray-100 text-gray-700 hover:shadow-lg hover:scale-105 hover:-translate-y-0.5'
-                    }`}
-                  >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 transition-all duration-500 ${
-                      isActive ? 'bg-white/20 rotate-6 scale-110' : 'bg-white group-hover:rotate-3'
-                    }`}>
-                      {Icon ? (
-                        <Icon className={`w-6 h-6 transition-all duration-500 ${isActive ? 'text-white animate-bounce-slow' : 'text-[#0B8457]'}`} />
-                      ) : (
-                        <DefaultIcon className={`w-6 h-6 ${isActive ? 'bg-white/20' : ''}`} />
-                      )}
-                    </div>
-                    <span className="text-xs font-semibold text-center leading-tight transition-all duration-300">
-                      {category.name}
-                    </span>
-                  </button>
-                );
-              })}
-                  {/* Static Skilled Labour tile to match other category tiles */}
-                  <button
-                    key="skilled-labour"
-                    onClick={() => setLocation('/skilled-labour')}
-                    style={{ animationDelay: `${categories.length * 0.05}s` }}
-                    className={`flex flex-col items-center justify-center px-8 py-4 min-w-[140px] rounded-xl transition-all duration-500 animate-fade-in-up bg-gray-50/80 hover:bg-gray-100 text-gray-700 hover:shadow-lg hover:scale-105 hover:-translate-y-0.5`}
-                  >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 transition-all duration-500 bg-white group-hover:rotate-3`}>
-                      <Briefcase className={`w-6 h-6 text-[#0B8457]`} />
-                    </div>
-                    <span className="text-xs font-semibold text-center leading-tight transition-all duration-300">
-                      Skilled Labour
-                    </span>
-                  </button>
-                </div>
+                        }`}
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 transition-all duration-500 ${isActive ? 'bg-white/20 rotate-6 scale-110' : 'bg-white group-hover:rotate-3'
+                        }`}>
+                        {Icon ? (
+                          <Icon className={`w-6 h-6 transition-all duration-500 ${isActive ? 'text-white animate-bounce-slow' : 'text-[#0B8457]'}`} />
+                        ) : (
+                          <DefaultIcon className={`w-6 h-6 ${isActive ? 'bg-white/20' : ''}`} />
+                        )}
+                      </div>
+                      <span className="text-xs font-semibold text-center leading-tight transition-all duration-300">
+                        {category.name}
+                      </span>
+                    </button>
+                  );
+                })}
+                {/* Static Skilled Labour tile to match other category tiles */}
+                <button
+                  key="skilled-labour"
+                  onClick={() => setLocation('/skilled-labour')}
+                  style={{ animationDelay: `${categories.length * 0.05}s` }}
+                  className={`flex flex-col items-center justify-center px-8 py-4 min-w-[140px] rounded-xl transition-all duration-500 animate-fade-in-up bg-gray-50/80 hover:bg-gray-100 text-gray-700 hover:shadow-lg hover:scale-105 hover:-translate-y-0.5`}
+                >
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-2 transition-all duration-500 bg-white group-hover:rotate-3`}>
+                    <Briefcase className={`w-6 h-6 text-[#0B8457]`} />
+                  </div>
+                  <span className="text-xs font-semibold text-center leading-tight transition-all duration-300">
+                    Skilled Labour
+                  </span>
+                </button>
               </div>
             </div>
+          </div>
         </div>
 
         {/* Expanded Category View with Subcategories */}
@@ -1119,9 +1117,9 @@ export default function Home() {
               sliders.map((s: any) => (
                 <CarouselItem key={s.id}>
                   <div className="relative h-[500px] rounded-3xl overflow-hidden bg-black/5">
-                    <img 
-                      src={s.imageUrl} 
-                      alt={s.title || "slider"} 
+                    <img
+                      src={s.imageUrl}
+                      alt={s.title || "slider"}
                       className="w-full h-full  object-center"
                       onError={(e) => {
                         const img = e.target as HTMLImageElement;
@@ -1190,7 +1188,7 @@ export default function Home() {
         </Carousel>
       </section>
 
-   
+
 
       {/* Slider Cards Carousel */}
       <section className="container mx-auto px-4 pb-8">
@@ -1204,9 +1202,9 @@ export default function Home() {
                   <div className="flex flex-col rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full">
                     <div className="flex-1 bg-gray-100">
                       {card.imageUrl ? (
-                        <img 
-                          src={card.imageUrl} 
-                          alt={card.title || 'card image'} 
+                        <img
+                          src={card.imageUrl}
+                          alt={card.title || 'card image'}
                           className="w-full h-48 "
                           onError={(e) => {
                             const img = e.target as HTMLImageElement;
@@ -1244,10 +1242,10 @@ export default function Home() {
       </section>
 
       {/* Skilled Labour - Coming Soon Section */}
-    
-             
-       
-       
+
+
+
+
 
       {/* Services Carousel Section */}
       <section className="w-full bg-gradient-to-b from-slate-50 via-white to-slate-50 py-20">
@@ -2097,7 +2095,8 @@ export default function Home() {
 
             {/* Event Decoration Services */}
             {eventDecoration && eventDecoration.length > 0 && (
-              <div className="group">
+
+              < div className="group">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-1.5 h-8 bg-gradient-to-b from-fuchsia-500 to-fuchsia-600 rounded-full"></div>
                   <h3 className="text-3xl font-bold text-gray-900">Event Decoration Services</h3>
@@ -2125,7 +2124,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.serviceType}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-fuchsia-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-fuchsia-600">रू {service.basePrice?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -2180,7 +2179,7 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{service.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{service.category}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-slate-600">रू {service.price?.toLocaleString('en-IN') || 'Contact'}</span>
+                                <span className="text-lg font-bold text-slate-600">रू {service.baseServiceCharge?.toLocaleString('en-IN') || 'Contact'}</span>
                                 <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
                                   {service.rating ? `${service.rating}★` : 'New'}
                                 </div>
@@ -2319,6 +2318,7 @@ export default function Home() {
 
             {/* Car & Bike Rentals */}
             {carBikeRentals && carBikeRentals.length > 0 && (
+
               <div className="group">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-1.5 h-8 bg-gradient-to-b from-blue-500 to-blue-600 rounded-full"></div>
@@ -2349,10 +2349,10 @@ export default function Home() {
                               <h4 className="font-semibold text-sm mb-1.5 line-clamp-2 text-gray-900">{rental.title}</h4>
                               <p className="text-xs text-gray-500 mb-3 line-clamp-1 flex-1">{rental.vehicleType} • {rental.brand} {rental.model}</p>
                               <div className="flex items-center justify-between">
-                                <span className="text-lg font-bold text-blue-600">रू {rental.pricePerDay?.toLocaleString('en-IN') || rental.price?.toLocaleString('en-IN') || 'N/A'}/day</span>
-                                  <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
-                                    {String(rental.driverAvailable || '').includes('driver') ? 'With Driver' : 'Self Drive'}
-                                  </div>
+                                <span className="text-lg font-bold text-blue-600">रू {rental.rentalPricePerDay?.toLocaleString('en-IN') || rental.price?.toLocaleString('en-IN') || 'N/A'}/day</span>
+                                <div className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                                  {String(rental.driverAvailable || '').includes('driver') ? 'With Driver' : 'Self Drive'}
+                                </div>
                               </div>
                             </div>
                           </Link>
@@ -2485,10 +2485,10 @@ export default function Home() {
             )}
           </div>
         </div>
-      </section>
+      </section >
 
       {/* Videos Section */}
-      <section className="container mx-auto px-4 py-16 bg-white">
+      < section className="container mx-auto px-4 py-16 bg-white" >
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#0B8457] to-[#059669] bg-clip-text text-transparent">
             Featured Videos
@@ -2546,13 +2546,13 @@ export default function Home() {
           <CarouselPrevious className="left-4" />
           <CarouselNext className="right-4" />
         </Carousel>
-      </section>
+      </section >
 
-     
+
 
 
       {/* Blog Section */}
-      <section className="container mx-auto px-4 py-16 bg-gradient-to-b from-white to-gray-50">
+      < section className="container mx-auto px-4 py-16 bg-gradient-to-b from-white to-gray-50" >
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
@@ -2694,10 +2694,10 @@ export default function Home() {
             </>
           )}
         </div>
-      </section>
+      </section >
 
       {/* Articles Section */}
-      <section className="container mx-auto px-4 py-16 bg-white">
+      < section className="container mx-auto px-4 py-16 bg-white" >
         <div className="flex justify-between items-center mb-8">
           <div>
             <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
@@ -2783,9 +2783,9 @@ export default function Home() {
             </div>
           </Card>
         </div>
-      </section>
- {/* More Details Section - Why Choose Us */}
-      <section className="container mx-auto px-4 py-16 bg-gradient-to-b from-gray-50 to-white">
+      </section >
+      {/* More Details Section - Why Choose Us */}
+      < section className="container mx-auto px-4 py-16 bg-gradient-to-b from-gray-50 to-white" >
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#0B8457] to-[#059669] bg-clip-text text-transparent">
             Why Choose Jeevika Services?
@@ -2901,7 +2901,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </section >
       <Footer />
 
       {/* Back to Top Button */}
@@ -2912,6 +2912,6 @@ export default function Home() {
       >
         ↑
       </button>
-    </div>
+    </div >
   );
 }

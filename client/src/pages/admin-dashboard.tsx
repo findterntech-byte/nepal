@@ -35,7 +35,49 @@ import {
   Pencil,
   Trash,
   Video,
-  Globe
+  Globe,
+  Building2,
+  Laptop,
+  Smartphone,
+  Shirt,
+  Sofa,
+  Car,
+  BookOpen,
+  Monitor,
+  Sparkles,
+  BookMarked,
+  Dumbbell,
+  Languages,
+  Music,
+  Award,
+  School,
+  Trophy,
+  Brain,
+  Truck,
+  TrendingUp,
+  Utensils,
+  HeartPulse,
+  ShoppingCart,
+  Plane,
+  Activity,
+  Newspaper,
+  Calculator,
+  Coins,
+  Landmark,
+  Coffee,
+  ChefHat,
+  Palette,
+  Code,
+  Megaphone,
+  Stethoscope,
+  Microscope,
+  Bed,
+  Ticket,
+  PawPrint,
+  Leaf,
+  Globe2,
+  GraduationCap,
+  Badge as BadgeIcon
 } from 'lucide-react';
 import {
   Sidebar,
@@ -2460,14 +2502,330 @@ interface Agency {
 }
 
 const iconMap: Record<string, React.ElementType> = {
+  'home': Home,
   'building': Building,
-  'map-pin': MapPin,
-  'briefcase': Building,
+  'building2': Building2,
+  'globe': Globe,
+  'bus': Truck, // Fallback if Bus is not available
   'users': Users,
-  'file-text': FileText,
-  'bar-chart': BarChart3,
-  'settings': Settings,
+  'graduation-cap': GraduationCap,
+  'list': FileText, // FileText as fallback
+  'map': Map,
+  'map-pin': MapPin,
+  'briefcase': Bookmark, // Bookmark as fallback
+  'laptop': Laptop,
+  'smartphone': Smartphone,
+  'shirt': Shirt,
+  'sofa': Sofa,
+  'car': Car,
+  'book-open': BookOpen,
+  'monitor': Monitor,
+  'sparkles': Sparkles,
+  'house': Home,
+  'book-marked': BookMarked,
+  'dumbbell': Dumbbell,
+  'languages': Languages,
+  'music': Music,
+  'award': Award,
+  'school': School,
+  'trophy': Trophy,
+  'globe2': Globe2,
+  'brain': Brain,
+  'truck': Truck,
+  'badge': BadgeIcon,
+  'trending-up': TrendingUp,
+  'utensils': Utensils,
+  'heart-pulse': HeartPulse,
+  'shopping-cart': ShoppingCart,
+  'plane': Plane,
+  'activity': Activity,
+  'newspaper': Newspaper,
+  'calculator': Calculator,
+  'coins': Coins,
+  'landmark': Landmark,
+  'coffee': Coffee,
+  'chef-hat': ChefHat,
+  'palette': Palette,
+  'code': Code,
+  'megaphone': Megaphone,
+  'stethoscope': Stethoscope,
+  'microscope': Microscope,
+  'bed': Bed,
+  'ticket': Ticket,
+  'paw-print': PawPrint,
+  'leaf': Leaf,
 };
+
+// Resolve icon from various possible data values (normalize strings)
+function getIconByName(name?: string): any | null {
+  if (!name || typeof name !== 'string') return null;
+  const raw = name.trim();
+  const candidates = new Set<string>();
+  candidates.add(raw);
+  candidates.add(raw.toLowerCase());
+  candidates.add(raw.replace(/[_\s]+/g, '-').toLowerCase());
+  candidates.add(raw.replace(/[_\-\s]+/g, '').toLowerCase());
+  candidates.add(raw.replace(/[_\s]+/g, '_').toLowerCase());
+
+  for (const c of Array.from(candidates)) {
+    if (iconMap[c]) return iconMap[c];
+  }
+  return null;
+}
+
+// Static mapping from normalized category slug/name to iconMap key
+const categoryIconMapping: Record<string, string> = {
+  'healthcare-fitness': 'heart-pulse',
+  'healthcare & fitness': 'heart-pulse',
+  'household-daily-needs': 'shopping-cart',
+  'household & daily needs': 'shopping-cart',
+  'sports-entertainment': 'activity',
+  'sports & entertainment': 'activity',
+  'travel-leisure': 'plane',
+  'travel & leisure': 'plane',
+  'business-sales': 'briefcase',
+  'business & sales': 'briefcase',
+  'finance-investments': 'trending-up',
+  'finance & investments': 'trending-up',
+  'food-beverages': 'utensils',
+  'food & beverages': 'utensils',
+  'freelance-online-services': 'laptop',
+  'freelance & online services': 'laptop',
+  'education': 'graduation-cap',
+  'education-learning': 'graduation-cap',
+  'education & learning': 'graduation-cap',
+  'electronics': 'monitor',
+  'electronics-technology': 'monitor',
+  'electronics & technology': 'monitor',
+  'fashion': 'shirt',
+  'fashion-lifestyle': 'shirt',
+  'fashion & lifestyle': 'shirt',
+  'furniture': 'sofa',
+  'furniture-home-decor': 'sofa',
+  'furniture & home decor': 'sofa',
+  'real-estate': 'building2',
+  'real-estate-property': 'building2',
+  'real estate & property': 'building2',
+  'vehicles': 'car',
+  'vehicles-transportation': 'car',
+  'vehicles & transportation': 'car',
+  'skilled-labour': 'briefcase',
+  'skilled-labor': 'briefcase',
+  'skilled labour': 'briefcase',
+  'health-wellness': 'dumbbell',
+  'health & wellness': 'dumbbell',
+  'pharmacy-medical': 'monitor',
+  'construction-materials': 'building',
+  'jewelry-accessories': 'award',
+  'jewellery-accessories': 'award',
+  'books': 'book-open',
+  'education-services': 'graduation-cap',
+  'construction-building-materials': 'building',
+  'construction & building materials': 'building',
+  'local-market': 'building2',
+  'local-market-commercial-property': 'building2',
+  'commercial-property': 'building2',
+  'industrial-land': 'building2',
+  'factory-industrial-land': 'building2',
+  'company-office-space': 'briefcase',
+  'office-space': 'briefcase',
+  'rental-rooms-flats-apartments': 'house',
+  'rental-rooms': 'house',
+  'rental-flats-apartments': 'house',
+  'rental-listings': 'house',
+  'hostel-pg': 'house',
+  'hostels-pg': 'house',
+  'property-deals': 'map-pin',
+};
+
+// Subcategory-specific icon mapping (normalized slug/name -> iconMap key)
+const subcategoryIconMapping: Record<string, string> = {
+  'news-media': 'newspaper',
+  'news & media': 'newspaper',
+  'accounting-audit': 'calculator',
+  'accounting & audit': 'calculator',
+  'investment-opportunities': 'coins',
+  'microfinance-cooperative': 'landmark',
+  'microfinance/cooperative listings': 'landmark',
+  'restaurants': 'utensils',
+  'restaurant': 'utensils',
+  'cafe': 'coffee',
+  'home-delivery': 'truck',
+  'home delivery': 'truck',
+  'catering': 'chef-hat',
+  'graphic-design': 'palette',
+  'graphic design': 'palette',
+  'web-development': 'code',
+  'web development': 'code',
+  'digital-marketing': 'megaphone',
+  'digital marketing': 'megaphone',
+  'clinics-hospitals': 'stethoscope',
+  'clinics & hospitals': 'stethoscope',
+  'diagnostic-labs': 'microscope',
+  'diagnostic labs': 'microscope',
+  'fitness-trainers': 'dumbbell',
+  'fitness trainers': 'dumbbell',
+  'tours-travels': 'plane',
+  'tours & travels': 'plane',
+  'hotels-resorts': 'bed',
+  'hotels & resorts': 'bed',
+  'event-movie-ticket-booking': 'ticket',
+  'event/movie ticket booking': 'ticket',
+  'pet-care-pet-food': 'paw-print',
+  'pet care & pet food': 'paw-print',
+  'agriculture-seeds-farming': 'leaf',
+  'agriculture, seeds & farming': 'leaf',
+  'grocery-daily-essentials': 'shopping-cart',
+  'grocery & daily essentials': 'shopping-cart',
+  'cleaning-pest-control': 'sparkles',
+  'cleaning & pest control': 'sparkles',
+  'tuition-private-classes': 'graduation-cap',
+  'dance-karate-gym-yoga': 'dumbbell',
+  'dance-karate-gym-yoga-classes': 'dumbbell',
+  'language-classes': 'languages',
+  'academies-music-arts-sports': 'music',
+  'skill-training-certification': 'award',
+  'schools-colleges-coaching-institutes': 'school',
+  'cricket-sports-training': 'trophy',
+  'ebooks-online-courses': 'book-open',
+  'e-books-online-courses': 'book-open',
+  'e-books-and-online-courses': 'book-open',
+  'educational-consultancy-study-abroad': 'globe2',
+  'educational-consultancy-study-abroad-admissions': 'globe2',
+  'computer-mobile-laptop-repair-services': 'laptop',
+  'cyber-cafe-internet-services': 'globe',
+  'new-phones-tablets-accessories': 'smartphone',
+  'electronics-gadgets': 'monitor',
+  'fashion-beauty-products': 'shirt',
+  'jewelry-accessories': 'award',
+  'furniture-interior-decor': 'sofa',
+  'cars-bikes': 'car',
+  'second-hand-cars-bikes': 'car',
+  'car-bike-rentals': 'car',
+  'construction-materials': 'building',
+  'household-services': 'briefcase',
+  'health-wellness-services': 'dumbbell',
+  'pharmacy-medical-stores': 'book-marked',
+  'event-decoration-services': 'sparkles',
+  'residential-properties': 'house',
+  'heavy-equipment': 'truck',
+  'heavy-equipment-for-sale': 'truck',
+  'showrooms': 'building2',
+  'showrooms-authorized': 'building2',
+  'showrooms-second-hand': 'building2',
+  'showroom': 'building2',
+  'authorized-showrooms': 'building2',
+  'second-hand-showrooms': 'building2',
+  'secondhand-showrooms': 'building2',
+  'second hand': 'building2',
+  'second-hand': 'building2',
+  'vehicle-license-classes': 'badge',
+  'vehicle-license': 'badge',
+  'vehicle-licence': 'badge',
+  'vehiclelicenseclasses': 'badge',
+  'vehicle license classes': 'badge',
+  'vehicle license': 'badge',
+  'telecommunication-services': 'globe',
+  'second-hand-phones-tablets-accessories': 'smartphone',
+  'second-hand-phones': 'smartphone',
+  'service-centre-warranty': 'monitor',
+  'saree-clothing': 'shirt',
+  'saree-clothing-shopping': 'shirt',
+  'sarees': 'shirt',
+  'saree': 'shirt',
+  'sari': 'shirt',
+  'construction-building-materials': 'building',
+  'local-market': 'building2',
+  'local-market-commercial-property': 'building2',
+  'commercial-properties': 'building2',
+  'commercial-property': 'building2',
+  'industrial-land': 'building2',
+  'factory-industrial-land': 'building2',
+  'office-spaces': 'briefcase',
+  'company-office-space': 'briefcase',
+  'rental-rooms-flats-apartments': 'house',
+  'rental-listings': 'house',
+  'rooms-flats-apartments': 'house',
+  'hostel-pg': 'house',
+  'hostels-pg': 'house',
+  'property-deals': 'map-pin',
+};
+
+// Resolve an icon for a category/subcategory object using multiple fallbacks
+function resolveIconForCategory(item?: any): any | null {
+  if (!item) return null;
+  // Try explicit icon field first
+  const byIconField = getIconByName(item.icon);
+  if (byIconField) return byIconField;
+
+  // Try slug
+  const bySlug = getIconByName(item.slug);
+  if (bySlug) return bySlug;
+
+  // Try name variants and mapping
+  const name = (item.name || '').toString().trim();
+  const normalized = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  // direct lookup in iconMap by normalized name
+  const byName = getIconByName(normalized);
+  if (byName) return byName;
+
+  // Try removing common suffixes (classes, courses, services, training, institutes, admissions)
+  const suffixes = ['-classes', '-courses', '-course', '-services', '-training', '-institutes', '-admissions', '-online'];
+  for (const s of suffixes) {
+    if (normalized.endsWith(s)) {
+      const base = normalized.slice(0, -s.length);
+      if (base) {
+        const byBaseName = getIconByName(base);
+        if (byBaseName) return byBaseName;
+        if (subcategoryIconMapping[base]) return iconMap[subcategoryIconMapping[base]] || null;
+        if (categoryIconMapping[base]) return iconMap[categoryIconMapping[base]] || null;
+      }
+    }
+  }
+
+  // mapping lookup
+  // subcategory mapping takes precedence
+  if (subcategoryIconMapping[normalized]) {
+    return iconMap[subcategoryIconMapping[normalized]] || null;
+  }
+
+  if (subcategoryIconMapping[name.toLowerCase()]) {
+    return iconMap[subcategoryIconMapping[name.toLowerCase()]] || null;
+  }
+
+  // then category mapping
+  if (categoryIconMapping[normalized]) {
+    return iconMap[categoryIconMapping[normalized]] || null;
+  }
+
+  if (categoryIconMapping[name.toLowerCase()]) {
+    return iconMap[categoryIconMapping[name.toLowerCase()]] || null;
+  }
+
+  // Keyword-based fallback for common subcategory phrases
+  const lname = name.toLowerCase();
+  if (lname.includes('cyber') || lname.includes('internet') || lname.includes('cafe')) {
+    return iconMap['globe'] || null;
+  }
+  if (lname.includes('showroom') || lname.includes('showrooms') || lname.includes('authorized') || lname.includes('second-hand') || lname.includes('second hand')) {
+    return iconMap['building2'] || null;
+  }
+  if (lname.includes('computer') || lname.includes('repair') || lname.includes('service centre') || lname.includes('service center') || lname.includes('service')) {
+    return iconMap['laptop'] || null;
+  }
+  if (lname.includes('phone') || lname.includes('tablet')) {
+    return iconMap['smartphone'] || null;
+  }
+  if (lname.includes('saree') || lname.includes('sari') || lname.includes('cloth') || lname.includes('clothing')) {
+    return iconMap['shirt'] || null;
+  }
+  if (lname.includes('license') || lname.includes('licence') || lname.includes('vehicle license') || lname.includes('license classes')) {
+    return iconMap['badge'] || null;
+  }
+
+  return null;
+}
 
 function AppSidebar({ activeSection, setActiveSection }: { activeSection: string; setActiveSection: (section: string) => void }) {
   const [categories, setCategories] = useState<AdminCategory[]>([]);
@@ -2539,10 +2897,10 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                     tooltip={item.title}
                     isActive={activeSection === item.key}
                     className={`
-                      w-full justify-start rounded-lg transition-all duration-200
+                      w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                       ${activeSection === item.key
-                        ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md hover:shadow-lg'
-                        : 'hover:bg-muted/80'
+                        ? 'bg-gradient-to-r from-blue-600 to-green-600 !text-white shadow-md hover:shadow-lg'
+                        : 'hover:bg-muted/80 text-foreground'
                       }
                     `}
                     onClick={() => {
@@ -2554,8 +2912,8 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                       }
                     }}
                   >
-                    <item.icon className="w-5 h-5" />
-                    <span className="font-medium">{item.title}</span>
+                    <item.icon className={`w-5 h-5 flex-shrink-0 ${activeSection === item.key ? '!text-white' : 'text-muted-foreground'}`} />
+                    <span className="font-semibold text-sm truncate text-left ml-3">{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -2571,7 +2929,7 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
             <SidebarGroupContent>
               <SidebarMenu className="gap-1">
                 {categories.map((category) => {
-                  const IconComponent = iconMap[category.icon as keyof typeof iconMap] || Settings;
+                  const IconComponent = resolveIconForCategory(category) || Settings;
                   const hasSubcategories = category.subcategories && category.subcategories.length > 0;
                   const isExpanded = expandedCategories.has(category.id);
 
@@ -2582,12 +2940,15 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                           tooltip={category.name}
                           isActive={activeSection === category.slug}
                           className={`
-                            w-full justify-start rounded-lg transition-all duration-200
+                            w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                             ${activeSection === category.slug
-                              ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md'
-                              : 'hover:bg-muted/80'
+                              ? '!text-white shadow-md'
+                              : 'hover:bg-muted/80 text-foreground'
                             }
                           `}
+                          style={{
+                            background: activeSection === category.slug ? `linear-gradient(135deg, ${category.color}, ${category.color}cc)` : undefined,
+                          }}
                           onClick={() => {
                             if (hasSubcategories) {
                               toggleCategoryExpand(category.id);
@@ -2596,19 +2957,22 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                           }}
                         >
                           <div
-                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
                             style={{
-                              backgroundColor: activeSection === category.slug ? 'rgba(255,255,255,0.2)' : `${category.color}20`,
+                              backgroundColor: activeSection === category.slug ? 'rgba(255,255,255,0.2)' : `${category.color}15`,
                             }}
                           >
                             <IconComponent
-                              className="w-4 h-4"
-                              style={{ color: activeSection === category.slug ? 'white' : category.color }}
+                              className="w-4 h-4 flex-shrink-0"
+                              style={{ color: activeSection === category.slug ? '#ffffff' : category.color }}
                             />
                           </div>
-                          <span className="font-medium flex-1">{category.name}</span>
+                          <span className="font-semibold text-sm truncate text-left ml-3 flex-1">{category.name}</span>
                           {hasSubcategories && (
-                            <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : 'rotate-0'}`} />
+                            <ChevronDown className={`w-4 h-4 ml-auto transition-transform duration-200 flex-shrink-0
+                              ${activeSection === category.slug ? '!text-white' : 'text-muted-foreground'}
+                              ${isExpanded ? 'rotate-180' : 'rotate-0'}
+                            `} />
                           )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
@@ -2616,22 +2980,26 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                       {hasSubcategories && isExpanded && (
                         <SidebarMenuSub className="ml-2 mt-1 mb-2 border-l-2 pl-4" style={{ borderColor: `${category.color}40` }}>
                           {category.subcategories.map((subcategory) => {
-                            const SubIcon = iconMap[subcategory.icon as keyof typeof iconMap] || Settings;
+                            const SubIcon = resolveIconForCategory(subcategory) || Settings;
                             return (
                               <SidebarMenuSubItem key={subcategory.id}>
                                 <SidebarMenuSubButton
                                   isActive={activeSection === subcategory.slug}
                                   onClick={() => setActiveSection(subcategory.slug)}
                                   className={`
-                                    cursor-pointer rounded-md transition-all duration-200
+                                    cursor-pointer rounded-md transition-all duration-200 !h-auto !py-1.5
                                     ${activeSection === subcategory.slug
-                                      ? 'bg-muted font-medium'
-                                      : 'hover:bg-muted/50'
+                                      ? 'bg-muted font-semibold'
+                                      : 'hover:bg-muted/50 text-muted-foreground'
                                     }
                                   `}
+                                  style={{
+                                    color: activeSection === subcategory.slug ? category.color : undefined,
+                                    backgroundColor: activeSection === subcategory.slug ? `${category.color}15` : undefined,
+                                  }}
                                 >
-                                  <SubIcon className="w-4 h-4" style={{ color: category.color }} />
-                                  <span>{subcategory.name}</span>
+                                  <SubIcon className="w-4 h-4 flex-shrink-0" style={{ color: category.color }} />
+                                  <span className="truncate text-left flex-1 text-xs">{subcategory.name}</span>
                                 </SidebarMenuSubButton>
                               </SidebarMenuSubItem>
                             );
@@ -2657,16 +3025,16 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                   tooltip="Users"
                   isActive={activeSection === "users"}
                   className={`
-                    w-full justify-start rounded-lg transition-all duration-200
+                    w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                     ${activeSection === "users"
-                      ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md'
-                      : 'hover:bg-muted/80'
+                      ? 'bg-gradient-to-r from-blue-600 to-green-600 !text-white shadow-md'
+                      : 'hover:bg-muted/80 text-foreground'
                     }
                   `}
                   onClick={() => setActiveSection('users')}
                 >
-                  <Users className="w-5 h-5" />
-                  <span className="font-medium">Users</span>
+                  <Users className={`w-5 h-5 flex-shrink-0 ${activeSection === "users" ? '!text-white' : 'text-muted-foreground'}`} />
+                  <span className="font-semibold text-sm truncate text-left ml-3">Users</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -2674,16 +3042,16 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                   tooltip="Agencies"
                   isActive={activeSection === "agencies"}
                   className={`
-                    w-full justify-start rounded-lg transition-all duration-200
+                    w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                     ${activeSection === "agencies"
-                      ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md'
-                      : 'hover:bg-muted/80'
+                      ? 'bg-gradient-to-r from-blue-600 to-green-600 !text-white shadow-md'
+                      : 'hover:bg-muted/80 text-foreground'
                     }
                   `}
                   onClick={() => setActiveSection('agencies')}
                 >
-                  <Bookmark className="w-5 h-5" />
-                  <span className="font-medium">Agencies</span>
+                  <Bookmark className={`w-5 h-5 flex-shrink-0 ${activeSection === "agencies" ? '!text-white' : 'text-muted-foreground'}`} />
+                  <span className="font-semibold text-sm truncate text-left ml-3">Agencies</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -2691,16 +3059,16 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                   tooltip="Analytics"
                   isActive={activeSection === "analytics"}
                   className={`
-                    w-full justify-start rounded-lg transition-all duration-200
+                    w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                     ${activeSection === "analytics"
-                      ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md'
-                      : 'hover:bg-muted/80'
+                      ? 'bg-gradient-to-r from-blue-600 to-green-600 !text-white shadow-md'
+                      : 'hover:bg-muted/80 text-foreground'
                     }
                   `}
                   onClick={() => setActiveSection('analytics')}
                 >
-                  <BarChart3 className="w-5 h-5" />
-                  <span className="font-medium">Analytics</span>
+                  <BarChart3 className={`w-5 h-5 flex-shrink-0 ${activeSection === "analytics" ? '!text-white' : 'text-muted-foreground'}`} />
+                  <span className="font-semibold text-sm truncate text-left ml-3">Analytics</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -2708,16 +3076,16 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
                   tooltip="Contact Messages"
                   isActive={activeSection === "contact-messages"}
                   className={`
-                    w-full justify-start rounded-lg transition-all duration-200
+                    w-full justify-start rounded-lg transition-all duration-200 !h-auto !py-2
                     ${activeSection === "contact-messages"
-                      ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-md'
-                      : 'hover:bg-muted/80'
+                      ? 'bg-gradient-to-r from-blue-600 to-green-600 !text-white shadow-md'
+                      : 'hover:bg-muted/80 text-foreground'
                     }
                   `}
                   onClick={() => setActiveSection('contact-messages')}
                 >
-                  <Mail className="w-5 h-5" />
-                  <span className="font-medium">Contact Messages</span>
+                  <Mail className={`w-5 h-5 flex-shrink-0 ${activeSection === "contact-messages" ? '!text-white' : 'text-muted-foreground'}`} />
+                  <span className="font-semibold text-sm truncate text-left ml-3">Contact Messages</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -2731,11 +3099,11 @@ function AppSidebar({ activeSection, setActiveSection }: { activeSection: string
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
               <SidebarMenuItem>
-                <SidebarMenuButton className="w-full justify-start cursor-pointer rounded-lg transition-all duration-200 hover:bg-green-600/10 text-green-600 hover:text-green-700 border border-green-200 hover:border-green-300"
+                <SidebarMenuButton className="w-full justify-start cursor-pointer rounded-lg transition-all duration-200 hover:bg-green-600/10 text-green-600 hover:text-green-700 border border-green-200 hover:border-green-300 !h-auto !py-2"
                   onClick={() => setActiveSection('categories')}
                 >
-                  <Plus className="w-5 h-5" />
-                  <span className="font-medium">Add Category</span>
+                  <Plus className="w-5 h-5 flex-shrink-0" />
+                  <span className="font-semibold text-sm truncate text-left ml-3">Add Category</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </SidebarMenu>
@@ -2993,7 +3361,7 @@ function CategoriesSection() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {Array.isArray(categories) && categories.map((category) => {
-          const IconComponent = iconMap[category.icon as keyof typeof iconMap] || Settings;
+          const IconComponent = resolveIconForCategory(category) || Settings;
 
           return (
             <Card key={category.id} className="group">
@@ -5308,6 +5676,13 @@ function FeaturedVideosSection() {
   );
 }
 
+const formatSectionTitle = (slug: string) => {
+  return slug
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 export default function AdminDashboard() {
   const [activeSection, setActiveSection] = useState(() => {
     const saved = localStorage.getItem('activeSection');
@@ -5477,7 +5852,6 @@ export default function AdminDashboard() {
       case "skill-training--certification":
         return <SkillTrainingCertificationSection />;
       case "schools-colleges-coaching":
-      case "schools-colleges-coaching-institutes":
       case "schools-colleges-coaching-institutes":
         return <SchoolsCollegesCoachingSection />;
       case "cricket-sports-training":
@@ -5781,7 +6155,7 @@ export default function AdminDashboard() {
             <SidebarTrigger className="-ml-1" />
             <div className="h-6 w-border bg-border mx-4" />
             <div>
-              <h1 className="text-lg font-semibold capitalize">{activeSection.replace('-', ' ')}</h1>
+              <h1 className="text-lg font-semibold">{formatSectionTitle(activeSection)}</h1>
             </div>
           </header>
 
